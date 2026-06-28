@@ -1,0 +1,264 @@
+# MedNexus-AI Knowledge Sources Configuration
+# This file defines all data sources for the knowledge ingestion framework
+
+version: "1.0"
+
+data_sources:
+  # Medical Q&A Datasets
+  medquad:
+    name: "MedQuAD Medical Question Answering Dataset"
+    type: "qa_dataset"
+    category: "medical_qa"
+    url: "https://github.com/abachaa/MedQuAD"
+    format: "xml"
+    license: "Public Domain"
+    description: "47,457 medical question-answer pairs from NIH websites"
+    enabled: true
+    priority: 1
+    download_method: "git_clone"
+    git_url: "https://github.com/abachaa/MedQuAD.git"
+    estimated_size_mb: 50
+    
+  pubmed_qa:
+    name: "PubMed QA"
+    type: "qa_dataset"
+    category: "medical_qa"
+    url: "https://pubmedqa.github.io/"
+    format: "json"
+    license: "MIT"
+    description: "Biomedical question answering dataset from PubMed abstracts"
+    enabled: false
+    priority: 2
+    download_method: "direct"
+    estimated_size_mb: 100
+
+  # Clinical Guidelines
+  who_guidelines:
+    name: "WHO Clinical Guidelines"
+    type: "clinical_guidelines"
+    category: "clinical_guidelines"
+    url: "https://www.who.int/publications/guidelines"
+    format: "pdf"
+    license: "CC BY-NC-SA 3.0 IGO"
+    description: "World Health Organization clinical practice guidelines"
+    enabled: false
+    priority: 3
+    download_method: "manual"
+    estimated_size_mb: 1000
+
+  cdc_guidelines:
+    name: "CDC Clinical Guidelines"
+    type: "clinical_guidelines"
+    category: "clinical_guidelines"
+    url: "https://www.cdc.gov/vaccines/hcp/acip-recs/index.html"
+    format: "pdf"
+    license: "Public Domain"
+    description: "Centers for Disease Control clinical recommendations"
+    enabled: false
+    priority: 3
+    download_method: "manual"
+    estimated_size_mb: 500
+
+  # Disease Information
+  mayo_clinic_diseases:
+    name: "Mayo Clinic Disease Information"
+    type: "disease_database"
+    category: "disease_information"
+    url: "https://www.mayoclinic.org/diseases-conditions"
+    format: "html"
+    license: "All Rights Reserved"
+    description: "Comprehensive disease information from Mayo Clinic"
+    enabled: false
+    priority: 4
+    download_method: "scraping"
+    requires_permission: true
+    estimated_size_mb: 500
+
+  medlineplus:
+    name: "MedlinePlus Health Topics"
+    type: "disease_database"
+    category: "disease_information"
+    url: "https://medlineplus.gov/healthtopics.html"
+    format: "xml"
+    license: "Public Domain"
+    description: "Consumer health information from National Library of Medicine"
+    enabled: false
+    priority: 2
+    download_method: "api"
+    api_endpoint: "https://connect.medlineplus.gov/service"
+    estimated_size_mb: 200
+
+  # Drug Databases
+  dailymed:
+    name: "DailyMed Drug Database"
+    type: "drug_database"
+    category: "drug_database"
+    url: "https://dailymed.nlm.nih.gov/dailymed/"
+    format: "xml"
+    license: "Public Domain"
+    description: "FDA drug labeling database"
+    enabled: false
+    priority: 2
+    download_method: "ftp"
+    ftp_url: "ftp://public.nlm.nih.gov/nlmdata/.dailymed/"
+    estimated_size_mb: 5000
+
+  drugbank:
+    name: "DrugBank Database"
+    type: "drug_database"
+    category: "drug_database"
+    url: "https://go.drugbank.com/"
+    format: "xml"
+    license: "CC BY-NC 4.0"
+    description: "Comprehensive drug and drug-target database"
+    enabled: false
+    priority: 3
+    download_method: "account_required"
+    requires_account: true
+    estimated_size_mb: 1000
+
+  # Research Papers
+  pubmed_central:
+    name: "PubMed Central Open Access"
+    type: "research_papers"
+    category: "research_papers"
+    url: "https://www.ncbi.nlm.nih.gov/pmc/"
+    format: "pdf"
+    license: "Various (Open Access)"
+    description: "Open access biomedical research papers"
+    enabled: false
+    priority: 4
+    download_method: "api"
+    api_endpoint: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+    requires_api_key: true
+    estimated_size_mb: 10000
+
+  # Medical Books
+  ncbi_bookshelf:
+    name: "NCBI Bookshelf"
+    type: "medical_books"
+    category: "medical_books"
+    url: "https://www.ncbi.nlm.nih.gov/books/"
+    format: "html"
+    license: "Public Domain / CC"
+    description: "Medical and life science books and documents"
+    enabled: false
+    priority: 3
+    download_method: "api"
+    estimated_size_mb: 2000
+
+
+# Download Configuration per source type
+download_settings:
+  default:
+    max_retries: 3
+    timeout_seconds: 300
+    rate_limit_seconds: 1.0
+    verify_ssl: true
+    user_agent: "MedNexus-AI-KnowledgeBot/1.0"
+  
+  api:
+    rate_limit_seconds: 2.0
+    timeout_seconds: 60
+  
+  scraping:
+    rate_limit_seconds: 3.0
+    respect_robots_txt: true
+    max_concurrent_requests: 5
+  
+  ftp:
+    timeout_seconds: 600
+    passive_mode: true
+
+
+# Validation Rules
+validation_rules:
+  file_naming:
+    pattern: "^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9]+$"
+    description: "Alphanumeric with underscores, hyphens, and extension"
+  
+  size_limits:
+    min_file_size_bytes: 100
+    max_file_size_mb: 500
+    warn_if_larger_mb: 100
+  
+  content_types:
+    allowed_extensions:
+      - ".pdf"
+      - ".txt"
+      - ".md"
+      - ".json"
+      - ".xml"
+      - ".html"
+      - ".csv"
+    
+    mime_types:
+      - "application/pdf"
+      - "text/plain"
+      - "text/markdown"
+      - "application/json"
+      - "application/xml"
+      - "text/xml"
+      - "text/html"
+      - "text/csv"
+
+
+# Metadata Schema
+metadata_schema:
+  required_fields:
+    - filename
+    - source
+    - download_date
+    - checksum
+    - file_size
+  
+  optional_fields:
+    - url
+    - mime_type
+    - language
+    - status
+    - error_message
+    - version
+    - license
+    - author
+    - description
+  
+  status_values:
+    - "pending"
+    - "downloading"
+    - "downloaded"
+    - "validated"
+    - "processed"
+    - "failed"
+
+
+# Processing Configuration
+processing:
+  concurrency:
+    max_workers: 4
+    batch_size: 10
+  
+  retry_policy:
+    max_attempts: 3
+    backoff_multiplier: 2
+    initial_delay_seconds: 5
+
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  date_format: "%Y-%m-%d %H:%M:%S"
+  
+  handlers:
+    console:
+      enabled: true
+      colored: true
+      level: "INFO"
+    
+    file:
+      enabled: true
+      filename: "knowledge_ingestion.log"
+      max_bytes: 10485760  # 10 MB
+      backup_count: 5
+      level: "DEBUG"

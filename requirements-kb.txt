@@ -1,0 +1,19 @@
+# MedNexus-AI Knowledge Ingestion Framework Requirements
+# Python 3.11+
+
+# Configuration and Data Handling
+pyyaml>=6.0.1              # YAML configuration parsing
+python-dotenv>=1.0.0        # Environment variable management
+
+# Note: The following packages are intentionally NOT included in Phase 2A:
+# - langchain (RAG implementation - Phase 2C)
+# - chromadb (Vector storage - Phase 2C)  
+# - sentence-transformers (Embeddings - Phase 2C)
+# - openai (LLM integration - Phase 2C)
+# - pypdf (PDF processing - Phase 2B)
+# - beautifulsoup4 (HTML parsing - Phase 2B)
+# - requests (HTTP downloads - Phase 2B)
+# - gitpython (Git operations - Phase 2B)
+
+# Current phase (2A) implements only the infrastructure framework
+# Actual data processing dependencies will be added in subsequent phases
