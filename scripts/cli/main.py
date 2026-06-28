@@ -51,6 +51,231 @@ def init_command(args):
         return 1
 
 
+def download_command(args):
+    """Download data from configured sources."""
+    logger = get_logger(__name__)
+    logger.info("Starting download...")
+    
+    try:
+        # Import downloaders
+        from downloaders.medquad_downloader import MedQuADDownloader
+        
+        # Load sources config
+        sources_config = load_yaml_config(config.config_dir / "sources.yaml")
+        data_sources = sources_config.get("data_sources", {})
+        
+        # Filter by source if specified
+        if args.source:
+            if args.source not in data_sources:
+                logger.error(f"Unknown source: {args.source}")
+                logger.info(f"Available sources: {', '.join(data_sources.keys())}")
+                return 1
+            sources_to_download = {args.source: data_sources[args.source]}
+        else:
+            # Download only enabled sources
+            sources_to_download = {
+                k: v for k, v in data_sources.items()
+                if v.get("enabled", False)
+            }
+        
+        if not sources_to_download:
+            logger.warning("No sources to download")
+            return 0
+        
+        logger.info(f"Downloading from {len(sources_to_download)} source(s)")
+        
+        # Download each source
+        for source_id, source_info in sources_to_download.items():
+            logger.info(f"\n{'='*80}")
+            logger.info(f"Downloading: {source_info.get('name', source_id)}")
+            logger.info(f"{'='*80}")
+            
+            category = source_info.get("category", "")
+            
+            # Map category to output directory
+            category_dirs = {
+                "medical_qa": config.medical_qa_dir,
+                "clinical_guidelines": config.clinical_guidelines_dir,
+                "disease_information": config.disease_info_dir,
+                "drug_database": config.drug_database_dir,
+                "research_papers": config.research_papers_dir,
+                "medical_books": config.medical_books_dir,
+            }
+            
+            output_dir = category_dirs.get(category, config.raw_data_dir / category)
+            
+            # Initialize downloader based on source
+            if source_id == "medquad":
+                downloader = MedQuADDownloader(
+                    output_dir=output_dir,
+                    metadata_dir=config.metadata_dir
+                )
+                results = downloader.download_all(
+                    max_files=args.limit,
+                    show_progress=not args.no_progress
+                )
+                
+                # Log stats
+                stats = downloader.get_download_stats(results)
+                logger.info(f"\nDownload Statistics:")
+                logger.info(f"  Total files: {stats['total_files']}")
+                logger.info(f"  Completed: {stats['completed']}")
+                logger.info(f"  Failed: {stats['failed']}")
+                logger.info(f"  Skipped: {stats['skipped']}")
+                logger.info(f"  Total size: {stats['total_size_mb']:.2f} MB")
+            else:
+                logger.warning(f"Downloader not implemented for: {source_id}")
+        
+        return 0
+        
+    except Exception as e:
+        logger.error(f"Download failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+
+
+def process_command(args):
+    """Process (extract text from) downloaded documents."""
+    logger = get_logger(__name__)
+    logger.info("Starting document processing...")
+    
+    try:
+        from processors.document_processor import DocumentProcessor
+        from utils.file_utils import list_files_recursive
+        
+        # Determine input directory
+        if args.input:
+            input_dir = Path(args.input)
+        else:
+            input_dir = config.raw_data_dir
+        
+        if not input_dir.exists():
+            logger.error(f"Input directory not found: {input_dir}")
+            return 1
+        
+        # Find documents to process
+        extensions = ['.pdf', '.txt', '.md', '.xml', '.html', '.htm']
+        input_files = []
+        
+        for ext in extensions:
+            input_files.extend(input_dir.rglob(f'*{ext}'))
+        
+        if args.limit:
+            input_files = input_files[:args.limit]
+        
+        logger.info(f"Found {len(input_files)} documents to process")
+        
+        if not input_files:
+            logger.warning("No documents found")
+            return 0
+        
+        # Initialize processor
+        processor = DocumentProcessor(
+            output_dir=config.cleaned_data_dir,
+            metadata_dir=config.metadata_dir,
+            enable_cleaning=not args.no_clean
+        )
+        
+        # Process documents
+        results = processor.process_batch(
+            input_paths=input_files,
+            source=args.source or "unknown",
+            show_progress=not args.no_progress
+        )
+        
+        # Log summary
+        successful = sum(1 for r in results if r.status == 'success')
+        partial = sum(1 for r in results if r.status == 'partial')
+        failed = sum(1 for r in results if r.status == 'failed')
+        
+        logger.info(f"\n{'='*80}")
+        logger.info(f"Processing Summary:")
+        logger.info(f"  Total: {len(results)}")
+        logger.info(f"  Success: {successful}")
+        logger.info(f"  Partial: {partial}")
+        logger.info(f"  Failed: {failed}")
+        logger.info(f"{'='*80}")
+        
+        return 0
+        
+    except Exception as e:
+        logger.error(f"Processing failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+
+
+def clean_command(args):
+    """Clean extracted text documents."""
+    logger = get_logger(__name__)
+    logger.info("Starting document cleaning...")
+    
+    try:
+        from processors.document_cleaner import DocumentCleaner
+        from utils.file_utils import list_files_recursive
+        
+        # Determine input directory
+        if args.input:
+            input_dir = Path(args.input)
+        else:
+            input_dir = config.cleaned_data_dir
+        
+        if not input_dir.exists():
+            logger.error(f"Input directory not found: {input_dir}")
+            return 1
+        
+        # Find text files
+        input_files = list(input_dir.rglob('*.txt'))
+        
+        if args.limit:
+            input_files = input_files[:args.limit]
+        
+        logger.info(f"Found {len(input_files)} text files to clean")
+        
+        if not input_files:
+            logger.warning("No text files found")
+            return 0
+        
+        # Initialize cleaner
+        cleaner = DocumentCleaner(
+            remove_excessive_whitespace=True,
+            normalize_unicode=True,
+            remove_duplicate_lines=True,
+            preserve_structure=True
+        )
+        
+        # Clean documents
+        output_dir = Path(args.output) if args.output else input_dir
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        successful = 0
+        failed = 0
+        
+        for input_file in input_files:
+            try:
+                output_file = output_dir / input_file.name
+                result = cleaner.clean_file(input_file, output_file)
+                logger.info(
+                    f"Cleaned {input_file.name}: "
+                    f"{result.reduction_percent:.1f}% reduction"
+                )
+                successful += 1
+            except Exception as e:
+                logger.error(f"Failed to clean {input_file}: {e}")
+                failed += 1
+        
+        logger.info(f"\nCleaning Summary:")
+        logger.info(f"  Successful: {successful}")
+        logger.info(f"  Failed: {failed}")
+        
+        return 0
+        
+    except Exception as e:
+        logger.error(f"Cleaning failed: {e}")
+        return 1
+
+
 def validate_command(args):
     """Validate datasets and folder structure."""
     logger = get_logger(__name__)
@@ -205,12 +430,27 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python -m scripts.cli.main init                    # Initialize knowledge base
-  python -m scripts.cli.main validate                # Validate folder structure
-  python -m scripts.cli.main validate --dataset medical_qa  # Validate specific dataset
-  python -m scripts.cli.main status                  # Show knowledge base status
-  python -m scripts.cli.main sources                 # List data sources
-  python -m scripts.cli.main sources --verbose       # List sources with details
+  # Initialization
+  python -m scripts.cli.main init
+  
+  # Download data
+  python -m scripts.cli.main download --source medquad
+  python -m scripts.cli.main download --limit 100
+  
+  # Process documents
+  python -m scripts.cli.main process --input datasets/raw/medical_qa
+  python -m scripts.cli.main process --no-clean --limit 50
+  
+  # Clean text
+  python -m scripts.cli.main clean --input datasets/processed/cleaned
+  
+  # Validation
+  python -m scripts.cli.main validate
+  python -m scripts.cli.main validate --dataset medical_qa
+  
+  # Status and info
+  python -m scripts.cli.main status
+  python -m scripts.cli.main sources --verbose
         """
     )
     
@@ -226,6 +466,29 @@ Examples:
     # Init command
     parser_init = subparsers.add_parser("init", help="Initialize knowledge base")
     parser_init.set_defaults(func=init_command)
+    
+    # Download command
+    parser_download = subparsers.add_parser("download", help="Download data from sources")
+    parser_download.add_argument("--source", help="Specific source to download (e.g., medquad)")
+    parser_download.add_argument("--limit", type=int, help="Limit number of files to download")
+    parser_download.add_argument("--no-progress", action="store_true", help="Disable progress bars")
+    parser_download.set_defaults(func=download_command)
+    
+    # Process command
+    parser_process = subparsers.add_parser("process", help="Process (extract text from) documents")
+    parser_process.add_argument("--input", help="Input directory (default: datasets/raw)")
+    parser_process.add_argument("--source", help="Source name for metadata")
+    parser_process.add_argument("--no-clean", action="store_true", help="Skip text cleaning")
+    parser_process.add_argument("--limit", type=int, help="Limit number of files to process")
+    parser_process.add_argument("--no-progress", action="store_true", help="Disable progress bars")
+    parser_process.set_defaults(func=process_command)
+    
+    # Clean command
+    parser_clean = subparsers.add_parser("clean", help="Clean extracted text documents")
+    parser_clean.add_argument("--input", help="Input directory (default: datasets/processed/cleaned)")
+    parser_clean.add_argument("--output", help="Output directory (default: same as input)")
+    parser_clean.add_argument("--limit", type=int, help="Limit number of files to clean")
+    parser_clean.set_defaults(func=clean_command)
     
     # Validate command
     parser_validate = subparsers.add_parser("validate", help="Validate datasets")

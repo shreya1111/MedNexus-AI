@@ -1,19 +1,45 @@
 # MedNexus-AI Knowledge Ingestion Framework Requirements
 # Python 3.11+
+# Phase 2B: Document Acquisition & Processing
 
 # Configuration and Data Handling
 pyyaml>=6.0.1              # YAML configuration parsing
 python-dotenv>=1.0.0        # Environment variable management
 
-# Note: The following packages are intentionally NOT included in Phase 2A:
+# Phase 2B: HTTP and Download
+requests>=2.31.0            # HTTP library for downloads
+urllib3>=2.0.0              # HTTP client (dependency of requests)
+certifi>=2023.0.0           # SSL certificates
+
+# Phase 2B: Git Operations
+gitpython>=3.1.40           # Git repository cloning
+
+# Phase 2B: PDF Processing
+pypdf>=3.17.0               # PDF reading and text extraction
+pdfplumber>=0.10.3          # Advanced PDF processing (fallback)
+
+# Phase 2B: HTML/XML Parsing
+beautifulsoup4>=4.12.0      # HTML/XML parsing
+lxml>=4.9.0                 # XML parser (fast)
+
+# Phase 2B: Text Processing
+markdown>=3.5.0             # Markdown processing
+chardet>=5.2.0              # Character encoding detection
+ftfy>=6.1.0                 # Text cleaning and Unicode normalization
+
+# Phase 2B: Progress Bars
+tqdm>=4.66.0                # Progress bars for downloads
+
+# Phase 2B: Testing
+pytest>=7.4.0               # Testing framework
+pytest-cov>=4.1.0           # Code coverage for tests
+
+# Note: The following packages are intentionally NOT included in Phase 2B:
 # - langchain (RAG implementation - Phase 2C)
 # - chromadb (Vector storage - Phase 2C)  
 # - sentence-transformers (Embeddings - Phase 2C)
 # - openai (LLM integration - Phase 2C)
-# - pypdf (PDF processing - Phase 2B)
-# - beautifulsoup4 (HTML parsing - Phase 2B)
-# - requests (HTTP downloads - Phase 2B)
-# - gitpython (Git operations - Phase 2B)
+# - tiktoken (Token counting - Phase 2C)
 
-# Current phase (2A) implements only the infrastructure framework
-# Actual data processing dependencies will be added in subsequent phases
+# Phase 2B implements document acquisition and preprocessing only
+# RAG pipeline dependencies will be added in Phase 2C

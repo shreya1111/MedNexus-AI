@@ -18,6 +18,8 @@ data_sources:
     download_method: "git_clone"
     git_url: "https://github.com/abachaa/MedQuAD.git"
     estimated_size_mb: 50
+    status: "✅ IMPLEMENTED - Phase 2B"
+    implementation_notes: "Full Git clone with resume support"
     
   pubmed_qa:
     name: "PubMed QA"

@@ -1,32 +1,28 @@
 """
 MedQuAD downloader for MedNexus-AI Knowledge Ingestion Framework.
 
-Downloads medical Q&A dataset from MedQuAD GitHub repository.
+Downloads the MedQuAD medical question-answering dataset from GitHub.
 """
 
-import time
 from pathlib import Path
-from typing import List, Dict, Any, Optional
-from datetime import datetime
+from typing import List, Dict, Any
+import time
 
 from .base_downloader import BaseDownloader, DownloadResult, DownloadStatus
 
+try:
+    import git
+    GIT_AVAILABLE = True
+except ImportError:
+    GIT_AVAILABLE = False
+
 
 class MedQuADDownloader(BaseDownloader):
-    """
-    Downloader for MedQuAD Medical Question Answering Dataset.
+    """Downloader for MedQuAD dataset (GitHub repository)."""
     
-    Source: https://github.com/abachaa/MedQuAD
-    License: Public Domain
-    Format: XML files with medical question-answer pairs
-    """
+    REPO_URL = "https://github.com/abachaa/MedQuAD.git"
     
-    def __init__(
-        self,
-        output_dir: Path,
-        metadata_dir: Path,
-        **kwargs
-    ):
+    def __init__(self, output_dir: Path, metadata_dir: Path, **kwargs):
         """
         Initialize MedQuAD downloader.
         
@@ -37,11 +33,8 @@ class MedQuADDownloader(BaseDownloader):
         """
         super().__init__(output_dir, metadata_dir, **kwargs)
         
-        self.source_url = "https://github.com/abachaa/MedQuAD"
-        self.git_url = "https://github.com/abachaa/MedQuAD.git"
-        
-        self.logger.info(f"Initialized MedQuAD downloader")
-        self.logger.info(f"Output directory: {output_dir}")
+        if not GIT_AVAILABLE:
+            self.logger.error("GitPython not installed. Run: pip install gitpython")
     
     def get_source_name(self) -> str:
         """Get source name."""
@@ -49,91 +42,93 @@ class MedQuADDownloader(BaseDownloader):
     
     def get_download_list(self) -> List[Dict[str, Any]]:
         """
-        Get list of files to download from MedQuAD.
+        Get list of items to download.
         
-        NOTE: This is a placeholder implementation.
-        Actual implementation would:
-        1. Clone the GitHub repository
-        2. List all XML files
-        3. Return metadata for each file
+        For MedQuAD, we clone the entire repository.
         
         Returns:
-            List of download items
+            List with single item (the repository)
         """
-        self.logger.warning(
-            "MedQuAD downloader get_download_list() is not yet implemented. "
-            "This is a placeholder that returns an empty list."
-        )
-        
-        # Placeholder: Return empty list
-        # In Phase 2B, this would clone the repo and list files
-        return []
+        return [{
+            'url': self.REPO_URL,
+            'filename': 'medquad_repo',
+            'description': 'MedQuAD GitHub repository',
+        }]
     
-    def download_file(
-        self,
-        url: str,
-        output_path: Path,
-        **kwargs
-    ) -> DownloadResult:
+    def download_file(self, url: str, output_path: Path, **kwargs) -> DownloadResult:
         """
-        Download a single file from MedQuAD.
-        
-        NOTE: This is a placeholder implementation.
-        Actual implementation would:
-        1. Use git clone or download individual files
-        2. Validate XML structure
-        3. Extract metadata from XML
+        Download (clone) the MedQuAD repository.
         
         Args:
-            url: URL to download from
-            output_path: Path to save file
+            url: Repository URL
+            output_path: Output directory path
             **kwargs: Additional arguments
             
         Returns:
             DownloadResult
         """
-        self.logger.warning(
-            f"MedQuAD downloader download_file() is not yet implemented. "
-            f"Would download from: {url} to: {output_path}"
-        )
+        if not GIT_AVAILABLE:
+            return DownloadResult(
+                status=DownloadStatus.FAILED,
+                error_message="GitPython not installed"
+            )
         
-        # Placeholder: Return failed status
-        # In Phase 2B, this would perform actual download
-        return DownloadResult(
-            status=DownloadStatus.FAILED,
-            error_message="Download not implemented yet (placeholder)",
-            metadata={
-                "url": url,
-                "output_path": str(output_path),
-                "source": self.get_source_name(),
-            }
-        )
-    
-    def download_via_git(self, branch: str = "master") -> DownloadResult:
-        """
-        Download entire MedQuAD repository via git clone.
+        start_time = time.time()
         
-        NOTE: This is a placeholder for the recommended download method.
-        
-        Args:
-            branch: Git branch to clone
+        try:
+            self.logger.info(f"Cloning MedQuAD repository to {output_path}")
             
-        Returns:
-            DownloadResult
-        """
-        self.logger.info(f"Would clone MedQuAD repository from: {self.git_url}")
-        self.logger.info(f"Branch: {branch}")
-        self.logger.info(f"Target directory: {self.output_dir}")
-        
-        # Placeholder: In Phase 2B, would execute:
-        # git clone --depth 1 --branch {branch} {self.git_url} {self.output_dir}
-        
-        return DownloadResult(
-            status=DownloadStatus.PENDING,
-            metadata={
-                "method": "git_clone",
-                "git_url": self.git_url,
-                "branch": branch,
-                "target_dir": str(self.output_dir),
-            }
-        )
+            # Check if already cloned
+            if output_path.exists() and (output_path / '.git').exists():
+                self.logger.info("Repository already exists, pulling latest changes")
+                repo = git.Repo(output_path)
+                origin = repo.remotes.origin
+                origin.pull()
+                status = DownloadStatus.RESUMED
+            else:
+                # Clone repository
+                git.Repo.clone_from(
+                    url,
+                    output_path,
+                    progress=None  # Could add custom progress handler
+                )
+                status = DownloadStatus.COMPLETED
+            
+            # Calculate size
+            total_size = sum(
+                f.stat().st_size for f in output_path.rglob('*') if f.is_file()
+            )
+            
+            elapsed_time = time.time() - start_time
+            
+            self.logger.info(
+                f"Successfully cloned MedQuAD repository "
+                f"({total_size / (1024*1024):.2f} MB in {elapsed_time:.2f}s)"
+            )
+            
+            return DownloadResult(
+                status=status,
+                file_path=output_path,
+                size_bytes=total_size,
+                download_time_seconds=elapsed_time,
+                metadata={
+                    'repository_url': url,
+                    'clone_method': 'git',
+                }
+            )
+            
+        except git.GitCommandError as e:
+            self.logger.error(f"Git error cloning repository: {e}")
+            return DownloadResult(
+                status=DownloadStatus.FAILED,
+                error_message=f"Git error: {str(e)}",
+                download_time_seconds=time.time() - start_time
+            )
+            
+        except Exception as e:
+            self.logger.error(f"Error cloning repository: {e}")
+            return DownloadResult(
+                status=DownloadStatus.FAILED,
+                error_message=str(e),
+                download_time_seconds=time.time() - start_time
+            )
