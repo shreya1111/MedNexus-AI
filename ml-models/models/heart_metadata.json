@@ -1,0 +1,55 @@
+{
+  "model_name": "RandomForest",
+  "features": [
+    "age",
+    "sex",
+    "chest_pain_type",
+    "blood_pressure",
+    "cholesterol",
+    "fasting_blood_sugar",
+    "resting_ecg",
+    "max_heart_rate",
+    "exercise_angina",
+    "st_depression",
+    "st_slope",
+    "major_vessels",
+    "thalassemia",
+    "age_chol",
+    "hr_age_ratio",
+    "bp_category"
+  ],
+  "metrics": {
+    "accuracy": 0.8688,
+    "precision": 0.8442,
+    "recall": 0.8784,
+    "f1": 0.8609,
+    "roc_auc": 0.9518,
+    "cv_f1_mean": 0.8031
+  },
+  "all_results": {
+    "RandomForest": {
+      "accuracy": 0.8688,
+      "precision": 0.8442,
+      "recall": 0.8784,
+      "f1": 0.8609,
+      "roc_auc": 0.9518,
+      "cv_f1_mean": 0.8031
+    },
+    "GradientBoosting": {
+      "accuracy": 0.8625,
+      "precision": 0.8514,
+      "recall": 0.8514,
+      "f1": 0.8514,
+      "roc_auc": 0.9511,
+      "cv_f1_mean": 0.8196
+    },
+    "SVM": {
+      "accuracy": 0.8562,
+      "precision": 0.84,
+      "recall": 0.8514,
+      "f1": 0.8456,
+      "roc_auc": 0.9522,
+      "cv_f1_mean": 0.8058
+    }
+  }
+}

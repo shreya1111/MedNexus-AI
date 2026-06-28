@@ -1,0 +1,61 @@
+{
+  "model_name": "LogisticRegression",
+  "features": [
+    "pregnancies",
+    "glucose",
+    "blood_pressure",
+    "skin_thickness",
+    "insulin",
+    "bmi",
+    "diabetes_pedigree",
+    "age",
+    "glucose_bmi",
+    "age_bmi",
+    "age_group",
+    "bmi_category"
+  ],
+  "metrics": {
+    "accuracy": 0.935,
+    "precision": 0.913,
+    "recall": 0.9,
+    "f1": 0.9065,
+    "roc_auc": 0.9835,
+    "cv_f1_mean": 0.8536,
+    "cv_f1_std": 0.0335
+  },
+  "all_results": {
+    "LogisticRegression": {
+      "accuracy": 0.935,
+      "precision": 0.913,
+      "recall": 0.9,
+      "f1": 0.9065,
+      "roc_auc": 0.9835,
+      "cv_f1_mean": 0.8536,
+      "cv_f1_std": 0.0335
+    },
+    "RandomForest": {
+      "accuracy": 0.915,
+      "precision": 0.8955,
+      "recall": 0.8571,
+      "f1": 0.8759,
+      "roc_auc": 0.9654,
+      "cv_f1_mean": 0.8389,
+      "cv_f1_std": 0.0264
+    },
+    "GradientBoosting": {
+      "accuracy": 0.915,
+      "precision": 0.8732,
+      "recall": 0.8857,
+      "f1": 0.8794,
+      "roc_auc": 0.9749,
+      "cv_f1_mean": 0.8266,
+      "cv_f1_std": 0.0192
+    }
+  },
+  "training_samples": 800,
+  "test_samples": 200,
+  "class_distribution": {
+    "negative": 650,
+    "positive": 350
+  }
+}

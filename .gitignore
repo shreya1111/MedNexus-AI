@@ -1,0 +1,87 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.env
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+*.egg-info/
+*.egg
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+coverage/
+.nyc_output/
+*.test.js
+
+# ML Models (large files - use DVC)
+*.pkl
+*.h5
+*.pt
+*.pth
+*.onnx
+*.pb
+ml-models/models/*.pkl
+ml-models/models/*.h5
+
+# Data
+*.csv
+*.parquet
+datasets/raw/
+datasets/processed/
+!datasets/README.md
+
+# Docker
+.dockerignore
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# DVC
+.dvc/cache/
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+.Spotlight-V100
+.Trashes
+
+# Invalid directories (phantom folders with braces)
+*{*}*/

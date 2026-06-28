@@ -1,0 +1,292 @@
+openapi: 3.0.3
+info:
+  title: MedNexus AI Backend API
+  description: |
+    RESTful API for the MedNexus AI healthcare platform.
+    Supports patient management, medical records, appointments, and AI-powered analytics.
+  version: 1.0.0
+  contact:
+    name: MedNexus AI Team
+    email: api@mednexus.ai
+
+servers:
+  - url: http://localhost:5000/api/v1
+    description: Development
+  - url: https://api.mednexus.ai/api/v1
+    description: Production
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        _id: { type: string, example: "64abc123def456" }
+        email: { type: string, format: email, example: "patient@mednexus.ai" }
+        firstName: { type: string, example: "Priya" }
+        lastName: { type: string, example: "Sharma" }
+        fullName: { type: string, example: "Priya Sharma" }
+        role: { type: string, enum: [patient, doctor, admin] }
+        isActive: { type: boolean }
+        isEmailVerified: { type: boolean }
+        createdAt: { type: string, format: date-time }
+
+    MedicalRecord:
+      type: object
+      properties:
+        _id: { type: string }
+        patient: { type: string }
+        type:
+          type: string
+          enum: [prescription, lab_result, imaging, discharge_summary, consultation]
+        title: { type: string, example: "Annual Blood Panel" }
+        description: { type: string }
+        date: { type: string, format: date }
+        fileUrl: { type: string, format: uri }
+        tags: { type: array, items: { type: string } }
+        aiSummary: { type: string }
+        isProcessed: { type: boolean }
+
+    Appointment:
+      type: object
+      properties:
+        _id: { type: string }
+        patient: { $ref: '#/components/schemas/User' }
+        doctor: { $ref: '#/components/schemas/User' }
+        scheduledAt: { type: string, format: date-time }
+        duration: { type: integer, example: 30 }
+        status: { type: string, enum: [pending, confirmed, cancelled, completed] }
+        type: { type: string, enum: [in-person, telemedicine] }
+        reason: { type: string }
+        notes: { type: string }
+
+    ApiResponse:
+      type: object
+      properties:
+        success: { type: boolean }
+        message: { type: string }
+        data: { type: object }
+        pagination:
+          type: object
+          properties:
+            page: { type: integer }
+            limit: { type: integer }
+            total: { type: integer }
+            totalPages: { type: integer }
+
+    Error:
+      type: object
+      properties:
+        success: { type: boolean, example: false }
+        message: { type: string }
+
+paths:
+  /auth/register:
+    post:
+      tags: [Authentication]
+      summary: Register a new account
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, firstName, lastName]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, minLength: 8, example: "Secure@1234" }
+                firstName: { type: string, example: "Priya" }
+                lastName: { type: string, example: "Sharma" }
+                role: { type: string, enum: [patient, doctor, admin], default: patient }
+      responses:
+        '201':
+          description: Account created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          user: { $ref: '#/components/schemas/User' }
+                          accessToken: { type: string }
+                          refreshToken: { type: string }
+        '400': { description: Validation error }
+        '409': { description: Email already registered }
+
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: Login and receive tokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '200':
+          description: Login successful
+        '401': { description: Invalid credentials }
+
+  /auth/refresh:
+    post:
+      tags: [Authentication]
+      summary: Refresh access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken: { type: string }
+      responses:
+        '200': { description: New tokens issued }
+        '401': { description: Invalid refresh token }
+
+  /auth/me:
+    get:
+      tags: [Authentication]
+      summary: Get current user profile
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          user: { $ref: '#/components/schemas/User' }
+        '401': { description: Unauthorized }
+
+  /records:
+    get:
+      tags: [Medical Records]
+      summary: List medical records (paginated)
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 10 }
+        - name: type
+          in: query
+          schema: { type: string, enum: [prescription, lab_result, imaging, discharge_summary, consultation] }
+        - name: tag
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Records list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          records:
+                            type: array
+                            items: { $ref: '#/components/schemas/MedicalRecord' }
+
+    post:
+      tags: [Medical Records]
+      summary: Create a medical record (with optional file)
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [title, description, type]
+              properties:
+                title: { type: string }
+                description: { type: string }
+                type: { type: string }
+                date: { type: string, format: date }
+                tags: { type: string, description: "Comma-separated" }
+                file:
+                  type: string
+                  format: binary
+                  description: PDF or image (max 20MB)
+      responses:
+        '201': { description: Record created }
+
+  /records/search:
+    get:
+      tags: [Medical Records]
+      summary: Full-text search across records
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Search results }
+
+  /appointments:
+    get:
+      tags: [Appointments]
+      summary: List appointments (role-scoped)
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string, enum: [pending, confirmed, cancelled, completed] }
+      responses:
+        '200': { description: Appointments list }
+
+    post:
+      tags: [Appointments]
+      summary: Book an appointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [doctorId, scheduledAt, reason, type]
+              properties:
+                doctorId: { type: string }
+                scheduledAt: { type: string, format: date-time }
+                reason: { type: string, minLength: 5 }
+                type: { type: string, enum: [in-person, telemedicine] }
+                notes: { type: string }
+      responses:
+        '201': { description: Appointment booked }
+        '409': { description: Time slot conflict }
+
+  /analytics/dashboard:
+    get:
+      tags: [Analytics]
+      summary: Get dashboard statistics (doctor/admin only)
+      responses:
+        '200': { description: Analytics data }
+        '403': { description: Insufficient permissions }
