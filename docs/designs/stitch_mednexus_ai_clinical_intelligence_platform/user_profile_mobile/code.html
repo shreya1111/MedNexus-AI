@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedNexus-AI Practitioner Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(26, 33, 35, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(60, 73, 78, 0.5);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.05);
+        }
+        .pulse-active {
+            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .7; transform: scale(1.1); }
+        }
+        body {
+            background-color: #0e1417;
+            color: #dde3e7;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#ffddb1",
+                      "on-primary": "#003543",
+                      "surface-container-high": "#242b2e",
+                      "on-primary-fixed": "#001f28",
+                      "surface-base": "#0e1417",
+                      "on-error": "#690005",
+                      "secondary-container": "#7000ff",
+                      "surface-bright": "#333a3d",
+                      "primary": "#a4e6ff",
+                      "tertiary-container": "#feb127",
+                      "surface-container": "#1a2123",
+                      "secondary-fixed-dim": "#d1bcff",
+                      "on-tertiary": "#442b00",
+                      "on-tertiary-fixed": "#291800",
+                      "on-surface": "#dde3e7",
+                      "inverse-primary": "#00677f",
+                      "surface-tint": "#4cd6ff",
+                      "error-container": "#93000a",
+                      "success-glow": "#feb127",
+                      "primary-container": "#00d1ff",
+                      "surface-dim": "#0e1417",
+                      "primary-fixed": "#b7eaff",
+                      "on-secondary": "#3c0090",
+                      "error": "#ffb4ab",
+                      "on-secondary-fixed-variant": "#5700c9",
+                      "tertiary-fixed-dim": "#ffba49",
+                      "surface-container-low": "#161d1f",
+                      "inverse-surface": "#dde3e7",
+                      "surface-variant": "#2f3639",
+                      "on-secondary-container": "#ddcdff",
+                      "on-secondary-fixed": "#23005b",
+                      "secondary-fixed": "#e9ddff",
+                      "on-primary-fixed-variant": "#004e60",
+                      "on-error-container": "#ffdad6",
+                      "border-low-opacity": "rgba(60, 73, 78, 0.5)",
+                      "inverse-on-surface": "#2b3134",
+                      "secondary": "#d1bcff",
+                      "on-tertiary-container": "#6b4700",
+                      "outline-variant": "#3c494e",
+                      "tertiary": "#ffd59c",
+                      "background": "#0e1417",
+                      "surface-container-lowest": "#090f12",
+                      "primary-fixed-dim": "#4cd6ff",
+                      "on-surface-variant": "#bbc9cf",
+                      "surface-container-highest": "#2f3639",
+                      "outline": "#859399",
+                      "surface": "#0e1417",
+                      "on-primary-container": "#00566a",
+                      "on-background": "#dde3e7",
+                      "on-tertiary-fixed-variant": "#624000",
+                      "surface-glass": "rgba(26, 33, 35, 0.7)"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "xl": "32px",
+                      "md": "16px",
+                      "2xl": "48px",
+                      "3xl": "64px",
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "sm": "8px",
+                      "container-max": "1440px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "mono-data": ["JetBrains Mono"],
+                      "headline-md": ["Inter"],
+                      "display-lg-mobile": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "label-caps": ["Inter"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen bg-surface-base font-body-md text-on-surface">
+<!-- Top App Bar -->
+<header class="fixed top-0 z-50 w-full h-16 flex justify-between items-center px-gutter bg-surface-glass backdrop-blur-xl border-b border-outline-variant/30 shadow-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="clinical_notes">clinical_notes</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Clinical Intel</h1>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 transition-transform" data-icon="notifications">notifications</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 mt-16 pb-24 px-gutter overflow-y-auto">
+
+<div class="relative z-10 max-w-md mx-auto pt-8">
+<!-- Profile Header -->
+<section class="flex flex-col items-center mb-xl">
+<div class="relative mb-md">
+<div class="w-24 h-24 rounded-full border-2 border-primary p-1 glow-cyan">
+<img class="w-full h-full object-cover rounded-full" data-alt="A professional headshot of a medical practitioner in a modern clinic, high-end corporate style. The lighting is crisp and cool-toned with cyan accents, reflecting a technologically advanced medical environment. The doctor wears a sleek dark medical uniform, and the background is a blurred high-tech medical lab with translucent glass panels and oceanic blue tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxboSkaCFd2SoIBDN6J7V9nyr5hWh0Gm4oKyeF7UBwSHlnjQkWul5PYMa0bGI6nt_Rx3CwxFoE9Sxc2mtIu4hYkm7hng20OoZLsTNs-8Qr5wc3sSNdPp3xsxYoYbXt58KN3YndAReaNck_CQDBX85rGkR5HwA3QySNwGC5LmPOx4Arn1T-CxXgTbRQXMScWDvM0H4Gwe58zd_XLBVFpbPqtqwAFowQGJA4Rcx_Jhp6q1BWukZ9PoE5xG2dI6K3GG25phnL-t7RpUc"/>
+</div>
+<div class="absolute bottom-0 right-0 w-6 h-6 bg-success-glow rounded-full border-4 border-surface-base pulse-active"></div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface text-center">Dr. Aris Thorne</h2>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest mt-xs">Senior Neuro-Oncologist</p>
+</section>
+<!-- Quick Stats Grid -->
+<section class="grid grid-cols-2 gap-md mb-xl">
+<div class="glass-card p-md rounded-xl flex flex-col items-center justify-center text-center">
+<span class="font-label-caps text-label-caps text-primary mb-xs">Cases Handled</span>
+<span class="font-mono-data text-headline-md text-on-primary-container">1,284</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+                        +12% MoM
+                    </span>
+</div>
+<div class="glass-card p-md rounded-xl flex flex-col items-center justify-center text-center">
+<span class="font-label-caps text-label-caps text-primary mb-xs">AI Accuracy</span>
+<span class="font-mono-data text-headline-md text-on-primary-container">99.2%</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-xs">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="verified_user">verified_user</span>
+                        Confidence
+                    </span>
+</div>
+</section>
+<!-- Settings Categories -->
+<section class="glass-card rounded-xl overflow-hidden mb-xl">
+<div class="divide-y divide-outline-variant/30">
+<!-- Profile Info -->
+<button class="w-full flex items-center justify-between p-md hover:bg-surface-container-high transition-all active:scale-[0.98] group">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="person_outline">person_outline</span>
+<span class="font-body-md text-body-md text-on-surface">Personal Information</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Security -->
+<button class="w-full flex items-center justify-between p-md hover:bg-surface-container-high transition-all active:scale-[0.98] group">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="shield_lock">shield_lock</span>
+<span class="font-body-md text-body-md text-on-surface">Security &amp; Privacy</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Notifications -->
+<button class="w-full flex items-center justify-between p-md hover:bg-surface-container-high transition-all active:scale-[0.98] group">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="notifications_active">notifications_active</span>
+<span class="font-body-md text-body-md text-on-surface">Notification Preferences</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Integrations -->
+<button class="w-full flex items-center justify-between p-md hover:bg-surface-container-high transition-all active:scale-[0.98] group">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="hub">hub</span>
+<span class="font-body-md text-body-md text-on-surface">API &amp; Medical Systems</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Language -->
+<button class="w-full flex items-center justify-between p-md hover:bg-surface-container-high transition-all active:scale-[0.98] group">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="language">language</span>
+<span class="font-body-md text-body-md text-on-surface">Language &amp; Region</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Support & Info -->
+<section class="glass-card rounded-xl overflow-hidden mb-xl">
+<div class="divide-y divide-outline-variant/30">
+<button class="w-full flex items-center justify-between p-md hover:bg-surface-container-high transition-all active:scale-[0.98] group">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="help_center">help_center</span>
+<span class="font-body-md text-body-md text-on-surface">Help Center</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="open_in_new">open_in_new</span>
+</button>
+<button class="w-full flex items-center justify-between p-md hover:bg-surface-container-high transition-all active:scale-[0.98] group">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="info">info</span>
+<span class="font-body-md text-body-md text-on-surface">About MedNexus-AI</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">v2.4.0</span>
+</button>
+</div>
+</section>
+<!-- Logout Button -->
+<button class="w-full h-14 flex items-center justify-center gap-sm bg-error-container/10 border border-error/20 text-error rounded-xl hover:bg-error-container/20 transition-all active:scale-95 mb-12">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-headline-md text-body-md font-bold">Logout</span>
+</button>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-2 py-3 pb-safe bg-surface-glass backdrop-blur-xl border-t border-outline-variant/30 shadow-lg z-50 rounded-t-xl">
+<!-- Dashboard -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps mt-1">Dashboard</span>
+</button>
+<!-- AI Chat -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="neurology">neurology</span>
+<span class="font-label-caps text-label-caps mt-1">AI Chat</span>
+</button>
+<!-- Search -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-caps text-label-caps mt-1">Search</span>
+</button>
+<!-- Reports -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-caps text-label-caps mt-1">Reports</span>
+</button>
+<!-- Profile - ACTIVE -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="account_circle" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</button>
+</nav>
+<script>
+        // Micro-interaction for hover effects on glass cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>

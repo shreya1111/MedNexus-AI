@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedNexus-AI | Clinical Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#ddcdff",
+                        "on-surface": "#dde3e7",
+                        "surface": "#0e1417",
+                        "primary-fixed": "#b7eaff",
+                        "on-tertiary-container": "#6b4700",
+                        "primary-fixed-dim": "#4cd6ff",
+                        "surface-dim": "#0e1417",
+                        "background": "#0e1417",
+                        "surface-tint": "#4cd6ff",
+                        "secondary-fixed": "#e9ddff",
+                        "on-error": "#690005",
+                        "on-tertiary": "#442b00",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#5700c9",
+                        "on-secondary-fixed": "#23005b",
+                        "error": "#ffb4ab",
+                        "secondary": "#d1bcff",
+                        "tertiary-fixed": "#ffddb1",
+                        "tertiary-container": "#feb127",
+                        "tertiary-fixed-dim": "#ffba49",
+                        "on-tertiary-fixed": "#291800",
+                        "surface-container-low": "#161d1f",
+                        "on-tertiary-fixed-variant": "#624000",
+                        "surface-container-high": "#242b2e",
+                        "on-background": "#dde3e7",
+                        "on-primary-container": "#00566a",
+                        "surface-variant": "#2f3639",
+                        "surface-container-lowest": "#090f12",
+                        "inverse-primary": "#00677f",
+                        "surface-bright": "#333a3d",
+                        "inverse-surface": "#dde3e7",
+                        "primary-container": "#00d1ff",
+                        "outline-variant": "#3c494e",
+                        "outline": "#859399",
+                        "on-surface-variant": "#bbc9cf",
+                        "on-primary-fixed-variant": "#004e60",
+                        "secondary-container": "#7000ff",
+                        "primary": "#a4e6ff",
+                        "tertiary": "#ffd59c",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#3c0090",
+                        "on-primary": "#003543",
+                        "surface-container": "#1a2123",
+                        "inverse-on-surface": "#2b3134",
+                        "secondary-fixed-dim": "#d1bcff",
+                        "on-primary-fixed": "#001f28",
+                        "surface-container-highest": "#2f3639"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "container-max": "1440px",
+                        "sm": "8px",
+                        "unit": "8px",
+                        "xs": "4px",
+                        "3xl": "64px",
+                        "2xl": "48px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "mono-data": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0e1417;
+            color: #dde3e7;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid #1e293b;
+        }
+        .primary-glow {
+            box-shadow: 0px 0px 15px rgba(0, 209, 255, 0.15);
+        }
+        .mesh-bg {
+            background-image: radial-gradient(circle at 2px 2px, #1e293b 1px, transparent 0);
+            background-size: 32px 32px;
+        }
+    </style>
+</head>
+<body class="selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center px-lg h-16 w-full fixed top-0 z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-xl">
+<span class="font-display-lg text-display-lg font-bold text-primary cursor-pointer active:scale-95">MedNexus-AI</span>
+<div class="hidden md:flex items-center gap-lg">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors cursor-pointer active:scale-95" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors cursor-pointer active:scale-95" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden lg:flex items-center bg-surface-container-low border border-outline-variant rounded-lg px-md h-10 w-64 group focus-within:border-primary transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-full placeholder:text-on-surface-variant/50" placeholder="Search insights..." type="text"/>
+</div>
+<div class="flex items-center gap-sm">
+<button class="material-symbols-outlined text-on-surface-variant p-sm hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant p-sm hover:text-primary transition-colors">sensors</button>
+<button class="material-symbols-outlined text-on-surface-variant p-sm hover:text-primary transition-colors">account_circle</button>
+</div>
+<button class="bg-primary-container text-on-primary-container px-lg py-sm rounded-lg font-label-caps text-label-caps hover:brightness-110 active:scale-95 transition-all">
+                Quick Action
+            </button>
+</div>
+</nav>
+<main class="pt-16">
+<!-- Hero Section -->
+<section class="relative min-h-[870px] flex flex-col items-center justify-center text-center px-gutter overflow-hidden mesh-bg">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full opacity-30 pointer-events-none">
+<div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/20 blur-[120px] rounded-full"></div>
+</div>
+<div class="relative z-10 max-w-4xl mx-auto space-y-lg">
+<div class="inline-flex items-center gap-sm px-md py-xs bg-surface-container border border-outline-variant rounded-full">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">Next-Gen Clinical Engine v2.4</span>
+</div>
+<h1 class="font-display-lg text-display-lg md:text-[72px] md:leading-[80px] text-on-surface">
+                    The Future of <span class="text-primary italic">Clinical Intelligence</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                    AI-powered insights for modern healthcare. Process vast amounts of clinical data with unparalleled precision and secure RAG-based reasoning.
+                </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-md pt-lg">
+<button class="w-full sm:w-auto bg-primary text-on-primary font-label-caps text-label-caps px-[40px] py-[16px] rounded-lg hover:brightness-110 transition-all active:scale-95">
+                        Get Started
+                    </button>
+<button class="w-full sm:w-auto flex items-center justify-center gap-sm border border-outline-variant bg-surface-container-low text-on-surface font-label-caps text-label-caps px-[40px] py-[16px] rounded-lg hover:bg-surface-variant transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+                        Watch Demo
+                    </button>
+</div>
+</div>
+</section>
+<!-- Visual Component: AI Visualization -->
+<section class="relative px-gutter pb-3xl">
+<div class="max-w-container-max mx-auto h-[600px] rounded-3xl overflow-hidden glass-panel relative border border-outline-variant/30 primary-glow">
+<div class="absolute inset-0 z-0">
+
+</div>
+<div class="absolute bottom-lg left-lg z-10 space-y-xs">
+<div class="font-mono-data text-mono-data text-primary/80 uppercase">Neural Stream Rendering</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant/60">SIMULATING PATIENT PATHWAY SYNTHESIS</div>
+</div>
+<div class="absolute inset-0 pointer-events-none bg-gradient-to-t from-surface to-transparent opacity-40"></div>
+</div>
+</section>
+<!-- Features Bento Grid -->
+<section class="py-3xl px-gutter max-w-container-max mx-auto">
+<div class="text-center mb-2xl space-y-sm">
+<h2 class="font-headline-md text-headline-md text-on-surface">Cognitive Precision Engineering</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Three pillars of the MedNexus ecosystem.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Card 1 -->
+<div class="glass-panel p-xl rounded-2xl flex flex-col gap-lg group hover:border-primary/50 transition-all">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined">database</span>
+</div>
+<div class="space-y-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Semantic Search</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Navigate complex patient histories using natural language. Query vectors instead of keywords for high-accuracy recall.</p>
+</div>
+<div class="mt-auto flex items-center gap-sm text-primary font-label-caps text-label-caps cursor-pointer">
+                        Learn More <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="glass-panel p-xl rounded-2xl flex flex-col gap-lg group border-primary/20 shadow-[0_0_40px_rgba(0,209,255,0.05)]">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div class="space-y-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Automated Analysis</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Summarize labs, imaging reports, and provider notes in seconds. Identify clinical contradictions with AI-led auditing.</p>
+</div>
+<div class="mt-auto flex items-center gap-sm text-primary font-label-caps text-label-caps cursor-pointer">
+                        Learn More <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="glass-panel p-xl rounded-2xl flex flex-col gap-lg group hover:border-primary/50 transition-all">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+</div>
+<div class="space-y-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Enterprise HIPAA</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Bank-grade encryption for all PHI. Zero-retention data processing ensures your practice remains fully compliant with federal standards.</p>
+</div>
+<div class="mt-auto flex items-center gap-sm text-primary font-label-caps text-label-caps cursor-pointer">
+                        Learn More <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Tech Stack -->
+<section class="py-2xl border-y border-outline-variant/30 bg-surface-container-lowest">
+<div class="max-w-container-max mx-auto px-gutter">
+<p class="text-center font-label-caps text-label-caps text-on-surface-variant/40 mb-xl tracking-[0.2em] uppercase">Built with Industry Standards</p>
+<div class="flex flex-wrap items-center justify-center gap-3xl">
+<div class="flex items-center gap-sm opacity-60 hover:opacity-100 transition-opacity cursor-default group">
+<div class="w-10 h-10 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[20px]">smart_toy</span>
+</div>
+<span class="font-display-lg text-[24px] font-bold text-on-surface">Med-PaLM 2</span>
+</div>
+<div class="flex items-center gap-sm opacity-60 hover:opacity-100 transition-opacity cursor-default group">
+<div class="w-10 h-10 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[20px]">lock</span>
+</div>
+<span class="font-display-lg text-[24px] font-bold text-on-surface">Secure-RAG</span>
+</div>
+<div class="flex items-center gap-sm opacity-60 hover:opacity-100 transition-opacity cursor-default group">
+<div class="w-10 h-10 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[20px]">hub</span>
+</div>
+<span class="font-display-lg text-[24px] font-bold text-on-surface">FHIR Compatible</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Architecture Diagram -->
+<section class="py-3xl px-gutter max-w-container-max mx-auto">
+<div class="glass-panel rounded-3xl p-2xl relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[80px]"></div>
+<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-xl">
+<!-- Step 1 -->
+<div class="flex flex-col items-center text-center max-w-xs space-y-md">
+<div class="w-16 h-16 rounded-xl bg-surface-container flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-primary text-[32px]">upload_file</span>
+</div>
+<div>
+<h4 class="font-headline-md text-body-md font-bold">Data Ingestion</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">EHR integration via HL7 &amp; FHIR</p>
+</div>
+</div>
+<!-- Connector -->
+<div class="hidden md:block flex-1 h-px bg-gradient-to-r from-outline-variant via-primary to-outline-variant relative">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary animate-ping"></div>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center text-center max-w-xs space-y-md">
+<div class="w-16 h-16 rounded-xl bg-surface-container flex items-center justify-center border border-primary shadow-[0_0_20px_rgba(0,209,255,0.2)]">
+<span class="material-symbols-outlined text-primary text-[32px]">memory</span>
+</div>
+<div>
+<h4 class="font-headline-md text-body-md font-bold">AI Processing</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Medical-grade LLM Orchestration</p>
+</div>
+</div>
+<!-- Connector -->
+<div class="hidden md:block flex-1 h-px bg-gradient-to-r from-outline-variant via-primary to-outline-variant"></div>
+<!-- Step 3 -->
+<div class="flex flex-col items-center text-center max-w-xs space-y-md">
+<div class="w-16 h-16 rounded-xl bg-surface-container flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-primary text-[32px]">clinical_notes</span>
+</div>
+<div>
+<h4 class="font-headline-md text-body-md font-bold">Clinical Insights</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Actionable bedside intelligence</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-3xl bg-surface-container-low/50">
+<div class="max-w-4xl mx-auto px-gutter text-center space-y-xl">
+<span class="material-symbols-outlined text-primary text-[48px] opacity-40">format_quote</span>
+<blockquote class="font-display-lg text-[32px] leading-[40px] text-on-surface font-medium italic">
+                    "MedNexus-AI hasn't just improved our workflow; it has redefined the way we synthesize patient history. The clinical accuracy and speed of report analysis are unprecedented in my 20 years of practice."
+                </blockquote>
+<div class="flex flex-col items-center gap-sm">
+<img class="w-16 h-16 rounded-full border-2 border-primary object-cover" data-alt="A professional headshot of a middle-aged medical executive with a kind yet authoritative expression. He is wearing a minimalist navy blue scrub suit in a high-tech hospital corridor with soft, blue-tinted overhead lighting. The visual style is premium, clean, and futuristic, matching a high-end medical software aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcI_aK7_poqxt9akE3WfVbC3d5TD9Ek-ZCzf1ZUmBbvPZAGGisVVe41eAqqbBRSIa2ajYgnXAzfGObp98mdZWb0OzKynMJa9RQh6sf9CiUCFI_Km4GdzbTBN6XscsWp2fWV8o2NeKqTEKQQKHxbgFezjZhQqPyFgTiSCOKTv18zNqZL-mca_Y12G2OiSRlePzcV1sWnOS9Zyz8z9fV8miGT04BoAmTBHtvh38Jgqj-tKRcu4TdaQvwMXmSOoBDDE2-baNYRgAMOtI"/>
+<div class="text-center">
+<p class="font-headline-md text-body-md font-bold text-on-surface">Dr. Aris Thorne</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Chief Medical Officer, Vanguard Health</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-3xl px-gutter">
+<div class="max-w-container-max mx-auto glass-panel rounded-3xl p-3xl text-center border-primary/10 relative overflow-hidden">
+<div class="absolute -bottom-24 -right-24 w-96 h-96 bg-primary/10 blur-[100px] rounded-full"></div>
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-secondary/10 blur-[100px] rounded-full"></div>
+<h2 class="font-display-lg text-display-lg mb-md text-on-surface">Ready to transform your practice?</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-xl max-w-2xl mx-auto">
+                    Join 500+ clinics using MedNexus to deliver superior care through clinical intelligence.
+                </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-md">
+<button class="bg-primary text-on-primary px-3xl py-md rounded-lg font-label-caps text-label-caps hover:brightness-110 active:scale-95 transition-all">
+                        Schedule a Demo
+                    </button>
+<button class="border border-outline-variant px-3xl py-md rounded-lg font-label-caps text-label-caps hover:bg-surface-variant active:scale-95 transition-all text-on-surface">
+                        Contact Sales
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-xl bg-surface-container-lowest border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max mx-auto gap-lg">
+<div class="flex flex-col gap-sm">
+<span class="font-display-lg text-display-lg text-primary font-bold">MedNexus-AI</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 MedNexus AI. Enterprise Clinical Intelligence.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-xl">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-opacity hover:opacity-80" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-opacity hover:opacity-80" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-opacity hover:opacity-80" href="#">HIPAA Compliance</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-opacity hover:opacity-80" href="#">Contact Support</a>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">language</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">shield</button>
+</div>
+</div>
+</footer>
+<script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-8');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-8');
+            observer.observe(section);
+        });
+
+        // Interactive Header Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 20) {
+                nav.classList.add('py-2', 'bg-surface/95');
+                nav.classList.remove('h-16');
+            } else {
+                nav.classList.remove('py-2', 'bg-surface/95');
+                nav.classList.add('h-16');
+            }
+        });
+    </script>
+</body></html>

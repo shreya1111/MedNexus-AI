@@ -1,0 +1,199 @@
+# MedNexus-AI Embedding Generation Configuration
+# Phase 2D: Production Embedding Pipeline
+
+# Provider Configuration
+provider:
+  # Active provider: gemini, sentence-transformers
+  active: "sentence-transformers"
+  
+  # Provider-specific settings
+  gemini:
+    model: "models/text-embedding-004"
+    api_key_env: "GEMINI_API_KEY"
+    task_type: "RETRIEVAL_DOCUMENT"
+    title_prefix: "Medical Document"
+    dimension: 768
+    max_batch_size: 100
+    rate_limit_rpm: 1500  # Requests per minute
+    retry_delay: 2
+    
+  sentence_transformers:
+    model: "sentence-transformers/all-MiniLM-L6-v2"
+    device: "cpu"  # cpu, cuda, mps
+    dimension: 384
+    max_batch_size: 32
+    normalize_embeddings: true
+    show_progress_bar: true
+
+# Processing Configuration
+processing:
+  batch_size: 32  # Default batch size (provider may override)
+  max_workers: 4  # Parallel processing workers
+  resume_enabled: true  # Resume interrupted jobs
+  skip_existing: true  # Skip chunks with valid embeddings
+  force_regenerate: false  # Force regeneration of all embeddings
+  
+  # Memory management
+  max_memory_mb: 4096  # Maximum memory usage
+  clear_cache_interval: 1000  # Clear cache every N batches
+
+# Caching Configuration
+cache:
+  enabled: true
+  strategy: "checksum"  # checksum, timestamp, disabled
+  cache_dir: "datasets/processed/embeddings/.cache"
+  validate_on_load: true
+  
+  # Cache invalidation rules
+  invalidate_on:
+    chunk_change: true  # Chunk checksum changed
+    model_change: true  # Model name changed
+    provider_change: true  # Provider changed
+    config_change: false  # Config parameters changed
+
+# Output Configuration
+output:
+  format: "json"  # json, numpy, both
+  compression: "none"  # none, gzip, bz2
+  save_numpy: false  # Save as .npy files
+  save_json: true  # Save as JSON files
+  separate_metadata: true  # Store metadata separately
+  output_dir: "datasets/processed/embeddings"
+  
+  # File organization
+  organize_by: "source"  # source, document, flat
+  filename_pattern: "{source}_{document}_embeddings"
+
+# Validation Configuration
+validation:
+  enabled: true
+  strict_mode: true  # Fail on validation errors
+  
+  # Validation checks
+  checks:
+    dimension: true  # Validate embedding dimensions
+    nan_values: true  # Check for NaN values
+    inf_values: true  # Check for infinite values
+    zero_vectors: true  # Check for zero vectors
+    duplicates: true  # Check for duplicate embeddings
+    metadata_consistency: true  # Validate metadata
+    checksum_match: true  # Verify checksums
+  
+  # Validation thresholds
+  thresholds:
+    max_zero_ratio: 0.1  # Max ratio of zero values
+    min_norm: 0.01  # Minimum vector norm
+    max_norm: 100.0  # Maximum vector norm
+    duplicate_tolerance: 0.9999  # Cosine similarity threshold
+
+# Retry Configuration
+retry:
+  enabled: true
+  max_attempts: 3
+  backoff_factor: 2  # Exponential backoff multiplier
+  retry_on_timeout: true
+  retry_on_rate_limit: true
+  retry_on_error: true
+  
+  # Error handling
+  skip_on_permanent_error: true
+  save_failed_chunks: true
+  failed_chunks_file: "datasets/evaluation/failed_embeddings.json"
+
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  log_batch_progress: true
+  log_cache_hits: false  # Log every cache hit (verbose)
+  log_validation: true
+  log_memory_usage: true
+  
+  # Progress reporting
+  progress_update_interval: 10  # Update every N batches
+  show_eta: true
+  show_speed: true
+
+# Benchmarking Configuration
+benchmark:
+  enabled: true
+  track_metrics:
+    - "generation_time"
+    - "batch_time"
+    - "cache_hit_rate"
+    - "memory_usage"
+    - "validation_errors"
+    - "retry_count"
+  
+  # Cost estimation
+  cost_estimation:
+    enabled: true
+    gemini_cost_per_1m_tokens: 0.00025  # $0.00025 per 1k tokens
+    storage_cost_per_gb_month: 0.023  # $0.023 per GB/month
+  
+  # Output files
+  output_files:
+    statistics: "datasets/evaluation/embedding_statistics.json"
+    validation: "datasets/evaluation/embedding_validation.json"
+    benchmark: "datasets/evaluation/embedding_benchmark.json"
+    cost_estimation: "datasets/evaluation/embedding_cost_estimation.json"
+
+# Quality Configuration
+quality:
+  min_quality_score: 0.0  # Minimum chunk quality score (0-100)
+  skip_low_quality: false  # Skip chunks below threshold
+  warn_low_quality: true  # Warn about low quality chunks
+  
+  # Quality-based prioritization
+  prioritize_high_quality: false  # Process high quality first
+  quality_weight: 1.0  # Weight for quality scoring
+
+# Advanced Configuration
+advanced:
+  # Token estimation
+  token_estimation_method: "simple"  # simple, tiktoken
+  characters_per_token: 4  # For simple estimation
+  
+  # Dimension validation
+  enforce_dimension: true  # Enforce expected dimensions
+  allow_dimension_mismatch: false  # Allow mismatched dimensions
+  
+  # Parallel processing
+  use_multiprocessing: false  # Use multiprocessing (vs threading)
+  prefetch_chunks: true  # Prefetch next batch
+  prefetch_size: 2  # Number of batches to prefetch
+  
+  # Error recovery
+  checkpoint_interval: 100  # Save checkpoint every N batches
+  checkpoint_file: "datasets/processed/embeddings/.checkpoint.json"
+  auto_resume_on_start: true  # Auto-resume from checkpoint
+
+# Feature Flags
+features:
+  incremental_updates: true  # Support incremental embedding updates
+  batch_optimization: true  # Optimize batch sizes dynamically
+  smart_caching: true  # Use intelligent caching strategies
+  parallel_validation: false  # Validate in parallel
+  streaming_output: false  # Stream embeddings to disk
+  compression_on_save: false  # Compress embeddings on save
+
+# Metadata Fields
+metadata:
+  required_fields:
+    - "embedding_id"
+    - "chunk_id"
+    - "document_id"
+    - "provider"
+    - "model"
+    - "dimension"
+    - "created_at"
+  
+  optional_fields:
+    - "source"
+    - "checksum"
+    - "chunk_checksum"
+    - "generation_time"
+    - "quality_score"
+    - "token_count"
+    - "processing_status"
+    - "retry_count"
+    - "cache_hit"

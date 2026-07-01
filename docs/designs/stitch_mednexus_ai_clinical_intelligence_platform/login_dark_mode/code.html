@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedNexus-AI | Secure Clinical Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Shared Style Guidance Tokens -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "border-low-opacity": "rgba(60, 73, 78, 0.5)",
+                    "secondary": "#d1bcff",
+                    "on-primary": "#003543",
+                    "error": "#ffb4ab",
+                    "surface-base": "#0e1417",
+                    "outline-variant": "#3c494e",
+                    "tertiary": "#ffd59c",
+                    "surface-container": "#1a2123",
+                    "inverse-on-surface": "#2b3134",
+                    "inverse-primary": "#00677f",
+                    "surface-glass": "rgba(26, 33, 35, 0.7)",
+                    "background": "#0e1417",
+                    "surface-container-high": "#242b2e",
+                    "on-background": "#dde3e7",
+                    "tertiary-container": "#feb127",
+                    "error-container": "#93000a",
+                    "on-secondary-fixed-variant": "#5700c9",
+                    "on-tertiary": "#442b00",
+                    "inverse-surface": "#dde3e7",
+                    "surface-container-low": "#161d1f",
+                    "on-tertiary-container": "#6b4700",
+                    "surface-dim": "#0e1417",
+                    "on-secondary": "#3c0090",
+                    "on-secondary-container": "#ddcdff",
+                    "primary": "#a4e6ff",
+                    "outline": "#859399",
+                    "on-tertiary-fixed-variant": "#624000",
+                    "primary-fixed": "#b7eaff",
+                    "surface-container-highest": "#2f3639",
+                    "on-secondary-fixed": "#23005b",
+                    "tertiary-fixed-dim": "#ffba49",
+                    "surface-variant": "#2f3639",
+                    "secondary-fixed": "#e9ddff",
+                    "surface": "#0e1417",
+                    "surface-tint": "#4cd6ff",
+                    "on-primary-fixed-variant": "#004e60",
+                    "tertiary-fixed": "#ffddb1",
+                    "secondary-fixed-dim": "#d1bcff",
+                    "primary-fixed-dim": "#4cd6ff",
+                    "on-tertiary-fixed": "#291800",
+                    "on-primary-container": "#00566a",
+                    "surface-container-lowest": "#090f12",
+                    "on-surface": "#dde3e7",
+                    "success-glow": "#feb127",
+                    "on-surface-variant": "#bbc9cf",
+                    "surface-bright": "#333a3d",
+                    "primary-container": "#00d1ff",
+                    "on-error": "#690005",
+                    "secondary-container": "#7000ff",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-fixed": "#001f28"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "xs": "4px",
+                    "container-max": "1440px",
+                    "sm": "8px",
+                    "2xl": "48px",
+                    "md": "16px",
+                    "xl": "32px",
+                    "3xl": "64px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "mono-data": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0e1417;
+            color: #dde3e7;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(26, 33, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(60, 73, 78, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.05);
+            border-color: rgba(0, 209, 255, 0.3);
+        }
+
+        .input-glow:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(164, 230, 255, 0.2);
+            border-color: #a4e6ff;
+        }
+
+        .pulse-live {
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .loader-dots div {
+            animation: loading-bounce 0.6s infinite alternate;
+        }
+        .loader-dots div:nth-child(2) { animation-delay: 0.2s; }
+        .loader-dots div:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes loading-bounce {
+            to { transform: translateY(-4px); opacity: 0.4; }
+        }
+
+        .clinical-bg-pattern {
+            background-image: radial-gradient(circle at 2px 2px, rgba(164, 230, 255, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md clinical-bg-pattern min-h-screen flex flex-col">
+<!-- Subtle Ambient Background Shader -->
+
+<!-- Top Bar (Minimal/Hidden Shell Logic) -->
+<header class="w-full h-16 flex justify-between items-center px-lg fixed top-0 z-50">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+<span class="font-display-lg text-headline-md font-bold text-primary tracking-tight">MedNexus-AI</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="text-on-surface-variant font-label-caps text-label-caps flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-success-glow pulse-live"></span>
+                System Operational
+            </span>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center px-lg py-3xl relative z-10">
+<div class="max-w-md w-full">
+<!-- Login Card -->
+<div class="glass-panel p-xl rounded-xl">
+<div class="mb-xl text-center">
+<h1 class="font-headline-md text-headline-md text-on-background mb-sm">Clinical Intelligence Login</h1>
+<p class="text-on-surface-variant text-body-sm">Access the MedNexus neural diagnostic network</p>
+</div>
+<form class="space-y-lg" id="loginForm" onsubmit="handleLogin(event)">
+<!-- Email Field -->
+<div class="space-y-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant" for="email">Clinical ID / Email</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline text-lg">alternate_email</span>
+<input class="w-full bg-surface-container-low border border-outline-variant text-on-surface py-md pl-11 pr-md rounded-lg input-glow transition-all" id="email" placeholder="name@hospital.org" required="" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-caps text-label-caps text-on-surface-variant" for="password">Secure Credential</label>
+<a class="text-primary text-body-sm hover:underline font-medium" href="#">Forgot Access?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline text-lg">lock</span>
+<input class="w-full bg-surface-container-low border border-outline-variant text-on-surface py-md pl-11 pr-md rounded-lg input-glow transition-all" id="password" placeholder="••••••••••••" required="" type="password"/>
+</div>
+</div>
+<!-- Actions Row -->
+<div class="flex items-center">
+<label class="flex items-center cursor-pointer group">
+<input class="rounded-sm border-outline-variant bg-surface-container-low text-primary focus:ring-primary w-4 h-4 transition-colors" type="checkbox"/>
+<span class="ml-sm text-on-surface-variant text-body-sm group-hover:text-on-surface">Stay Authenticated</span>
+</label>
+</div>
+<!-- Sign In Button -->
+<button class="w-full bg-primary-container text-on-primary font-headline-md text-body-md py-md rounded-lg font-bold flex justify-center items-center gap-md transition-all active:scale-[0.98] hover:shadow-[0_0_20px_rgba(0,209,255,0.3)]" id="signInBtn" type="submit">
+<span id="btnText">Sign In</span>
+<div class="hidden flex gap-xs loader-dots" id="loader">
+<div class="w-2 h-2 bg-on-primary rounded-full"></div>
+<div class="w-2 h-2 bg-on-primary rounded-full"></div>
+<div class="w-2 h-2 bg-on-primary rounded-full"></div>
+</div>
+</button>
+<!-- Divider -->
+<div class="flex items-center gap-md py-sm">
+<div class="flex-grow h-px bg-outline-variant/30"></div>
+<span class="font-label-caps text-label-caps text-outline">Enterprise Protocols</span>
+<div class="flex-grow h-px bg-outline-variant/30"></div>
+</div>
+<!-- SSO Option -->
+<button class="w-full bg-transparent border border-outline-variant text-on-surface font-medium text-body-sm py-md rounded-lg flex justify-center items-center gap-md transition-all hover:bg-surface-container-high active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-lg">hub</span>
+                        Sign in with Hospital SSO
+                    </button>
+</form>
+<div class="mt-xl pt-lg border-t border-outline-variant/30 flex flex-col items-center gap-md">
+<p class="text-on-surface-variant text-body-sm">New Clinical Practitioner?</p>
+<button class="text-primary font-bold hover:text-primary-fixed-dim transition-colors">Apply for Research Access</button>
+</div>
+</div>
+<!-- Contextual Security Footer -->
+<div class="mt-lg flex justify-center gap-xl text-on-surface-variant font-label-caps text-[10px] uppercase tracking-[0.1em]">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">verified_user</span>
+                    HIPAA Compliant
+                </div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">encrypted</span>
+                    AES-256 Auth
+                </div>
+</div>
+</div>
+</main>
+<!-- Global Footer -->
+<footer class="w-full py-lg border-t border-outline-variant/20 bg-surface-container-lowest relative z-10">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max mx-auto gap-md">
+<div class="text-on-surface-variant font-body-sm text-body-sm">
+                © 2024 MedNexus AI. Enterprise Clinical Intelligence.
+            </div>
+<div class="flex flex-wrap justify-center gap-lg">
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">HIPAA Compliance</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+<!-- Micro-interactions Script -->
+<script>
+        function handleLogin(event) {
+            event.preventDefault();
+            const btn = document.getElementById('signInBtn');
+            const btnText = document.getElementById('btnText');
+            const loader = document.getElementById('loader');
+
+            // Set Loading State
+            btn.disabled = true;
+            btnText.classList.add('opacity-0');
+            loader.classList.remove('hidden');
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
+
+            // Simulate Clinical Handshake
+            setTimeout(() => {
+                // Success feedback
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Authenticated';
+                btn.classList.remove('bg-primary-container');
+                btn.classList.add('bg-success-glow', 'text-on-tertiary');
+                
+                setTimeout(() => {
+                    alert('Login successful. Initializing clinical dashboard...');
+                    // Reset for demo
+                    location.reload();
+                }, 800);
+            }, 2500);
+        }
+
+        // Add visual cues for input interactions
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('.material-symbols-outlined').style.color = '#a4e6ff';
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('.material-symbols-outlined').style.color = '#859399';
+            });
+        });
+    </script>
+</body></html>

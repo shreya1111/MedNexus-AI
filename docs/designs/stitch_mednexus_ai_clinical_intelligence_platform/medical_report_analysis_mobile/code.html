@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>MedNexus-AI | Clinical Intel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#ffddb1",
+                    "on-primary": "#003543",
+                    "surface-container-high": "#242b2e",
+                    "on-primary-fixed": "#001f28",
+                    "surface-base": "#0e1417",
+                    "on-error": "#690005",
+                    "secondary-container": "#7000ff",
+                    "surface-bright": "#333a3d",
+                    "primary": "#a4e6ff",
+                    "tertiary-container": "#feb127",
+                    "surface-container": "#1a2123",
+                    "secondary-fixed-dim": "#d1bcff",
+                    "on-tertiary": "#442b00",
+                    "on-tertiary-fixed": "#291800",
+                    "on-surface": "#dde3e7",
+                    "inverse-primary": "#00677f",
+                    "surface-tint": "#4cd6ff",
+                    "error-container": "#93000a",
+                    "success-glow": "#feb127",
+                    "primary-container": "#00d1ff",
+                    "surface-dim": "#0e1417",
+                    "primary-fixed": "#b7eaff",
+                    "on-secondary": "#3c0090",
+                    "error": "#ffb4ab",
+                    "on-secondary-fixed-variant": "#5700c9",
+                    "tertiary-fixed-dim": "#ffba49",
+                    "surface-container-low": "#161d1f",
+                    "inverse-surface": "#dde3e7",
+                    "surface-variant": "#2f3639",
+                    "on-secondary-container": "#ddcdff",
+                    "on-secondary-fixed": "#23005b",
+                    "secondary-fixed": "#e9ddff",
+                    "on-primary-fixed-variant": "#004e60",
+                    "on-error-container": "#ffdad6",
+                    "border-low-opacity": "rgba(60, 73, 78, 0.5)",
+                    "inverse-on-surface": "#2b3134",
+                    "secondary": "#d1bcff",
+                    "on-tertiary-container": "#6b4700",
+                    "outline-variant": "#3c494e",
+                    "tertiary": "#ffd59c",
+                    "background": "#0e1417",
+                    "surface-container-lowest": "#090f12",
+                    "primary-fixed-dim": "#4cd6ff",
+                    "on-surface-variant": "#bbc9cf",
+                    "surface-container-highest": "#2f3639",
+                    "outline": "#859399",
+                    "surface": "#0e1417",
+                    "on-primary-container": "#00566a",
+                    "on-background": "#dde3e7",
+                    "on-tertiary-fixed-variant": "#624000",
+                    "surface-glass": "rgba(26, 33, 35, 0.7)"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "xl": "32px",
+                    "md": "16px",
+                    "2xl": "48px",
+                    "3xl": "64px",
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "mono-data": ["JetBrains Mono"],
+                    "headline-md": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0e1417;
+            color: #dde3e7;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-card {
+            background: rgba(26, 33, 35, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(60, 73, 78, 0.5);
+        }
+        .status-pulse {
+            box-shadow: 0 0 0 0 rgba(0, 209, 255, 0.4);
+            animation: pulse-cyan 2s infinite;
+        }
+        @keyframes pulse-cyan {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 209, 255, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 209, 255, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 209, 255, 0); }
+        }
+        .reveal-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s ease-out;
+        }
+        .reveal-content.open {
+            grid-template-rows: 1fr;
+        }
+        .reveal-inner {
+            overflow: hidden;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-md antialiased pb-32">
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 w-full z-50 h-16 flex justify-between items-center px-gutter bg-surface-glass backdrop-blur-xl border-b border-outline-variant/30 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="clinical_notes">clinical_notes</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Clinical Intel</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="mt-20 px-gutter space-y-6">
+<!-- Risk Indicator Section -->
+<section class="glass-card rounded-xl p-6 relative overflow-hidden">
+
+<div class="relative z-10 flex flex-col items-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-2">SYSTEM ANALYSIS OVERVIEW</span>
+<div class="relative w-32 h-32 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90">
+<circle class="text-surface-variant" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-tertiary-container" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364" stroke-dashoffset="110" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline-md text-headline-md font-bold text-tertiary-container">72%</span>
+<span class="text-[10px] font-label-caps text-on-surface-variant">MODERATE</span>
+</div>
+</div>
+<h2 class="mt-4 font-headline-md text-headline-md text-center">Elevated Bio-Markers Detected</h2>
+<p class="text-body-sm text-on-surface-variant text-center mt-2">Analysis of MRI scan #8829 suggests neural inflammation consistent with early-stage hyper-sensitivity.</p>
+<div class="mt-6 flex gap-2 w-full">
+<div class="flex-1 bg-surface-container-low rounded-lg p-3 flex flex-col items-center">
+<span class="text-error font-bold text-body-lg">High</span>
+<span class="text-[10px] font-label-caps text-on-surface-variant">RECURRENCE RISK</span>
+</div>
+<div class="flex-1 bg-surface-container-low rounded-lg p-3 flex flex-col items-center">
+<span class="text-primary font-bold text-body-lg">Stable</span>
+<span class="text-[10px] font-label-caps text-on-surface-variant">VITAL TRENDS</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid Analysis Details -->
+<div class="grid grid-cols-1 gap-4">
+<!-- Expandable: Summary -->
+<div class="glass-card rounded-xl overflow-hidden">
+<button class="w-full flex justify-between items-center p-4 active:bg-surface-container-high transition-colors" onclick="toggleSection('summary-content', this)">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="summarize">summarize</span>
+<span class="font-label-caps text-label-caps text-on-surface">SUMMARY</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" data-icon="expand_more" id="summary-icon">expand_more</span>
+</button>
+<div class="reveal-content" id="summary-content">
+<div class="reveal-inner px-4 pb-4">
+<div class="pt-2 border-t border-outline-variant/30 text-body-sm text-on-surface-variant space-y-3">
+<p>MedNexus-AI processed 42 independent data points from the provided MRI and blood pathology report. The primary finding indicates a 14% increase in glial activity in the pre-frontal cortex compared to baseline data from March 2024.</p>
+<p>Metabolic indicators remain within the 75th percentile, though sodium-potassium balance shows a slight downward trajectory requiring monitoring.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Expandable: Recommendations -->
+<div class="glass-card rounded-xl overflow-hidden border-l-4 border-l-primary-container">
+<button class="w-full flex justify-between items-center p-4 active:bg-surface-container-high transition-colors" onclick="toggleSection('reco-content', this)">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container" data-icon="medical_services">medical_services</span>
+<span class="font-label-caps text-label-caps text-on-surface">RECOMMENDATIONS</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" data-icon="expand_more" id="reco-icon">expand_more</span>
+</button>
+<div class="reveal-content" id="reco-content">
+<div class="reveal-inner px-4 pb-4">
+<div class="pt-2 border-t border-outline-variant/30 space-y-4">
+<div class="flex items-start gap-3">
+<div class="mt-1 w-2 h-2 rounded-full bg-primary-container shrink-0"></div>
+<div class="text-body-sm">
+<span class="font-bold text-on-surface">Schedule Neurological Consultation:</span> Highly recommended within the next 7 business days to review MRI findings.
+                                </div>
+</div>
+<div class="flex items-start gap-3">
+<div class="mt-1 w-2 h-2 rounded-full bg-primary-container shrink-0"></div>
+<div class="text-body-sm">
+<span class="font-bold text-on-surface">Follow-up Blood Panel:</span> Perform targeted inflammatory marker test (CRP, ESR) to confirm systemic baseline.
+                                </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Expandable: Sources -->
+<div class="glass-card rounded-xl overflow-hidden">
+<button class="w-full flex justify-between items-center p-4 active:bg-surface-container-high transition-colors" onclick="toggleSection('source-content', this)">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="menu_book">menu_book</span>
+<span class="font-label-caps text-label-caps text-on-surface">SOURCES</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" data-icon="expand_more" id="source-icon">expand_more</span>
+</button>
+<div class="reveal-content" id="source-content">
+<div class="reveal-inner px-4 pb-4">
+<div class="pt-2 border-t border-outline-variant/30 space-y-3">
+<div class="flex justify-between items-center p-3 bg-surface-container rounded-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="description">description</span>
+<div class="flex flex-col">
+<span class="text-body-sm font-bold">MRI_Scan_8829.dicom</span>
+<span class="text-[10px] text-on-surface-variant uppercase">St. Luke's Imaging Center</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="verified">verified</span>
+</div>
+<div class="flex justify-between items-center p-3 bg-surface-container rounded-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="biotech">biotech</span>
+<div class="flex flex-col">
+<span class="text-body-sm font-bold">Path_Results_V2.pdf</span>
+<span class="text-[10px] text-on-surface-variant uppercase">Central Labs International</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="verified">verified</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Download Action -->
+<div class="pt-4">
+<button class="w-full h-14 bg-primary-container text-on-primary-container rounded-xl flex items-center justify-center gap-3 font-bold active:scale-95 transition-transform shadow-lg shadow-primary-container/20">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+<span>Download Clinical Report</span>
+</button>
+<p class="text-center text-[11px] text-on-surface-variant mt-3 px-4 italic">
+                Report generated by MedNexus-AI v4.2. Secure PDF with AES-256 encryption.
+            </p>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-glass backdrop-blur-xl border-t border-outline-variant/30 shadow-lg px-2 py-3 pb-safe flex justify-around items-center rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="neurology">neurology</span>
+<span class="font-label-caps text-label-caps mt-1">AI Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-caps text-label-caps mt-1">Search</span>
+</a>
+<!-- Reports is active -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-caps text-label-caps mt-1">Reports</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</a>
+</nav>
+<script>
+        function toggleSection(id, btn) {
+            const content = document.getElementById(id);
+            const icon = btn.querySelector('.material-symbols-outlined:last-child');
+            
+            const isOpen = content.classList.contains('open');
+            
+            // Close all first if desired (optional)
+            // document.querySelectorAll('.reveal-content').forEach(c => c.classList.remove('open'));
+            // document.querySelectorAll('.material-symbols-outlined[data-icon="expand_more"]').forEach(i => i.style.transform = 'rotate(0deg)');
+
+            if (!isOpen) {
+                content.classList.add('open');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.remove('open');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Auto-open summary on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const summaryBtn = document.querySelector('button[onclick*="summary-content"]');
+            if (summaryBtn) toggleSection('summary-content', summaryBtn);
+        });
+    </script>
+</body></html>

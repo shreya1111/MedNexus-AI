@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedNexus-AI | Clinical Intelligence Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#ddcdff",
+                    "on-surface": "#dde3e7",
+                    "surface": "#0e1417",
+                    "primary-fixed": "#b7eaff",
+                    "on-tertiary-container": "#6b4700",
+                    "primary-fixed-dim": "#4cd6ff",
+                    "surface-dim": "#0e1417",
+                    "background": "#0e1417",
+                    "surface-tint": "#4cd6ff",
+                    "secondary-fixed": "#e9ddff",
+                    "on-error": "#690005",
+                    "on-tertiary": "#442b00",
+                    "error-container": "#93000a",
+                    "on-secondary-fixed-variant": "#5700c9",
+                    "on-secondary-fixed": "#23005b",
+                    "error": "#ffb4ab",
+                    "secondary": "#d1bcff",
+                    "tertiary-fixed": "#ffddb1",
+                    "tertiary-container": "#feb127",
+                    "tertiary-fixed-dim": "#ffba49",
+                    "on-tertiary-fixed": "#291800",
+                    "surface-container-low": "#161d1f",
+                    "on-tertiary-fixed-variant": "#624000",
+                    "surface-container-high": "#242b2e",
+                    "on-background": "#dde3e7",
+                    "on-primary-container": "#00566a",
+                    "surface-variant": "#2f3639",
+                    "surface-container-lowest": "#090f12",
+                    "inverse-primary": "#00677f",
+                    "surface-bright": "#333a3d",
+                    "inverse-surface": "#dde3e7",
+                    "primary-container": "#00d1ff",
+                    "outline-variant": "#3c494e",
+                    "outline": "#859399",
+                    "on-surface-variant": "#bbc9cf",
+                    "on-primary-fixed-variant": "#004e60",
+                    "secondary-container": "#7000ff",
+                    "primary": "#a4e6ff",
+                    "tertiary": "#ffd59c",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary": "#3c0090",
+                    "on-primary": "#003543",
+                    "surface-container": "#1a2123",
+                    "inverse-on-surface": "#2b3134",
+                    "secondary-fixed-dim": "#d1bcff",
+                    "on-primary-fixed": "#001f28",
+                    "surface-container-highest": "#2f3639"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "container-max": "1440px",
+                    "sm": "8px",
+                    "unit": "8px",
+                    "xs": "4px",
+                    "3xl": "64px",
+                    "2xl": "48px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "mono-data": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #0e1417; color: #dde3e7; font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(26, 33, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(60, 73, 78, 0.5);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 209, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.05);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .sidebar-item { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface-container border-r border-outline-variant z-[60] flex flex-col py-md">
+<div class="px-lg mb-xl">
+<h1 class="font-display-lg text-display-lg font-bold text-primary tracking-tight">MedNexus-AI</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Clinical Intelligence</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active: Dashboard -->
+<a class="sidebar-item flex items-center px-lg py-sm mx-2 bg-primary-container text-on-primary-container rounded-lg group" href="#">
+<span class="material-symbols-outlined mr-md">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<a class="sidebar-item flex items-center px-lg py-sm mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg" href="#">
+<span class="material-symbols-outlined mr-md">smart_toy</span>
+<span class="font-label-caps text-label-caps">AI Chat</span>
+</a>
+<a class="sidebar-item flex items-center px-lg py-sm mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg" href="#">
+<span class="material-symbols-outlined mr-md">database</span>
+<span class="font-label-caps text-label-caps">Knowledge Base</span>
+</a>
+<a class="sidebar-item flex items-center px-lg py-sm mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg" href="#">
+<span class="material-symbols-outlined mr-md">description</span>
+<span class="font-label-caps text-label-caps">Documents</span>
+</a>
+<a class="sidebar-item flex items-center px-lg py-sm mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg" href="#">
+<span class="material-symbols-outlined mr-md">analytics</span>
+<span class="font-label-caps text-label-caps">Reports</span>
+</a>
+<a class="sidebar-item flex items-center px-lg py-sm mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg" href="#">
+<span class="material-symbols-outlined mr-md">admin_panel_settings</span>
+<span class="font-label-caps text-label-caps">Admin</span>
+</a>
+<a class="sidebar-item flex items-center px-lg py-sm mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg" href="#">
+<span class="material-symbols-outlined mr-md">settings</span>
+<span class="font-label-caps text-label-caps">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-md">
+<a class="sidebar-item flex items-center px-lg py-sm mx-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mr-md">help</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</a>
+<a class="sidebar-item flex items-center px-lg py-sm mx-2 text-on-surface-variant hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined mr-md">logout</span>
+<span class="font-label-caps text-label-caps">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-surface/80 backdrop-blur-xl border-b border-outline-variant z-50 flex justify-between items-center px-lg">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-2 text-body-sm focus:outline-none focus:border-primary-container transition-all" placeholder="Search knowledge base, patients, or clinical reports..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-md ml-lg">
+<button class="bg-primary-container text-on-primary-container px-md py-2 rounded-lg font-label-caps text-label-caps font-bold hover:opacity-90 active:scale-95 transition-all">
+                Quick Action
+            </button>
+<div class="flex items-center space-x-sm text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">sensors</span>
+<div class="h-8 w-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Professional clinical headshot of a middle-aged doctor with short graying hair, wearing a white lab coat and a subtle stethoscope, clean minimalist lighting, high-tech dark background with soft blue accents, cinematic enterprise SaaS portrait style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAc4SyHv8dejkDH_vPqpRWJGfsdb0N65PxNQRraDkCLgC5sW_Z5rz2Y6R0VIwQIxAPTzAS0bcfn8DsWAOHziPHGtd-NNqbvHdvXfCe-jzwD5DPI_VM_SfDth-6HwZ2dvW8Eg0mcCZM9WfoC9a0hAPiP8nKQg5F70CeymY97RtFlbLeqZwJIbgGGFE11sPT0DvdJWuaRtrjrGiDm3kixiigHmjedF_jfaNVSyqsVnHGm8mm5XRI138XoW7urwbZC-WCqN_xw601tKkg"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="ml-64 pt-24 px-lg pb-xl min-h-screen">
+<!-- Welcome Header -->
+<section class="mb-xl flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg-mobile md:text-headline-md text-primary mb-xs">Good morning, Dr. Aris.</h2>
+<div class="flex items-center text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary mr-xs" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-md text-body-md">System status: <span class="text-tertiary font-bold">Optimal</span>. All clinical nodes synchronized.</span>
+</div>
+</div>
+<div class="text-right">
+<p class="font-label-caps text-label-caps text-on-surface-variant opacity-60">Session ID: NEXUS-882-ALFA</p>
+<p class="font-mono-data text-mono-data text-on-surface-variant">Last updated: 08:42 AM PST</p>
+</div>
+</section>
+<!-- Stats Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md mb-xl">
+<div class="glass-card p-md rounded-xl relative overflow-hidden">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Daily Inquiries</span>
+<span class="material-symbols-outlined text-primary">chat_bubble</span>
+</div>
+<div class="font-display-lg text-display-lg-mobile text-on-surface">1,284</div>
+<div class="flex items-center text-tertiary text-xs mt-xs">
+<span class="material-symbols-outlined text-xs mr-1">trending_up</span>
+<span>+12.5% from yesterday</span>
+</div>
+</div>
+<div class="glass-card p-md rounded-xl relative overflow-hidden">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Avg. Response Time</span>
+<span class="material-symbols-outlined text-primary">speed</span>
+</div>
+<div class="font-display-lg text-display-lg-mobile text-on-surface">240<span class="text-headline-md font-normal ml-1">ms</span></div>
+<div class="flex items-center text-tertiary text-xs mt-xs">
+<span class="material-symbols-outlined text-xs mr-1">bolt</span>
+<span>Latency optimized</span>
+</div>
+</div>
+<div class="glass-card p-md rounded-xl relative overflow-hidden">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Confidence Score</span>
+<span class="material-symbols-outlined text-primary">verified_user</span>
+</div>
+<div class="font-display-lg text-display-lg-mobile text-primary">98.2%</div>
+<div class="flex items-center text-tertiary text-xs mt-xs">
+<span class="material-symbols-outlined text-xs mr-1">security</span>
+<span>Validated against PubMed</span>
+</div>
+</div>
+<div class="glass-card p-md rounded-xl relative overflow-hidden">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Knowledge Base Size</span>
+<span class="material-symbols-outlined text-primary">storage</span>
+</div>
+<div class="font-display-lg text-display-lg-mobile text-on-surface">4.2<span class="text-headline-md font-normal ml-1">TB</span></div>
+<div class="flex items-center text-on-surface-variant text-xs mt-xs">
+<span>Last sync 4 mins ago</span>
+</div>
+</div>
+</section>
+<!-- Main Bento Content -->
+<div class="grid grid-cols-12 gap-lg">
+<!-- Main Analytics: Large Area Chart -->
+<div class="col-span-12 lg:col-span-8 glass-card rounded-xl p-lg flex flex-col min-h-[400px]">
+<div class="flex justify-between items-center mb-xl">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Medical Usage Analytics</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Total AI interactions and inference volume (Last 30 Days)</p>
+</div>
+<div class="flex bg-surface-container rounded-lg p-1">
+<button class="px-md py-1 rounded-md text-label-caps text-label-caps bg-surface-variant text-on-surface">Month</button>
+<button class="px-md py-1 rounded-md text-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors">Week</button>
+</div>
+</div>
+<div class="flex-1 w-full relative">
+<!-- Placeholder for Chart - Using SVG to simulate -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 300">
+<defs>
+<lineargradient id="gradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#00D1FF" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#00D1FF" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,250 Q100,220 200,240 T400,180 T600,200 T800,120 T1000,150 L1000,300 L0,300 Z" fill="url(#gradient)"></path>
+<path d="M0,250 Q100,220 200,240 T400,180 T600,200 T800,120 T1000,150" fill="none" stroke="#00D1FF" stroke-width="3"></path>
+<!-- Grid Lines -->
+<line stroke="#3c494e" stroke-dasharray="4" stroke-opacity="0.3" x1="0" x2="1000" y1="50" y2="50"></line>
+<line stroke="#3c494e" stroke-dasharray="4" stroke-opacity="0.3" x1="0" x2="1000" y1="150" y2="150"></line>
+<line stroke="#3c494e" stroke-dasharray="4" stroke-opacity="0.3" x1="0" x2="1000" y1="250" y2="250"></line>
+</svg>
+<!-- Y Axis Labels -->
+<div class="absolute left-0 top-0 h-full flex flex-col justify-between text-[10px] text-on-surface-variant opacity-50 py-2">
+<span>1.5k</span>
+<span>1.0k</span>
+<span>0.5k</span>
+<span>0</span>
+</div>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="col-span-12 lg:col-span-4 space-y-md">
+<div class="glass-card rounded-xl p-lg">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-md">Quick Actions</h3>
+<div class="space-y-sm">
+<button class="w-full flex items-center justify-between p-md bg-surface-container hover:bg-surface-variant rounded-lg group transition-all">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary mr-md">analytics</span>
+<span class="font-body-md text-body-md font-semibold">Analyze New Report</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-md bg-surface-container hover:bg-surface-variant rounded-lg group transition-all">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary mr-md">cloud_upload</span>
+<span class="font-body-md text-body-md font-semibold">Upload Dataset</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-md bg-surface-container hover:bg-surface-variant rounded-lg group transition-all">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary mr-md">search_insights</span>
+<span class="font-body-md text-body-md font-semibold">Search Knowledge Base</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- AI System Background Animation -->
+<div class="glass-card rounded-xl h-[160px] relative overflow-hidden group">
+
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-md left-md right-md">
+<div class="flex items-center mb-xs">
+<div class="w-2 h-2 rounded-full bg-tertiary animate-pulse mr-xs"></div>
+<span class="font-label-caps text-label-caps text-tertiary">Real-time Stream</span>
+</div>
+<h4 class="font-body-md text-body-md font-bold text-on-surface">Clinical Neural Engine Active</h4>
+</div>
+</div>
+</div>
+<!-- Recent Reports Table -->
+<div class="col-span-12 lg:col-span-8 glass-card rounded-xl overflow-hidden">
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low/50">
+<h3 class="font-headline-md text-headline-md text-on-surface">Recent Reports</h3>
+<button class="text-primary font-label-caps text-label-caps hover:underline">View All Documents</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-high/30 border-b border-outline-variant">
+<th class="px-lg py-sm font-label-caps text-label-caps text-on-surface-variant">Document Name</th>
+<th class="px-lg py-sm font-label-caps text-label-caps text-on-surface-variant">Type</th>
+<th class="px-lg py-sm font-label-caps text-label-caps text-on-surface-variant">Status</th>
+<th class="px-lg py-sm font-label-caps text-label-caps text-on-surface-variant">Extracted Findings</th>
+<th class="px-lg py-sm font-label-caps text-label-caps text-on-surface-variant">Timestamp</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<tr class="hover:bg-surface-variant/20 transition-colors">
+<td class="px-lg py-md font-body-sm text-body-sm font-semibold">MRI_BRAIN_V3_SMITH_J.pdf</td>
+<td class="px-lg py-md text-on-surface-variant text-xs">Imaging Report</td>
+<td class="px-lg py-md">
+<span class="flex items-center text-tertiary text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary mr-2"></span>
+                                        Completed
+                                    </span>
+</td>
+<td class="px-lg py-md font-mono-data text-mono-data">14 Entities</td>
+<td class="px-lg py-md text-on-surface-variant text-xs">2m ago</td>
+</tr>
+<tr class="hover:bg-surface-variant/20 transition-colors">
+<td class="px-lg py-md font-body-sm text-body-sm font-semibold">LAB_BLOOD_CHEM_PANEL.xlsx</td>
+<td class="px-lg py-md text-on-surface-variant text-xs">Pathology</td>
+<td class="px-lg py-md">
+<span class="flex items-center text-primary animate-pulse text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mr-2"></span>
+                                        Processing
+                                    </span>
+</td>
+<td class="px-lg py-md font-mono-data text-mono-data">...</td>
+<td class="px-lg py-md text-on-surface-variant text-xs">8m ago</td>
+</tr>
+<tr class="hover:bg-surface-variant/20 transition-colors">
+<td class="px-lg py-md font-body-sm text-body-sm font-semibold">DISCHARGE_SUMMARY_H_442.docx</td>
+<td class="px-lg py-md text-on-surface-variant text-xs">Summary</td>
+<td class="px-lg py-md">
+<span class="flex items-center text-tertiary text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary mr-2"></span>
+                                        Completed
+                                    </span>
+</td>
+<td class="px-lg py-md font-mono-data text-mono-data">28 Entities</td>
+<td class="px-lg py-md text-on-surface-variant text-xs">14m ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Recent Conversations -->
+<div class="col-span-12 lg:col-span-4 glass-card rounded-xl flex flex-col">
+<div class="px-lg py-md border-b border-outline-variant bg-surface-container-low/50 flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-on-surface">AI Conversations</h3>
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</div>
+<div class="flex-1 overflow-y-auto max-h-[350px] scrollbar-hide">
+<div class="p-md space-y-md">
+<div class="flex space-x-md p-sm hover:bg-surface-variant/30 rounded-lg cursor-pointer transition-all">
+<div class="w-10 h-10 rounded-lg bg-secondary-container/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary">psychiatry</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<h5 class="font-body-sm text-body-sm font-bold text-on-surface truncate">Neuropathy Symptoms Analysis</h5>
+<span class="text-[10px] text-on-surface-variant">09:12 AM</span>
+</div>
+<p class="text-xs text-on-surface-variant truncate mt-xs">AI suggested MRI and EMG testing based on patient profile...</p>
+</div>
+</div>
+<div class="flex space-x-md p-sm hover:bg-surface-variant/30 rounded-lg cursor-pointer transition-all">
+<div class="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">cardiology</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<h5 class="font-body-sm text-body-sm font-bold text-on-surface truncate">ECG Interpretation: Case #81</h5>
+<span class="text-[10px] text-on-surface-variant">Yesterday</span>
+</div>
+<p class="text-xs text-on-surface-variant truncate mt-xs">Elevated ST segment detected in leads V1-V3...</p>
+</div>
+</div>
+<div class="flex space-x-md p-sm hover:bg-surface-variant/30 rounded-lg cursor-pointer transition-all">
+<div class="w-10 h-10 rounded-lg bg-tertiary-container/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary">vaccines</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<h5 class="font-body-sm text-body-sm font-bold text-on-surface truncate">Drug Interaction Checker</h5>
+<span class="text-[10px] text-on-surface-variant">Yesterday</span>
+</div>
+<p class="text-xs text-on-surface-variant truncate mt-xs">Confirmed compatibility between Warfarin and Lisinopril...</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-md border-t border-outline-variant">
+<button class="w-full py-2 bg-surface-container hover:bg-surface-variant text-on-surface font-label-caps text-label-caps rounded-lg transition-colors">
+                        New Clinical Chat
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Component -->
+<footer class="ml-64 border-t border-outline-variant bg-surface-container-lowest">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter py-xl max-w-container-max mx-auto">
+<div class="flex flex-col space-y-xs">
+<h4 class="font-display-lg text-display-lg text-primary text-xl font-bold">MedNexus AI</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 MedNexus AI. Enterprise Clinical Intelligence.</p>
+</div>
+<div class="flex flex-wrap gap-md mt-md md:mt-0">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">HIPAA Compliance</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+<script>
+        // Simple Micro-interactions
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.transform = 'translateX(4px)';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'translateX(0px)';
+            });
+        });
+
+        // Search highlight interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-1', 'ring-primary/50');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-1', 'ring-primary/50');
+        });
+    </script>
+</body></html>

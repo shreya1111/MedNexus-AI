@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedNexus-AI | Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-on-surface": "#2b3134",
+                      "surface-container-highest": "#2f3639",
+                      "surface-variant": "#2f3639",
+                      "on-primary-fixed-variant": "#004e60",
+                      "primary-fixed-dim": "#4cd6ff",
+                      "on-primary": "#003543",
+                      "primary-fixed": "#b7eaff",
+                      "outline": "#859399",
+                      "on-surface": "#dde3e7",
+                      "success-glow": "#feb127",
+                      "surface-container-lowest": "#090f12",
+                      "border-low-opacity": "rgba(60, 73, 78, 0.5)",
+                      "outline-variant": "#3c494e",
+                      "surface-base": "#0e1417",
+                      "on-secondary-fixed-variant": "#5700c9",
+                      "surface-tint": "#4cd6ff",
+                      "on-secondary-fixed": "#23005b",
+                      "secondary-fixed-dim": "#d1bcff",
+                      "tertiary": "#ffd59c",
+                      "secondary": "#d1bcff",
+                      "on-error": "#690005",
+                      "primary-container": "#00d1ff",
+                      "surface-container-low": "#161d1f",
+                      "surface-container": "#1a2123",
+                      "secondary-fixed": "#e9ddff",
+                      "on-surface-variant": "#bbc9cf",
+                      "on-secondary-container": "#ddcdff",
+                      "surface-dim": "#0e1417",
+                      "on-primary-container": "#00566a",
+                      "error": "#ffb4ab",
+                      "surface-glass": "rgba(26, 33, 35, 0.7)",
+                      "on-tertiary-fixed-variant": "#624000",
+                      "inverse-surface": "#dde3e7",
+                      "tertiary-container": "#feb127",
+                      "surface-container-high": "#242b2e",
+                      "secondary-container": "#7000ff",
+                      "on-tertiary-fixed": "#291800",
+                      "tertiary-fixed": "#ffddb1",
+                      "on-secondary": "#3c0090",
+                      "on-tertiary": "#442b00",
+                      "on-background": "#dde3e7",
+                      "error-container": "#93000a",
+                      "inverse-primary": "#00677f",
+                      "on-tertiary-container": "#6b4700",
+                      "tertiary-fixed-dim": "#ffba49",
+                      "on-error-container": "#ffdad6",
+                      "surface": "#0e1417",
+                      "primary": "#a4e6ff",
+                      "background": "#0e1417",
+                      "surface-bright": "#333a3d",
+                      "on-primary-fixed": "#001f28"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "xl": "32px",
+                      "gutter": "24px",
+                      "lg": "24px",
+                      "container-max": "1440px",
+                      "md": "16px",
+                      "2xl": "48px",
+                      "3xl": "64px",
+                      "sm": "8px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Inter", "sans-serif"],
+                      "body-sm": ["Inter", "sans-serif"],
+                      "mono-data": ["JetBrains Mono", "monospace"],
+                      "body-lg": ["Inter", "sans-serif"],
+                      "headline-md": ["Inter", "sans-serif"],
+                      "label-caps": ["Inter", "sans-serif"],
+                      "body-md": ["Inter", "sans-serif"]
+              },
+              "fontSize": {
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(26, 33, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(60, 73, 78, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 209, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.05);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3c494e; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00d1ff; }
+        
+        .status-pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00d1ff;
+            box-shadow: 0 0 0 rgba(0, 209, 255, 0.4);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 209, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 209, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 209, 255, 0); }
+        }
+        
+        .active-nav-bg {
+            background: linear-gradient(90deg, rgba(0, 209, 255, 0.1) 0%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface-base text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
+<div class="flex h-screen w-full relative">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 flex flex-col bg-surface-base border-r border-outline-variant/30 z-50">
+<div class="p-lg flex flex-col gap-sm">
+<div class="flex items-center gap-md mb-xl">
+<div class="w-10 h-10 bg-primary-container rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(0,209,255,0.3)]">
+<span class="material-symbols-outlined text-on-primary-container font-bold" data-icon="neurology">neurology</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary leading-none">MedNexus-AI</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest mt-1">Clinical Intelligence</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Navigation Items mapped from JSON -->
+<a class="group flex items-center gap-md px-md py-sm rounded-lg transition-all duration-200 hover:text-primary hover:translate-x-1 active-nav-bg text-primary font-bold translate-x-1" href="#general">
+<span class="material-symbols-outlined text-lg" data-icon="settings">settings</span>
+<span class="font-body-md">General</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm rounded-lg transition-all duration-200 hover:text-primary hover:translate-x-1 text-on-surface-variant" href="#appearance">
+<span class="material-symbols-outlined text-lg" data-icon="palette">palette</span>
+<span class="font-body-md">Appearance</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm rounded-lg transition-all duration-200 hover:text-primary hover:translate-x-1 text-on-surface-variant" href="#ai-model">
+<span class="material-symbols-outlined text-lg" data-icon="neurology">neurology</span>
+<span class="font-body-md">AI Model</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm rounded-lg transition-all duration-200 hover:text-primary hover:translate-x-1 text-on-surface-variant" href="#retrieval">
+<span class="material-symbols-outlined text-lg" data-icon="database">database</span>
+<span class="font-body-md">Retrieval</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm rounded-lg transition-all duration-200 hover:text-primary hover:translate-x-1 text-on-surface-variant" href="#notifications">
+<span class="material-symbols-outlined text-lg" data-icon="notifications">notifications</span>
+<span class="font-body-md">Notifications</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm rounded-lg transition-all duration-200 hover:text-primary hover:translate-x-1 text-on-surface-variant" href="#privacy">
+<span class="material-symbols-outlined text-lg" data-icon="shield_lock">shield_lock</span>
+<span class="font-body-md">Privacy</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm rounded-lg transition-all duration-200 hover:text-primary hover:translate-x-1 text-on-surface-variant" href="#security">
+<span class="material-symbols-outlined text-lg" data-icon="security">security</span>
+<span class="font-body-md">Security</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm rounded-lg transition-all duration-200 hover:text-primary hover:translate-x-1 text-on-surface-variant" href="#api-keys">
+<span class="material-symbols-outlined text-lg" data-icon="key">key</span>
+<span class="font-body-md">API Keys</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm rounded-lg transition-all duration-200 hover:text-primary hover:translate-x-1 text-on-surface-variant" href="#advanced">
+<span class="material-symbols-outlined text-lg" data-icon="tune">tune</span>
+<span class="font-body-md">Advanced</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-lg border-t border-outline-variant/30">
+<div class="bg-surface-container-low rounded-xl p-md mb-md flex items-center gap-md">
+<div class="status-pulse"></div>
+<span class="font-label-caps text-label-caps text-primary">System Status: Active</span>
+</div>
+<div class="space-y-1">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help">help</span>
+<span class="font-body-md">Help Center</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="logout">logout</span>
+<span class="font-body-md">Log Out</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 ml-64 flex flex-col h-screen overflow-hidden relative">
+<!-- Background Shader Atmosphere -->
+
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 flex justify-between items-center w-full px-gutter py-md backdrop-blur-xl bg-surface-glass border-b border-outline-variant/50 shadow-sm">
+<div class="flex items-center gap-md">
+<h2 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">System Settings</h2>
+</div>
+<div class="flex items-center gap-xl">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-full py-sm pl-3xl pr-md text-body-sm focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all" placeholder="Search parameters, nodes, or documentation..." type="text"/>
+</div>
+<div class="flex items-center gap-lg">
+<div class="hidden md:flex gap-lg">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary-container transition-colors" href="#">Documentation</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary-container transition-colors" href="#">Changelog</a>
+</div>
+<div class="flex items-center gap-md">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="settings_suggest">settings_suggest</span>
+</button>
+<div class="flex items-center gap-sm pl-md border-l border-outline-variant/30">
+<div class="w-8 h-8 rounded-full border border-primary/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional close-up portrait of a senior clinical data scientist with a focused expression, wearing a high-tech medical lab coat with digital glowing patches. The lighting is cold and cinematic, emphasizing the deep teal and dark navy blue color palette of a high-tech medical facility. The background is slightly blurred with soft bokeh of laboratory server racks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzL_QPQ9o7N4OYgPoh-fSkIpMnLnokhexE19C2U90u0R91iBBKP-lbtZutneu2rT0VZbwPNm1Xnyo_46xmSjiEZYsXD-rNeboIx0jPCbT5wK73sxyF8YTAr2IrZjYvo0EYRxO7GV7CRHHv5IkgYjVOXWxgPGyrAuKrxD67uonauM6ivI41WMELL9Uhzwl0dokCF_nv7_yp6aJebTIjGAeF6tY3v9nmQDLAI5iJ9_aYgpd7R3HblCE4K5HK6CX0JsqPzm8x4770g0Q"/>
+</div>
+<span class="font-body-sm text-body-sm font-medium">Dr. Sterling</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Scrollable Content Canvas -->
+<div class="flex-1 overflow-y-auto p-gutter scroll-smooth">
+<div class="max-w-container-max mx-auto space-y-gutter pb-3xl">
+<!-- Section: General -->
+<section class="grid grid-cols-12 gap-gutter" id="general">
+<div class="col-span-12">
+<h3 class="font-headline-md text-headline-md text-primary mb-md">General Workspace</h3>
+<p class="text-on-surface-variant text-body-md mb-lg">Core identity and regional configuration for this instance.</p>
+</div>
+<div class="col-span-12 md:col-span-4 glass-card p-xl rounded-xl">
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-sm block uppercase tracking-widest">Workspace Name</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-lg py-md px-md text-body-md font-medium text-primary focus:ring-2 focus:ring-primary/50 outline-none" type="text" value="MedNexus AI"/>
+</div>
+<div class="col-span-12 md:col-span-4 glass-card p-xl rounded-xl">
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-sm block uppercase tracking-widest">Primary Language</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-lg py-md px-md text-body-md focus:ring-2 focus:ring-primary/50 outline-none appearance-none">
+<option>English (Medical Standard)</option>
+<option>Spanish (Clinical)</option>
+<option>Mandarin (Technical)</option>
+</select>
+</div>
+<div class="col-span-12 md:col-span-4 glass-card p-xl rounded-xl">
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-sm block uppercase tracking-widest">Time Zone</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-lg py-md px-md text-body-md focus:ring-2 focus:ring-primary/50 outline-none appearance-none">
+<option>UTC-05:00 Eastern Time (US &amp; Canada)</option>
+<option>UTC+00:00 Greenwich Mean Time</option>
+<option>UTC+09:00 Tokyo</option>
+</select>
+</div>
+</section>
+<!-- Section: AI Model & Retrieval (Bento Grid) -->
+<section class="grid grid-cols-12 gap-gutter">
+<div class="col-span-12 md:col-span-7 glass-card p-xl rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-primary" data-icon="neurology">neurology</span>
+<h3 class="font-headline-md text-headline-md text-primary">AI Model Configuration</h3>
+</div>
+<div class="space-y-xl">
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-md block uppercase tracking-widest">Selected Clinical Engine</label>
+<div class="flex items-center justify-between p-md bg-surface-container-highest/50 border border-primary/20 rounded-lg">
+<div class="flex items-center gap-md">
+<div class="w-2 h-8 bg-primary rounded-full"></div>
+<div>
+<p class="font-body-md font-bold text-primary">Med-Neural-1 Pro</p>
+<p class="text-body-sm text-on-surface-variant">Optimized for high-confidence diagnostics</p>
+</div>
+</div>
+<button class="bg-primary-container text-on-primary-container px-lg py-sm rounded-lg font-bold text-body-sm active:scale-95 transition-transform">Switch Model</button>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-lg">
+<div>
+<div class="flex justify-between items-center mb-md">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Temperature</label>
+<span class="font-mono-data text-primary">0.2</span>
+</div>
+<input class="w-full accent-primary bg-outline-variant h-1 rounded-full appearance-none cursor-pointer" type="range"/>
+</div>
+<div>
+<div class="flex justify-between items-center mb-md">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Max Tokens</label>
+<span class="font-mono-data text-primary">4,096</span>
+</div>
+<input class="w-full accent-primary bg-outline-variant h-1 rounded-full appearance-none cursor-pointer" type="range"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-5 glass-card p-xl rounded-xl" id="retrieval">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-tertiary" data-icon="database">database</span>
+<h3 class="font-headline-md text-headline-md text-primary">Retrieval System</h3>
+</div>
+<div class="space-y-lg">
+<div class="flex justify-between items-center p-md bg-surface-container-lowest rounded-lg border border-outline-variant/30">
+<span class="text-body-md">Vector Database</span>
+<span class="flex items-center gap-sm text-success-glow font-bold">
+<span class="status-pulse !bg-success-glow"></span>
+                                        Connected
+                                    </span>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-sm block uppercase">Semantic Threshold</label>
+<div class="h-2 w-full bg-outline-variant rounded-full overflow-hidden flex">
+<div class="h-full bg-primary" style="width: 82%"></div>
+</div>
+<div class="flex justify-between mt-sm text-mono-data text-on-surface-variant">
+<span>Relevance: High</span>
+<span>0.82</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-sm text-on-surface-variant">Top-k Results</span>
+<div class="flex items-center gap-md">
+<button class="w-8 h-8 rounded-full border border-outline-variant hover:bg-primary/10 flex items-center justify-center">-</button>
+<span class="font-mono-data text-primary font-bold">5</span>
+<button class="w-8 h-8 rounded-full border border-outline-variant hover:bg-primary/10 flex items-center justify-center">+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Appearance & Notifications -->
+<section class="grid grid-cols-12 gap-gutter">
+<div class="col-span-12 md:col-span-6 glass-card p-xl rounded-xl" id="appearance">
+<h3 class="font-headline-md text-headline-md text-primary mb-xl">Appearance</h3>
+<div class="space-y-xl">
+<div class="grid grid-cols-2 gap-lg">
+<div class="p-md border-2 border-primary bg-surface-container-lowest rounded-xl cursor-pointer">
+<div class="h-16 bg-surface-base rounded-md border border-outline-variant mb-md flex flex-col gap-xs p-xs">
+<div class="w-1/2 h-2 bg-primary/20 rounded"></div>
+<div class="w-3/4 h-2 bg-outline-variant/30 rounded"></div>
+</div>
+<p class="font-body-sm font-bold text-primary">Clinical Dark</p>
+</div>
+<div class="p-md border border-outline-variant bg-white/5 rounded-xl cursor-pointer hover:border-primary/50 transition-colors">
+<div class="h-16 bg-white rounded-md border border-outline-variant mb-md flex flex-col gap-xs p-xs">
+<div class="w-1/2 h-2 bg-slate-200 rounded"></div>
+<div class="w-3/4 h-2 bg-slate-100 rounded"></div>
+</div>
+<p class="font-body-sm font-on-surface-variant">Sterile Light</p>
+</div>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-md block uppercase">Font Scale</label>
+<div class="flex items-center gap-gutter">
+<span class="text-body-sm">A</span>
+<input class="flex-1 accent-primary h-1 bg-outline-variant appearance-none rounded-full" type="range"/>
+<span class="text-headline-md">A</span>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-6 glass-card p-xl rounded-xl" id="notifications">
+<h3 class="font-headline-md text-headline-md text-primary mb-xl">System Notifications</h3>
+<div class="space-y-lg">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-body-md font-bold">Critical Finding Alerts</p>
+<p class="text-body-sm text-on-surface-variant">Immediate email alerts for high-risk pathology detection.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+</label></div></div></div></section></div></div></main></div></body></html>

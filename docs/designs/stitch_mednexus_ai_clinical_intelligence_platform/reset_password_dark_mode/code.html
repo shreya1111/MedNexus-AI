@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reset Password | MedNexus-AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "border-low-opacity": "rgba(60, 73, 78, 0.5)",
+                    "secondary": "#d1bcff",
+                    "on-primary": "#003543",
+                    "error": "#ffb4ab",
+                    "surface-base": "#0e1417",
+                    "outline-variant": "#3c494e",
+                    "tertiary": "#ffd59c",
+                    "surface-container": "#1a2123",
+                    "inverse-on-surface": "#2b3134",
+                    "inverse-primary": "#00677f",
+                    "surface-glass": "rgba(26, 33, 35, 0.7)",
+                    "background": "#0e1417",
+                    "surface-container-high": "#242b2e",
+                    "on-background": "#dde3e7",
+                    "tertiary-container": "#feb127",
+                    "error-container": "#93000a",
+                    "on-secondary-fixed-variant": "#5700c9",
+                    "on-tertiary": "#442b00",
+                    "inverse-surface": "#dde3e7",
+                    "surface-container-low": "#161d1f",
+                    "on-tertiary-container": "#6b4700",
+                    "surface-dim": "#0e1417",
+                    "on-secondary": "#3c0090",
+                    "on-secondary-container": "#ddcdff",
+                    "primary": "#a4e6ff",
+                    "outline": "#859399",
+                    "on-tertiary-fixed-variant": "#624000",
+                    "primary-fixed": "#b7eaff",
+                    "surface-container-highest": "#2f3639",
+                    "on-secondary-fixed": "#23005b",
+                    "tertiary-fixed-dim": "#ffba49",
+                    "surface-variant": "#2f3639",
+                    "secondary-fixed": "#e9ddff",
+                    "surface": "#0e1417",
+                    "surface-tint": "#4cd6ff",
+                    "on-primary-fixed-variant": "#004e60",
+                    "tertiary-fixed": "#ffddb1",
+                    "secondary-fixed-dim": "#d1bcff",
+                    "primary-fixed-dim": "#4cd6ff",
+                    "on-tertiary-fixed": "#291800",
+                    "on-primary-container": "#00566a",
+                    "surface-container-lowest": "#090f12",
+                    "on-surface": "#dde3e7",
+                    "success-glow": "#feb127",
+                    "on-surface-variant": "#bbc9cf",
+                    "surface-bright": "#333a3d",
+                    "primary-container": "#00d1ff",
+                    "on-error": "#690005",
+                    "secondary-container": "#7000ff",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-fixed": "#001f28"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "xs": "4px",
+                    "container-max": "1440px",
+                    "sm": "8px",
+                    "2xl": "48px",
+                    "md": "16px",
+                    "xl": "32px",
+                    "3xl": "64px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "mono-data": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0e1417;
+            color: #dde3e7;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(26, 33, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(60, 73, 78, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .input-glow:focus-within {
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.15);
+            border-color: rgba(164, 230, 255, 0.5);
+        }
+
+        .pulse-dot {
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0px rgba(0, 209, 255, 0.4); }
+            100% { box-shadow: 0 0 0 10px rgba(0, 209, 255, 0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="flex min-h-screen items-center justify-center font-body-md text-body-md p-md relative overflow-hidden">
+<!-- Background Cinematic Ambient Light -->
+<div class="fixed inset-0 pointer-events-none z-0">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-secondary/5 blur-[120px]"></div>
+
+</div>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-md z-10 fade-in">
+<!-- Brand Header (Floating Above Card) -->
+<div class="text-center mb-xl">
+<div class="inline-flex items-center gap-sm mb-md">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center shadow-[0_0_20px_rgba(0,209,255,0.3)]">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-headline-md font-bold text-primary tracking-tight">MedNexus-AI</h1>
+</div>
+<p class="text-on-surface-variant font-body-md">Clinical Intelligence Security Protocol</p>
+</div>
+<!-- Reset Password Card -->
+<div class="glass-panel rounded-xl p-xl space-y-xl">
+<div class="space-y-sm">
+<h2 class="text-headline-md font-headline-md text-on-surface">Reset Password</h2>
+<p class="text-body-sm text-on-surface-variant">Please establish a new secure credential for your clinical workstation.</p>
+</div>
+<form class="space-y-lg" id="resetForm">
+<!-- Password Field -->
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block" for="new-password">New Password</label>
+<div class="relative input-glow group transition-all duration-300 rounded-lg overflow-hidden border border-outline-variant bg-surface-container-low">
+<div class="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<input class="block w-full pl-[48px] pr-md py-md bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline-variant transition-colors" id="new-password" name="password" placeholder="••••••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-md flex items-center text-outline hover:text-primary transition-colors" onclick="togglePassword('new-password')" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Validation Rules (Bento Sub-items) -->
+<div class="grid grid-cols-1 gap-xs py-sm">
+<div class="flex items-center gap-sm text-[12px] transition-colors duration-300" id="req-length">
+<span class="material-symbols-outlined text-[16px] text-outline" id="icon-length">radio_button_unchecked</span>
+<span class="font-medium text-on-surface-variant">At least 12 characters (Clinical Standard)</span>
+</div>
+<div class="flex items-center gap-sm text-[12px] transition-colors duration-300" id="req-complex">
+<span class="material-symbols-outlined text-[16px] text-outline" id="icon-complex">radio_button_unchecked</span>
+<span class="font-medium text-on-surface-variant">Mixed case, numbers, and symbols</span>
+</div>
+</div>
+<!-- Confirm Password Field -->
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block" for="confirm-password">Confirm New Password</label>
+<div class="relative input-glow group transition-all duration-300 rounded-lg overflow-hidden border border-outline-variant bg-surface-container-low">
+<div class="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+</div>
+<input class="block w-full pl-[48px] pr-md py-md bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline-variant transition-colors" id="confirm-password" name="confirm-password" placeholder="••••••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-md flex items-center text-outline hover:text-primary transition-colors" onclick="togglePassword('confirm-password')" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Error Message (Hidden by default) -->
+<div class="hidden flex items-center gap-sm p-sm bg-error-container/20 border border-error/30 rounded-lg" id="match-error">
+<span class="material-symbols-outlined text-error text-[20px]">error</span>
+<span class="text-body-sm text-error">Passwords do not match. Please verify entries.</span>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-primary-container hover:brightness-110 active:scale-[0.98] text-on-primary font-bold py-md px-lg rounded-xl flex items-center justify-center gap-sm transition-all shadow-[0_4px_20px_rgba(0,209,255,0.2)]" type="submit">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sync_saved_locally</span>
+                    Update Password
+                </button>
+</form>
+<!-- Footer links within card -->
+<div class="pt-md border-t border-outline-variant/30 text-center">
+<a class="text-body-sm text-outline hover:text-primary transition-colors flex items-center justify-center gap-xs" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                    Back to Secure Login
+                </a>
+</div>
+</div>
+<!-- Compliance & Branding Footer (Outside Card) -->
+<footer class="mt-xl text-center space-y-md">
+<div class="flex items-center justify-center gap-lg">
+<div class="flex items-center gap-xs text-outline/50">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+<span class="text-[10px] font-label-caps tracking-widest">HIPAA COMPLIANT</span>
+</div>
+<div class="flex items-center gap-xs text-outline/50">
+<span class="material-symbols-outlined text-[14px]">encrypted</span>
+<span class="text-[10px] font-label-caps tracking-widest">AES-256 ENCRYPTION</span>
+</div>
+</div>
+<p class="text-[11px] font-body-sm text-outline/40">
+                © 2024 MedNexus AI. Enterprise Clinical Intelligence Security. 
+                Unauthorized access is strictly prohibited and monitored.
+            </p>
+</footer>
+</main>
+<!-- Side Decoration (Bento Style Data Visualization) - Hidden on mobile -->
+<aside class="fixed right-gutter top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-gutter w-64 pointer-events-none">
+<!-- Security Card -->
+<div class="glass-panel p-md rounded-xl space-y-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-primary uppercase">Security Status</span>
+<span class="w-2 h-2 rounded-full bg-primary pulse-dot"></span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[88%] rounded-full shadow-[0_0_8px_#a4e6ff]"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant leading-relaxed">System strength: Optimal. Biometric syncing pending password refresh.</p>
+</div>
+<!-- Network Card -->
+<div class="glass-panel p-md rounded-xl space-y-sm opacity-50 scale-95">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Node Connectivity</span>
+<div class="flex gap-[2px] items-end h-8">
+<div class="bg-primary/40 w-1 h-[40%] rounded-full"></div>
+<div class="bg-primary/40 w-1 h-[60%] rounded-full"></div>
+<div class="bg-primary/40 w-1 h-[30%] rounded-full"></div>
+<div class="bg-primary/80 w-1 h-[90%] rounded-full"></div>
+<div class="bg-primary/40 w-1 h-[50%] rounded-full"></div>
+<div class="bg-primary/40 w-1 h-[70%] rounded-full"></div>
+<div class="bg-primary/40 w-1 h-[40%] rounded-full"></div>
+<div class="bg-primary/40 w-1 h-[85%] rounded-full"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant">Global Sync: Active</p>
+</div>
+</aside>
+<script>
+        // Password Visibility Toggle
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            const icon = input.nextElementSibling.querySelector('.material-symbols-outlined');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+
+        // Live Validation Logic
+        const passInput = document.getElementById('new-password');
+        const confirmInput = document.getElementById('confirm-password');
+        const reqLength = document.getElementById('req-length');
+        const reqComplex = document.getElementById('req-complex');
+        const iconLength = document.getElementById('icon-length');
+        const iconComplex = document.getElementById('icon-complex');
+        const errorMsg = document.getElementById('match-error');
+
+        passInput.addEventListener('input', () => {
+            const val = passInput.value;
+            
+            // Length check
+            if (val.length >= 12) {
+                reqLength.classList.remove('text-on-surface-variant');
+                reqLength.classList.add('text-primary');
+                iconLength.textContent = 'check_circle';
+                iconLength.style.fontVariationSettings = "'FILL' 1";
+            } else {
+                reqLength.classList.add('text-on-surface-variant');
+                reqLength.classList.remove('text-primary');
+                iconLength.textContent = 'radio_button_unchecked';
+                iconLength.style.fontVariationSettings = "'FILL' 0";
+            }
+
+            // Complexity check (rough estimate)
+            const complexity = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/.test(val);
+            if (complexity) {
+                reqComplex.classList.remove('text-on-surface-variant');
+                reqComplex.classList.add('text-primary');
+                iconComplex.textContent = 'check_circle';
+                iconComplex.style.fontVariationSettings = "'FILL' 1";
+            } else {
+                reqComplex.classList.add('text-on-surface-variant');
+                reqComplex.classList.remove('text-primary');
+                iconComplex.textContent = 'radio_button_unchecked';
+                iconComplex.style.fontVariationSettings = "'FILL' 0";
+            }
+        });
+
+        // Submit logic
+        document.getElementById('resetForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (passInput.value !== confirmInput.value) {
+                errorMsg.classList.remove('hidden');
+                confirmInput.parentElement.classList.add('border-error/50');
+                return;
+            }
+            
+            errorMsg.classList.add('hidden');
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalHtml = btn.innerHTML;
+            
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> Processing...';
+            btn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Success';
+                btn.classList.replace('bg-primary-container', 'bg-tertiary-container');
+                btn.classList.replace('text-on-primary', 'text-on-tertiary-container');
+                
+                // Alert success and redirect simulation
+                setTimeout(() => {
+                    alert('Password has been securely reset. Access tokens regenerated.');
+                    window.location.reload();
+                }, 1000);
+            }, 1500);
+        });
+    </script>
+</body></html>

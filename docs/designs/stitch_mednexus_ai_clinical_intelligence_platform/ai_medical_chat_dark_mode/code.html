@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedNexus-AI | Clinical Intelligence Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid #1E293B;
+        }
+        .ai-border-gradient {
+            border-left: 3px solid transparent;
+            background-image: linear-gradient(#0e1417, #0e1417), linear-gradient(to bottom, #00d1ff, #7000ff);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2f3639;
+            border-radius: 10px;
+        }
+        .citation-tag {
+            font-size: 10px;
+            vertical-align: super;
+            margin-left: 2px;
+            cursor: pointer;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#ddcdff",
+                        "on-surface": "#dde3e7",
+                        "surface": "#0e1417",
+                        "primary-fixed": "#b7eaff",
+                        "on-tertiary-container": "#6b4700",
+                        "primary-fixed-dim": "#4cd6ff",
+                        "surface-dim": "#0e1417",
+                        "background": "#0e1417",
+                        "surface-tint": "#4cd6ff",
+                        "secondary-fixed": "#e9ddff",
+                        "on-error": "#690005",
+                        "on-tertiary": "#442b00",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#5700c9",
+                        "on-secondary-fixed": "#23005b",
+                        "error": "#ffb4ab",
+                        "secondary": "#d1bcff",
+                        "tertiary-fixed": "#ffddb1",
+                        "tertiary-container": "#feb127",
+                        "tertiary-fixed-dim": "#ffba49",
+                        "on-tertiary-fixed": "#291800",
+                        "surface-container-low": "#161d1f",
+                        "on-tertiary-fixed-variant": "#624000",
+                        "surface-container-high": "#242b2e",
+                        "on-background": "#dde3e7",
+                        "on-primary-container": "#00566a",
+                        "surface-variant": "#2f3639",
+                        "surface-container-lowest": "#090f12",
+                        "inverse-primary": "#00677f",
+                        "surface-bright": "#333a3d",
+                        "inverse-surface": "#dde3e7",
+                        "primary-container": "#00d1ff",
+                        "outline-variant": "#3c494e",
+                        "outline": "#859399",
+                        "on-surface-variant": "#bbc9cf",
+                        "on-primary-fixed-variant": "#004e60",
+                        "secondary-container": "#7000ff",
+                        "primary": "#a4e6ff",
+                        "tertiary": "#ffd59c",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#3c0090",
+                        "on-primary": "#003543",
+                        "surface-container": "#1a2123",
+                        "inverse-on-surface": "#2b3134",
+                        "secondary-fixed-dim": "#d1bcff",
+                        "on-primary-fixed": "#001f28",
+                        "surface-container-highest": "#2f3639"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "container-max": "1440px",
+                        "sm": "8px",
+                        "unit": "8px",
+                        "xs": "4px",
+                        "3xl": "64px",
+                        "2xl": "48px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "mono-data": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center px-lg h-16 w-full fixed top-0 z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-xl">
+<span class="font-display-lg text-display-lg font-bold text-primary">MedNexus-AI</span>
+<div class="hidden md:flex gap-md">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors cursor-pointer active:scale-95" href="#">Dashboard</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer active:scale-95" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="bg-surface-container-high border-none rounded-lg pl-10 pr-4 py-1.5 text-body-sm w-64 focus:ring-1 focus:ring-primary transition-all" placeholder="Global Clinical Search..." type="text"/>
+</div>
+<button class="bg-primary-container text-on-primary-container px-md py-1.5 rounded-lg font-label-caps text-label-caps font-bold hover:opacity-90 active:scale-95 transition-all">Quick Action</button>
+<div class="flex gap-sm">
+<span class="material-symbols-outlined p-2 text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined p-2 text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="sensors">sensors</span>
+<span class="material-symbols-outlined p-2 text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-surface-container dark:bg-surface-container border-r border-outline-variant flex flex-col py-md hidden md:flex z-40">
+<div class="px-md mb-lg">
+<div class="flex items-center gap-sm mb-xs">
+<img class="w-8 h-8 rounded" data-alt="A sleek, high-tech minimalist logo for a clinical AI platform called MedNexus-AI. The logo uses geometric shapes and a vibrant cyan and deep blue color scheme, presented on a dark slate background with subtle glowing highlights to evoke precision and medical intelligence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-YgGF2MIPwe2NPDpdo8dbI63OLcQWOHQFr1TdYJ7OE3A2maZDit4BwA6fAEN2R3Zg3DgNzW-M_dFnGraMSgQ-yd4o5cSh6UM-fvsRNHk1q3D3Gm4L79nyoMVhL7slJ-BcHWC_Avt0661o0o8fh6CdP1CeNV55brMNvX5np_1jxwOgarcnOXojHy9G53MsHHhwm0OLPrkB-c-Qst_eIVs0H4OmR8-U4BTt9Tzz6W_gmmvn5R-2IIGaXYV7CPQ5sROndjG0TmtFNyA"/>
+<div>
+<h2 class="font-label-caps text-label-caps text-primary leading-tight">MedNexus-AI</h2>
+<p class="text-[10px] text-on-surface-variant opacity-70">Clinical Intelligence</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-md py-3 px-4 mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<a class="flex items-center gap-md py-3 px-4 bg-primary-container text-on-primary-container rounded-lg mx-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-caps text-label-caps">AI Chat</span>
+</a>
+<a class="flex items-center gap-md py-3 px-4 mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span class="font-label-caps text-label-caps">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-md py-3 px-4 mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-caps text-label-caps">Documents</span>
+</a>
+<a class="flex items-center gap-md py-3 px-4 mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-caps text-label-caps">Reports</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant/30 pt-md">
+<a class="flex items-center gap-md py-3 px-4 mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</a>
+<a class="flex items-center gap-md py-3 px-4 mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-caps text-label-caps">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-64 pt-16 h-screen flex overflow-hidden">
+<!-- Left Sidebar: Chat History -->
+<div class="w-72 bg-surface border-r border-outline-variant flex flex-col hidden lg:flex shrink-0">
+<div class="p-md border-b border-outline-variant">
+<div class="relative mb-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full bg-surface-container border border-outline-variant rounded-lg pl-10 pr-4 py-2 text-body-sm focus:ring-1 focus:ring-primary outline-none" placeholder="Search history..." type="text"/>
+</div>
+<button class="w-full flex items-center justify-center gap-sm py-2 bg-surface-container-high hover:bg-surface-variant text-on-surface rounded-lg border border-outline-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span class="font-label-caps text-label-caps">New Consultation</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-sm space-y-1">
+<div class="px-md py-xs"><span class="text-[10px] font-label-caps text-outline uppercase tracking-wider">Today</span></div>
+<div class="p-3 bg-surface-container-high rounded-xl border border-primary/20 cursor-pointer group">
+<p class="text-body-sm font-medium text-on-surface truncate mb-1">Analysis of T2-weighted MRI Scan</p>
+<div class="flex items-center justify-between">
+<span class="text-[10px] text-on-surface-variant">2 mins ago</span>
+<span class="material-symbols-outlined text-[14px] text-primary opacity-0 group-hover:opacity-100">more_horiz</span>
+</div>
+</div>
+<div class="p-3 hover:bg-surface-container rounded-xl cursor-pointer group">
+<p class="text-body-sm font-medium text-on-surface-variant truncate mb-1">Pediatric Leukemia Protocols</p>
+<div class="flex items-center justify-between">
+<span class="text-[10px] text-on-surface-variant">1 hour ago</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant opacity-0 group-hover:opacity-100">more_horiz</span>
+</div>
+</div>
+<div class="px-md py-xs mt-md"><span class="text-[10px] font-label-caps text-outline uppercase tracking-wider">Yesterday</span></div>
+<div class="p-3 hover:bg-surface-container rounded-xl cursor-pointer group">
+<p class="text-body-sm font-medium text-on-surface-variant truncate mb-1">Diabetes Mellitus Type 2 - Patient 882</p>
+<div class="flex items-center justify-between">
+<span class="text-[10px] text-on-surface-variant">Yesterday, 4:12 PM</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant opacity-0 group-hover:opacity-100">more_horiz</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Center: Chat Interface -->
+<div class="flex-1 flex flex-col relative bg-surface-container-lowest">
+<!-- Chat Header -->
+<div class="h-14 border-b border-outline-variant flex items-center justify-between px-lg glass-panel">
+<div class="flex items-center gap-md">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-[20px]">clinical_notes</span>
+</div>
+<div>
+<h1 class="text-body-md font-bold text-on-surface">Analysis of T2-weighted MRI Scan</h1>
+<p class="text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+                            AI Processing Active
+                        </p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex -space-x-2">
+<div class="w-7 h-7 rounded-full border border-background bg-slate-700 flex items-center justify-center text-[10px]">JD</div>
+<div class="w-7 h-7 rounded-full border border-background bg-slate-600 flex items-center justify-center text-[10px]">ML</div>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Messages Area -->
+<div class="flex-1 overflow-y-auto p-lg space-y-xl" id="chat-messages">
+<!-- User Message -->
+<div class="flex justify-end">
+<div class="max-w-[80%] bg-surface-container-high p-md rounded-2xl rounded-tr-none border border-outline-variant">
+<p class="text-body-md text-on-surface">Can you review the patient's MRI scans from today and compare the lesion progression with the baseline from three months ago? I'm specifically concerned about the edema around the left temporal lobe.</p>
+<div class="mt-3 flex items-center gap-2">
+<div class="flex items-center gap-2 px-2 py-1 bg-surface-container rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-[14px] text-primary">image</span>
+<span class="text-[11px] text-on-surface-variant">mri_t2_coronal.dicom</span>
+</div>
+</div>
+<div class="mt-2 text-right">
+<span class="text-[10px] text-outline">10:24 AM • Delivered</span>
+</div>
+</div>
+</div>
+<!-- AI Response -->
+<div class="flex justify-start">
+<div class="max-w-[90%] flex gap-md">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex-shrink-0 flex items-center justify-center mt-1">
+<span class="material-symbols-outlined text-on-primary-container text-[20px]">smart_toy</span>
+</div>
+<div class="ai-border-gradient p-md rounded-2xl rounded-tl-none glass-panel shadow-2xl">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-md">
+<span class="font-label-caps text-label-caps text-primary">MedNexus Clinical Agent</span>
+<span class="px-2 py-0.5 bg-primary/10 text-primary border border-primary/20 rounded-full text-[10px] font-mono-data">Confidence Score: 99.4%</span>
+</div>
+<div class="flex gap-sm">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">content_copy</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">refresh</span></button>
+</div>
+</div>
+<div class="space-y-md text-body-md text-on-surface leading-relaxed">
+<p>I have processed the DICOM metadata for <strong>mri_t2_coronal.dicom</strong> and compared it with the study dated <span class="font-mono-data text-primary">2023-11-14</span>. <span class="citation-tag text-primary bg-primary/20 px-1 rounded hover:bg-primary hover:text-on-primary transition-colors">1</span></p>
+<p>Key findings in the left temporal lobe show a volumetric increase in the hyperintense T2/FLAIR signal. The measurable lesion core has expanded from <span class="font-mono-data">14.2mm</span> to <span class="font-mono-data">18.6mm</span> (approximately 31% volume increase). <span class="citation-tag text-primary bg-primary/20 px-1 rounded hover:bg-primary hover:text-on-primary transition-colors">2</span></p>
+<ul class="list-disc pl-5 space-y-2 text-on-surface-variant border-l border-outline-variant/50 ml-2">
+<li>Perilesional edema shows mild mass effect on the adjacent sulci.</li>
+<li>No midline shift detected (current: 0.2mm shift).</li>
+<li>Contrast enhancement patterns remain consistent with WHO Grade II characteristics.</li>
+</ul>
+<p class="bg-surface-variant/30 p-3 rounded-lg border border-outline-variant/40 italic text-on-surface-variant text-body-sm">
+                                    "Clinical recommendation: Consider early follow-up stereotactic biopsy if clinical symptoms of increased intracranial pressure present." <span class="citation-tag text-primary bg-primary/20 px-1 rounded">3</span>
+</p>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/30 flex items-center justify-between">
+<div class="flex gap-md">
+<button class="flex items-center gap-1 text-[11px] text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[16px]">thumb_up</span> Helpful</button>
+<button class="flex items-center gap-1 text-[11px] text-on-surface-variant hover:text-error"><span class="material-symbols-outlined text-[16px]">thumb_down</span> Not Helpful</button>
+</div>
+<span class="text-[10px] font-mono-data text-outline">Generated in 1.4s • Citations: 3</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Streaming Mockup -->
+<div class="flex justify-start opacity-70">
+<div class="max-w-[90%] flex gap-md">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex-shrink-0 flex items-center justify-center mt-1 animate-pulse">
+<span class="material-symbols-outlined text-outline text-[20px]">smart_toy</span>
+</div>
+<div class="p-md rounded-2xl rounded-tl-none border border-outline-variant/30 bg-surface-container/30">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+<div class="w-2 h-2 bg-primary rounded-full animate-bounce delay-75"></div>
+<div class="w-2 h-2 bg-primary rounded-full animate-bounce delay-150"></div>
+<span class="text-[11px] text-outline italic ml-2">Agent is calculating longitudinal drift...</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Input Command Bar -->
+<div class="p-lg pt-2 bg-surface-container-lowest/80 backdrop-blur-xl border-t border-outline-variant z-10">
+<div class="max-w-4xl mx-auto">
+<div class="flex items-center justify-between mb-2 px-1">
+<div class="flex gap-md items-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-8 h-4 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary"></div>
+<span class="ml-2 text-[11px] font-label-caps text-on-surface-variant">Clinical Reasoning</span>
+</label>
+<span class="text-outline text-[11px] px-2 border-l border-outline-variant">Context: Current Session + Records</span>
+</div>
+<div class="flex gap-sm">
+<span class="text-[11px] text-outline font-mono-data">GPT-4-MED-TURBO</span>
+<span class="material-symbols-outlined text-[14px] text-outline">tune</span>
+</div>
+</div>
+<div class="relative group bg-surface-container-high border border-outline rounded-xl p-xs focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/50 transition-all shadow-xl">
+<div class="flex items-end gap-sm px-2 pb-1">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<textarea class="flex-1 bg-transparent border-none focus:ring-0 text-on-surface py-3 resize-none max-h-32 min-h-[48px]" id="chat-input" placeholder="Type clinical query or use '/' for commands..." rows="1"></textarea>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">mic</span>
+</button>
+<button class="bg-primary text-on-primary h-10 w-10 rounded-lg flex items-center justify-center hover:opacity-90 active:scale-95 transition-all mb-[4px]">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+<p class="text-center text-[10px] text-outline mt-3">MedNexus AI is a clinical assistant. Final medical decisions must be verified by a board-certified professional.</p>
+</div>
+</div>
+</div>
+<!-- Right Citation Panel -->
+<div class="w-80 bg-surface border-l border-outline-variant hidden xl:flex flex-col shrink-0">
+<div class="p-md h-14 border-b border-outline-variant flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface">Evidence &amp; Sources</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">close</span>
+</div>
+<div class="flex-1 overflow-y-auto p-md space-y-md">
+<div class="p-4 rounded-xl glass-panel border-l-4 border-primary">
+<div class="flex items-center justify-between mb-2">
+<span class="px-1.5 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded">SOURCE 1</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">open_in_new</span>
+</div>
+<h3 class="text-body-sm font-bold text-on-surface mb-1">DICOM Header Analysis: Study UUID 8829-X</h3>
+<p class="text-[11px] text-on-surface-variant line-clamp-3">Primary temporal scan metadata. Comparison baseline extracted from internal PACS node v4.2. Precision alignment confirmed via elastic registration algorithm.</p>
+<div class="mt-2 pt-2 border-t border-outline-variant/30 flex justify-between items-center">
+<span class="text-[10px] font-mono-data text-outline">Internal Node: HL7-772</span>
+<span class="text-[10px] text-primary">99.9% Match</span>
+</div>
+</div>
+<div class="p-4 rounded-xl glass-panel border-l-4 border-secondary">
+<div class="flex items-center justify-between mb-2">
+<span class="px-1.5 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded">SOURCE 2</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">open_in_new</span>
+</div>
+<h3 class="text-body-sm font-bold text-on-surface mb-1">PubMed: PMID 34221054</h3>
+<p class="text-[11px] text-on-surface-variant line-clamp-3">"Longitudinal changes in T2-FLAIR signal intensity as predictors of malignant transformation in low-grade gliomas."</p>
+<div class="mt-2 pt-2 border-t border-outline-variant/30">
+<span class="text-[10px] font-mono-data text-outline italic">Journal of Clinical Neuro-Oncology, 2023</span>
+</div>
+</div>
+<div class="p-4 rounded-xl glass-panel border-l-4 border-tertiary">
+<div class="flex items-center justify-between mb-2">
+<span class="px-1.5 py-0.5 bg-tertiary/10 text-tertiary text-[10px] font-bold rounded">SOURCE 3</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">open_in_new</span>
+</div>
+<h3 class="text-body-sm font-bold text-on-surface mb-1">Standard Clinical Guidelines v8.2</h3>
+<p class="text-[11px] text-on-surface-variant line-clamp-3">Follow-up protocol for symptomatic intracranial mass progression. Institutional guidelines for neuroradiological staging.</p>
+<div class="mt-2 pt-2 border-t border-outline-variant/30">
+<span class="text-[10px] font-mono-data text-outline">Section 4.2: Edema Management</span>
+</div>
+</div>
+<div class="mt-lg">
+<div class="w-full h-32 rounded-xl bg-cover bg-center border border-outline-variant opacity-40 grayscale hover:grayscale-0 transition-all cursor-crosshair" data-alt="A microscopic, high-resolution visualization of neural tissue pathways in a cool blue and violet color palette. The image shows glowing axons and synaptic nodes in a futuristic, 3D medical rendering style, perfectly aligned with a clinical AI dashboard aesthetic. Soft bokeh effect in the background with bright data-points of light." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAHBKgCUD1BIIuO9oxHhSmEaBnY66DmDoC_zsFfl54cEA6nWNboTwrWAqiqEcCuVe76djL3V8c2wH5N5bkV4FugT44LGnZn_DPvg_MmKEgQHL_n22rkqnLEoOxFnt_MZWuF-CwjTIEKct9_DHa5H2jHzesCz7DpDLjuHq0ekqIaxlP1MZXwfJOSziupqCVjMlJF0DXcMsXICLvhWMHhaBkpsaRSOBmOZCR3TFabp-tm6NjNYthyO0PyJ_u-6CQ9Bsv6ixHgTdV13ZM')"></div>
+<p class="text-[10px] text-outline text-center mt-2">Semantic Knowledge Graph Active</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (Supressed based on rule - Contextual) -->
+<script>
+        // Auto-expand textarea
+        const textarea = document.getElementById('chat-input');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Simple mock for "Streaming" effect visibility
+        window.addEventListener('DOMContentLoaded', () => {
+            const chatContainer = document.getElementById('chat-messages');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        });
+
+        // Toggle Clinical Reasoning (Visual update only)
+        const reasoningToggle = document.querySelector('input[type="checkbox"]');
+        reasoningToggle.addEventListener('change', (e) => {
+            if(e.target.checked) {
+                console.log('Clinical Reasoning Enabled');
+            }
+        });
+    </script>
+</body></html>

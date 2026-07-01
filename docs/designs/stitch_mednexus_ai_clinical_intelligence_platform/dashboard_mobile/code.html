@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>MedNexus-AI | Clinical Intel Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#ffddb1",
+                    "on-primary": "#003543",
+                    "surface-container-high": "#242b2e",
+                    "on-primary-fixed": "#001f28",
+                    "surface-base": "#0e1417",
+                    "on-error": "#690005",
+                    "secondary-container": "#7000ff",
+                    "surface-bright": "#333a3d",
+                    "primary": "#a4e6ff",
+                    "tertiary-container": "#feb127",
+                    "surface-container": "#1a2123",
+                    "secondary-fixed-dim": "#d1bcff",
+                    "on-tertiary": "#442b00",
+                    "on-tertiary-fixed": "#291800",
+                    "on-surface": "#dde3e7",
+                    "inverse-primary": "#00677f",
+                    "surface-tint": "#4cd6ff",
+                    "error-container": "#93000a",
+                    "success-glow": "#feb127",
+                    "primary-container": "#00d1ff",
+                    "surface-dim": "#0e1417",
+                    "primary-fixed": "#b7eaff",
+                    "on-secondary": "#3c0090",
+                    "error": "#ffb4ab",
+                    "on-secondary-fixed-variant": "#5700c9",
+                    "tertiary-fixed-dim": "#ffba49",
+                    "surface-container-low": "#161d1f",
+                    "inverse-surface": "#dde3e7",
+                    "surface-variant": "#2f3639",
+                    "on-secondary-container": "#ddcdff",
+                    "on-secondary-fixed": "#23005b",
+                    "secondary-fixed": "#e9ddff",
+                    "on-primary-fixed-variant": "#004e60",
+                    "on-error-container": "#ffdad6",
+                    "border-low-opacity": "rgba(60, 73, 78, 0.5)",
+                    "inverse-on-surface": "#2b3134",
+                    "secondary": "#d1bcff",
+                    "on-tertiary-container": "#6b4700",
+                    "outline-variant": "#3c494e",
+                    "tertiary": "#ffd59c",
+                    "background": "#0e1417",
+                    "surface-container-lowest": "#090f12",
+                    "primary-fixed-dim": "#4cd6ff",
+                    "on-surface-variant": "#bbc9cf",
+                    "surface-container-highest": "#2f3639",
+                    "outline": "#859399",
+                    "surface": "#0e1417",
+                    "on-primary-container": "#00566a",
+                    "on-background": "#dde3e7",
+                    "on-tertiary-fixed-variant": "#624000",
+                    "surface-glass": "rgba(26, 33, 35, 0.7)"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "xl": "32px",
+                    "md": "16px",
+                    "2xl": "48px",
+                    "3xl": "64px",
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "mono-data": ["JetBrains Mono"],
+                    "headline-md": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(26, 33, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(60, 73, 78, 0.5);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.05);
+        }
+        .pulse-live {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.1); }
+        }
+        body {
+            background-color: #0e1417;
+            color: #dde3e7;
+            -webkit-font-smoothing: antialiased;
+        }
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 w-full h-16 z-50 bg-surface-glass backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-gutter">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-headline-md">clinical_notes</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Clinical Intel</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined text-primary">notifications</span>
+</button>
+</header>
+<main class="pt-20 pb-32 px-gutter space-y-6">
+<!-- Welcome Section -->
+<section class="space-y-1">
+<h2 class="font-headline-md text-headline-md text-on-surface">Dr. Sarah Chen</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-container pulse-live"></span>
+                System Health: Optimized
+            </p>
+</section>
+<!-- System Metrics Bento -->
+<section class="grid grid-cols-2 gap-4">
+<div class="glass-panel p-4 rounded-xl space-y-2 glow-cyan">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">neurology</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Active</span>
+</div>
+<div class="space-y-0.5">
+<div class="font-headline-md text-headline-md font-bold text-primary">84%</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant">Neural Load</div>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-xl space-y-2">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Sync</span>
+</div>
+<div class="space-y-0.5">
+<div class="font-headline-md text-headline-md font-bold text-on-surface">12</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant">Reports Pend.</div>
+</div>
+</div>
+</section>
+<!-- Feature Spotlight (Diagnostic Canvas) -->
+<section class="glass-panel relative overflow-hidden rounded-xl h-48 flex flex-col justify-end p-6">
+
+<div class="relative z-10 space-y-2">
+<div class="font-label-caps text-label-caps text-primary uppercase tracking-widest">New Capability</div>
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">Cross-Modal Genetic Analysis</h3>
+<button class="mt-2 px-4 py-2 bg-primary-container text-on-primary-container font-label-caps text-label-caps rounded-full active:scale-95 transition-transform">
+                    Initialize Tool
+                </button>
+</div>
+</section>
+<!-- Quick Access Tools -->
+<section class="space-y-3">
+<div class="flex items-center justify-between">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant">AI Diagnostic Tools</h4>
+<button class="text-primary text-body-sm font-label-caps">View All</button>
+</div>
+<div class="space-y-2">
+<button class="w-full glass-panel flex items-center gap-4 p-4 rounded-xl hover:bg-surface-container-high transition-colors text-left group">
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">radiology</span>
+</div>
+<div class="flex-1">
+<div class="font-body-md text-on-surface font-semibold">Imaging Synthesis</div>
+<div class="font-body-sm text-on-surface-variant">CT/MRI anomaly detection</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+<button class="w-full glass-panel flex items-center gap-4 p-4 rounded-xl hover:bg-surface-container-high transition-colors text-left group">
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">genetics</span>
+</div>
+<div class="flex-1">
+<div class="font-body-md text-on-surface font-semibold">Genomic Sequence</div>
+<div class="font-body-sm text-on-surface-variant">Mutation risk assessment</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Recent Summary List -->
+<section class="space-y-4">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant">Clinical Summary</h4>
+<div class="space-y-3">
+<div class="flex gap-4 items-start border-l-2 border-outline-variant pl-4 py-1">
+<div class="flex-1">
+<div class="font-body-md text-on-surface">Patient #9942 Synthesis</div>
+<p class="font-body-sm text-on-surface-variant line-clamp-1">Analysis complete: Metabolic markers indicate high probability of Stage 2...</p>
+<div class="font-mono-data text-mono-data text-primary mt-1">2m ago • Verified</div>
+</div>
+</div>
+<div class="flex gap-4 items-start border-l-2 border-outline-variant/30 pl-4 py-1">
+<div class="flex-1">
+<div class="font-body-md text-on-surface">System Patch v2.1</div>
+<p class="font-body-sm text-on-surface-variant line-clamp-1">Oncology model updated with latest peer-reviewed datasets.</p>
+<div class="font-mono-data text-mono-data text-on-surface-variant mt-1">45m ago • System</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full bg-surface-glass backdrop-blur-xl border-t border-outline-variant/30 shadow-lg px-2 py-3 pb-safe z-50 flex justify-around items-center rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">neurology</span>
+<span class="font-label-caps text-label-caps">AI Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-caps text-label-caps">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps">Reports</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for glass panels
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('touchstart', () => {
+                card.style.borderColor = 'rgba(0, 209, 255, 0.4)';
+                card.style.transform = 'scale(0.99)';
+            });
+            card.addEventListener('touchend', () => {
+                card.style.borderColor = 'rgba(60, 73, 78, 0.5)';
+                card.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simple scroll observer for header transparency
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md');
+                header.classList.remove('shadow-sm');
+            } else {
+                header.classList.add('shadow-sm');
+                header.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body></html>

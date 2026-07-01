@@ -1,0 +1,292 @@
+# MedNexus-AI Vector Knowledge Retrieval Configuration
+# Phase 3: Intelligent Vector Retrieval Engine
+
+# ChromaDB Configuration
+chromadb:
+  persist_directory: "storage/chroma_db"
+  collection_name: "medical_knowledge"
+  distance_metric: "cosine"  # cosine, l2, ip
+  
+  # Collection metadata
+  metadata:
+    description: "Medical knowledge base from MedNexus-AI"
+    version: "1.0.0"
+    embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+    dimension: 384
+  
+  # Performance settings
+  batch_size: 100
+  max_batch_size: 5000
+  enable_optimization: true
+  
+  # Backup settings
+  backup_enabled: true
+  backup_dir: "storage/chroma_db/backups"
+  backup_retention_days: 30
+
+# Indexing Configuration
+indexing:
+  mode: "incremental"  # incremental, full, force
+  batch_size: 100
+  parallel_workers: 4
+  resume_enabled: true
+  skip_unchanged: true
+  
+  # Checksum validation
+  validate_checksums: true
+  fail_on_checksum_mismatch: false
+  
+  # Progress tracking
+  show_progress: true
+  log_frequency: 100
+  
+  # Error handling
+  max_retries: 3
+  retry_delay: 2
+  skip_on_error: true
+  
+  # Checkpoint
+  checkpoint_enabled: true
+  checkpoint_interval: 1000
+  checkpoint_file: "storage/chroma_db/.checkpoint.json"
+
+# Search Configuration
+search:
+  # Retrieval mode
+  mode: "hybrid"  # vector, bm25, hybrid
+  
+  # Search parameters
+  top_k: 10
+  similarity_threshold: 0.0
+  
+  # MMR (Maximum Marginal Relevance)
+  mmr_enabled: false
+  mmr_lambda: 0.5  # 0 = diversity, 1 = relevance
+  mmr_fetch_k: 20  # Fetch more candidates for MMR
+  
+  # Hybrid search weights
+  hybrid:
+    vector_weight: 0.7
+    bm25_weight: 0.3
+    rrf_k: 60  # Reciprocal Rank Fusion constant
+  
+  # Distance metrics
+  distance_metric: "cosine"  # cosine, l2, ip
+  
+  # Result filtering
+  deduplicate: true
+  max_results: 100
+
+# Query Preprocessing Configuration
+query_preprocessing:
+  enabled: true
+  lowercase: true
+  normalize_whitespace: true
+  
+  # Medical abbreviation expansion
+  expand_abbreviations: true
+  abbreviations:
+    dm: "diabetes mellitus"
+    htn: "hypertension"
+    mi: "myocardial infarction"
+    chf: "congestive heart failure"
+    copd: "chronic obstructive pulmonary disease"
+    cad: "coronary artery disease"
+    ckd: "chronic kidney disease"
+    afib: "atrial fibrillation"
+  
+  # Stopwords
+  remove_stopwords: false
+  stopwords: ["the", "a", "an", "is", "are", "was", "were"]
+  
+  # Validation
+  min_query_length: 2
+  max_query_length: 500
+  
+  # Query hashing
+  cache_queries: true
+
+# BM25 Configuration
+bm25:
+  k1: 1.5  # Term frequency saturation parameter
+  b: 0.75  # Length normalization parameter
+  
+  # Tokenization
+  tokenizer: "simple"  # simple, medical, custom
+  lowercase: true
+  remove_punctuation: true
+  
+  # Index settings
+  build_on_startup: false
+  cache_index: true
+
+# Metadata Filtering Configuration
+metadata_filtering:
+  enabled: true
+  
+  # Supported filters
+  supported_fields:
+    - source
+    - document_id
+    - disease
+    - drug
+    - section
+    - language
+    - date
+    - specialty
+    - document_type
+  
+  # Filter operators
+  operators:
+    - eq      # Equal
+    - ne      # Not equal
+    - in      # In list
+    - nin     # Not in list
+    - gt      # Greater than
+    - gte     # Greater than or equal
+    - lt      # Less than
+    - lte     # Less than or equal
+    - contains
+    - startswith
+    - endswith
+
+# Search Cache Configuration
+cache:
+  enabled: true
+  strategy: "lru"  # lru, lfu, ttl
+  max_size: 1000
+  ttl_seconds: 3600  # 1 hour
+  
+  # Cache key configuration
+  include_top_k: true
+  include_filters: true
+  include_mode: true
+  
+  # Statistics
+  track_statistics: true
+  log_cache_hits: false
+  
+  # Invalidation
+  auto_invalidate: true
+  invalidate_on_index_update: true
+
+# Validation Configuration
+validation:
+  enabled: true
+  strict_mode: false
+  
+  # Validation checks
+  checks:
+    missing_vectors: true
+    duplicate_ids: true
+    broken_metadata: true
+    collection_consistency: true
+    checksum_match: true
+  
+  # Repair options
+  auto_repair: false
+  remove_invalid: false
+
+# Benchmarking Configuration
+benchmarking:
+  enabled: true
+  
+  # Metrics to track
+  metrics:
+    - recall_at_1
+    - recall_at_3
+    - recall_at_5
+    - recall_at_10
+    - precision_at_1
+    - precision_at_3
+    - precision_at_5
+    - mrr
+    - ndcg
+    - hit_rate
+    - latency
+    - memory_usage
+  
+  # Test queries
+  test_queries_file: "datasets/evaluation/test_queries.json"
+  
+  # Output
+  output_dir: "datasets/evaluation"
+  output_files:
+    metrics: "retrieval_metrics.json"
+    latency: "retrieval_latency.json"
+    benchmark: "retrieval_benchmark.json"
+    validation: "retrieval_validation.json"
+    statistics: "search_statistics.json"
+    collection: "collection_statistics.json"
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  log_searches: true
+  log_indexing: true
+  log_cache: false
+  log_validation: true
+  
+  # Performance logging
+  log_latency: true
+  latency_threshold_ms: 1000
+  
+  # Query logging
+  log_query_text: true
+  log_results_count: true
+  log_similarity_scores: false
+
+# Performance Configuration
+performance:
+  # Parallel processing
+  parallel_indexing: true
+  parallel_search: false
+  max_workers: 4
+  
+  # Memory management
+  max_memory_mb: 8192
+  clear_cache_on_memory_limit: true
+  
+  # Optimization
+  optimize_on_startup: false
+  optimize_interval_hours: 24
+  
+  # Batch processing
+  batch_processing: true
+  adaptive_batch_size: true
+
+# Advanced Configuration
+advanced:
+  # Embedding dimension validation
+  enforce_dimension: true
+  expected_dimension: 384
+  
+  # Collection management
+  auto_create_collection: true
+  collection_prefix: "mednexus_"
+  
+  # Index rebuilding
+  rebuild_on_error: false
+  rebuild_threshold_errors: 10
+  
+  # Query optimization
+  query_expansion: false
+  query_rewriting: false
+  
+  # Result post-processing
+  rerank_results: false
+  filter_low_scores: true
+  score_threshold: 0.0
+
+# Feature Flags
+features:
+  mmr_retrieval: true
+  hybrid_search: true
+  metadata_filtering: true
+  search_caching: true
+  incremental_indexing: true
+  parallel_processing: true
+  query_preprocessing: true
+  result_deduplication: true
+  auto_backup: true
+  health_checks: true

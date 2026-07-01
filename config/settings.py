@@ -37,6 +37,7 @@ MEDICAL_QA_DIR = RAW_DATA_DIR / "medical_qa"
 CLEANED_DATA_DIR = PROCESSED_DATA_DIR / "cleaned"
 CHUNKS_DIR = PROCESSED_DATA_DIR / "chunks"
 METADATA_DIR = PROCESSED_DATA_DIR / "metadata"
+EMBEDDINGS_DIR = PROCESSED_DATA_DIR / "embeddings"
 
 # Storage paths
 CHROMA_DB_DIR = STORAGE_DIR / "chroma_db"
@@ -169,6 +170,7 @@ class Config:
         self.cleaned_data_dir = CLEANED_DATA_DIR
         self.chunks_dir = CHUNKS_DIR
         self.metadata_dir = METADATA_DIR
+        self.embeddings_dir = EMBEDDINGS_DIR
         
         # Storage paths
         self.chroma_db_dir = CHROMA_DB_DIR
@@ -191,6 +193,7 @@ class Config:
             self.cleaned_data_dir,
             self.chunks_dir,
             self.metadata_dir,
+            self.embeddings_dir,
             self.chroma_db_dir,
             self.evaluation_dir,
         ]

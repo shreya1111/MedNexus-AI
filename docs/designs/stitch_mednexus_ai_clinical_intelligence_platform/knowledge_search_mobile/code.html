@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>MedNexus-AI | Clinical Intel Search</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(26, 33, 35, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(60, 73, 78, 0.5);
+        }
+        .search-glow:focus-within {
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.15);
+            border-color: rgba(164, 230, 255, 0.5);
+        }
+        @keyframes pulse-cyan {
+            0% { box-shadow: 0 0 0 0 rgba(0, 209, 255, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(0, 209, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 209, 255, 0); }
+        }
+        .live-indicator {
+            animation: pulse-cyan 2s infinite;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(164, 230, 255, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffddb1",
+                        "on-primary": "#003543",
+                        "surface-container-high": "#242b2e",
+                        "on-primary-fixed": "#001f28",
+                        "surface-base": "#0e1417",
+                        "on-error": "#690005",
+                        "secondary-container": "#7000ff",
+                        "surface-bright": "#333a3d",
+                        "primary": "#a4e6ff",
+                        "tertiary-container": "#feb127",
+                        "surface-container": "#1a2123",
+                        "secondary-fixed-dim": "#d1bcff",
+                        "on-tertiary": "#442b00",
+                        "on-tertiary-fixed": "#291800",
+                        "on-surface": "#dde3e7",
+                        "inverse-primary": "#00677f",
+                        "surface-tint": "#4cd6ff",
+                        "error-container": "#93000a",
+                        "success-glow": "#feb127",
+                        "primary-container": "#00d1ff",
+                        "surface-dim": "#0e1417",
+                        "primary-fixed": "#b7eaff",
+                        "on-secondary": "#3c0090",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed-variant": "#5700c9",
+                        "tertiary-fixed-dim": "#ffba49",
+                        "surface-container-low": "#161d1f",
+                        "inverse-surface": "#dde3e7",
+                        "surface-variant": "#2f3639",
+                        "on-secondary-container": "#ddcdff",
+                        "on-secondary-fixed": "#23005b",
+                        "secondary-fixed": "#e9ddff",
+                        "on-primary-fixed-variant": "#004e60",
+                        "on-error-container": "#ffdad6",
+                        "border-low-opacity": "rgba(60, 73, 78, 0.5)",
+                        "inverse-on-surface": "#2b3134",
+                        "secondary": "#d1bcff",
+                        "on-tertiary-container": "#6b4700",
+                        "outline-variant": "#3c494e",
+                        "tertiary": "#ffd59c",
+                        "background": "#0e1417",
+                        "surface-container-lowest": "#090f12",
+                        "primary-fixed-dim": "#4cd6ff",
+                        "on-surface-variant": "#bbc9cf",
+                        "surface-container-highest": "#2f3639",
+                        "outline": "#859399",
+                        "surface": "#0e1417",
+                        "on-primary-container": "#00566a",
+                        "on-background": "#dde3e7",
+                        "on-tertiary-fixed-variant": "#624000",
+                        "surface-glass": "rgba(26, 33, 35, 0.7)"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "2xl": "48px",
+                        "3xl": "64px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface-base text-on-surface font-body-md selection:bg-primary/30 min-h-screen flex flex-col">
+<!-- Top App Bar -->
+<header class="bg-surface-glass dark:bg-surface-glass backdrop-blur-xl border-b border-outline-variant/30 shadow-sm docked full-width top-0 z-50 flex justify-between items-center px-gutter w-full h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary font-headline-md text-headline-md">clinical_notes</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Clinical Intel</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full border border-primary/20 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up professional portrait of a medical doctor in a dark modern clinic environment with blue accent lighting, high-tech glass screens in the background, sharp focus, 8k resolution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYaWR7vH0m1IsxEUUXZa7uFhwbhQ7bzpjauy2gihMCuTdcAHKPlMtDUnUq7yIqb3a18EVXMjp7koA1Jw2WCP5DQOdsCkdcExZ8fCBj2lvBRTaqnco40aUh_c38Seq5uylVF7baUCoQyeoPwW0GyPZREqxs_0d3R0FsEfRbTyiKxSi3nzb8G1t-DFhK24vFd9nrX37j7WF4LL2-9ZPi9r83kVozc7Ppg4XBP0WjPs-WRg3SiHGmGLzTVv93b89iFXuRfRvw6G1Yi8k"/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<main class="flex-1 overflow-y-auto pt-4 pb-24 px-4 custom-scrollbar">
+<!-- Animated Background Element -->
+<div class="fixed inset-0 pointer-events-none opacity-20 z-0">
+
+</div>
+<div class="relative z-10 max-w-md mx-auto space-y-6">
+<!-- Hero Search Section -->
+<section class="space-y-4">
+<div class="space-y-1">
+<h2 class="font-headline-md text-headline-md-mobile text-on-surface">Knowledge Search</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Access the global MedNexus neural clinical database.</p>
+</div>
+<div class="search-glow glass-card rounded-xl flex items-center px-4 py-3 transition-all duration-300">
+<span class="material-symbols-outlined text-primary mr-3">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-on-surface-variant/50 w-full font-body-md" placeholder="Search pathology, protocols, or research..." type="text"/>
+<span class="material-symbols-outlined text-on-surface-variant/50">mic</span>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+<button class="px-4 py-1.5 rounded-full bg-primary text-on-primary font-label-caps text-label-caps whitespace-nowrap active:scale-95 transition-all">All Intel</button>
+<button class="px-4 py-1.5 rounded-full glass-card text-on-surface-variant font-label-caps text-label-caps whitespace-nowrap hover:bg-surface-container-high active:scale-95 transition-all">Diagnostic</button>
+<button class="px-4 py-1.5 rounded-full glass-card text-on-surface-variant font-label-caps text-label-caps whitespace-nowrap hover:bg-surface-container-high active:scale-95 transition-all">Treatment</button>
+<button class="px-4 py-1.5 rounded-full glass-card text-on-surface-variant font-label-caps text-label-caps whitespace-nowrap hover:bg-surface-container-high active:scale-95 transition-all">Research</button>
+<button class="px-4 py-1.5 rounded-full glass-card text-on-surface-variant font-label-caps text-label-caps whitespace-nowrap hover:bg-surface-container-high active:scale-95 transition-all">Neurology</button>
+</div>
+</section>
+<!-- Search Results List -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">RECENT CLINICAL UPDATES</span>
+<span class="flex items-center gap-1.5 font-label-caps text-label-caps text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container live-indicator"></span>
+                        LIVE FEED
+                    </span>
+</div>
+<!-- Result 1 -->
+<div class="glass-card rounded-xl p-4 space-y-3 hover:border-primary/40 transition-colors group">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-widest">Diagnostic Protocol</span>
+<h3 class="font-headline-md text-body-lg font-bold group-hover:text-primary transition-colors">Early-Onset Neural Degeneration Analysis</h3>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward_ios</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                        Updated synthesis of CSF biomarkers and high-resolution neuroimaging patterns for identifying early synaptic failure in patients under 45.
+                    </p>
+<div class="flex gap-2 pt-1">
+<span class="bg-surface-container-high px-2 py-0.5 rounded text-[10px] font-mono-data text-on-surface-variant border border-outline-variant/30">#Biomarkers</span>
+<span class="bg-surface-container-high px-2 py-0.5 rounded text-[10px] font-mono-data text-on-surface-variant border border-outline-variant/30">#Neuro2024</span>
+</div>
+</div>
+<!-- Result 2 -->
+<div class="glass-card rounded-xl p-4 space-y-3 hover:border-primary/40 transition-colors group">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<span class="font-label-caps text-label-caps text-tertiary uppercase tracking-widest">Research Synthesis</span>
+<h3 class="font-headline-md text-body-lg font-bold group-hover:text-primary transition-colors">CRISPR-Cas9 Therapeutic Efficacy in Myeloma</h3>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward_ios</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                        Comparative study of genomic editing techniques in relapsed multiple myeloma patients, focusing on BCMA-targeted T-cell modification.
+                    </p>
+<div class="flex gap-2 pt-1">
+<span class="bg-surface-container-high px-2 py-0.5 rounded text-[10px] font-mono-data text-on-surface-variant border border-outline-variant/30">#Genetics</span>
+<span class="bg-surface-container-high px-2 py-0.5 rounded text-[10px] font-mono-data text-on-surface-variant border border-outline-variant/30">#Oncology</span>
+</div>
+</div>
+<!-- Result 3 (With Image Context) -->
+<div class="glass-card rounded-xl overflow-hidden hover:border-primary/40 transition-colors group">
+<div class="h-32 w-full overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Microscopic view of neural pathways glowing with electric cyan and deep violet signals, high-resolution scientific visualization, dark background, cinematic medical rendering, photorealistic bioluminescence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXfMk4McKSWo-PpydtcssPyQfvhjyO7Vg2qdmLazxexaHJxUQgmca4sWA_OhBrHPNH0FZnkM8982X8bPOkB-FubdQTMPt1H5qIF-qP3oK4lVyX8tUFe_rtsGPJJMFQatkCnNFYdNu8e-foSsnlrkia70BJfKNbTa7hdR3a8IReEp7ltbIkn_WzpcMRluIQqF66JMxfY1kNW42v6nFP388fPUiTZ1f_g5_9lURjP8nzO4ChRmFSP2RNMHQmiaJmFJiPTqUC8qNr0Uw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container to-transparent"></div>
+</div>
+<div class="p-4 -mt-6 relative z-10 space-y-2">
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest">Treatment Roadmap</span>
+<h3 class="font-headline-md text-body-lg font-bold group-hover:text-primary transition-colors">Optogenetic Modulation for Chronic Pain</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                            New clinical guidelines for applying light-activated neural pathways to inhibit nociceptor signaling without opioid intervention.
+                        </p>
+<div class="flex justify-between items-center pt-2">
+<div class="flex gap-2">
+<span class="bg-surface-container-high px-2 py-0.5 rounded text-[10px] font-mono-data text-on-surface-variant border border-outline-variant/30">#PainMgmt</span>
+</div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">6 MIN READ</span>
+</div>
+</div>
+</div>
+<!-- Result 4 -->
+<div class="glass-card rounded-xl p-4 space-y-3 hover:border-primary/40 transition-colors group">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-widest">Diagnostic Intel</span>
+<h3 class="font-headline-md text-body-lg font-bold group-hover:text-primary transition-colors">AI-Driven Cardiomyopathy Screening</h3>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward_ios</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                        Validation results for the NexNexus neural core on identifying hypertrophic cardiomyopathy from standard 12-lead ECG traces.
+                    </p>
+<div class="flex gap-2 pt-1">
+<span class="bg-surface-container-high px-2 py-0.5 rounded text-[10px] font-mono-data text-on-surface-variant border border-outline-variant/30">#Cardiology</span>
+<span class="bg-surface-container-high px-2 py-0.5 rounded text-[10px] font-mono-data text-on-surface-variant border border-outline-variant/30">#AI_Validated</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- FAB for AI Interaction -->
+<div class="fixed bottom-24 right-6 z-50">
+<button class="w-14 h-14 rounded-full bg-primary-container text-on-primary-container shadow-lg flex items-center justify-center active:scale-90 transition-transform duration-200 group">
+<span class="material-symbols-outlined text-[32px]">neurology</span>
+<div class="absolute -top-1 -right-1 w-4 h-4 bg-error rounded-full border-2 border-surface-base animate-pulse"></div>
+</button>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="bg-surface-glass dark:bg-surface-glass backdrop-blur-xl border-t border-outline-variant/30 shadow-lg fixed bottom-0 left-0 w-full flex justify-around items-center px-2 py-3 pb-safe z-50 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">neurology</span>
+<span class="font-label-caps text-label-caps mt-1">AI Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-caps text-label-caps">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps mt-1">Reports</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple Micro-interaction for filter chips
+        const filterChips = document.querySelectorAll('button.rounded-full');
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                filterChips.forEach(c => {
+                    c.classList.remove('bg-primary', 'text-on-primary');
+                    c.classList.add('glass-card', 'text-on-surface-variant');
+                });
+                chip.classList.remove('glass-card', 'text-on-surface-variant');
+                chip.classList.add('bg-primary', 'text-on-primary');
+            });
+        });
+
+        // Search input interaction
+        const searchInput = document.querySelector('input');
+        searchInput.addEventListener('input', (e) => {
+            if(e.target.value.length > 2) {
+                // Simulate real-time search logic or visual feedback
+                console.log('Searching for:', e.target.value);
+            }
+        });
+    </script>
+</body></html>

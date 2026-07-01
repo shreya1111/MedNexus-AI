@@ -1,0 +1,215 @@
+# MedNexus-AI Chunking Configuration
+# Configuration for document chunking and metadata enrichment
+
+version: "1.0"
+
+# Default Chunking Strategy
+default_strategy: "recursive"
+
+# Chunking Strategies Configuration
+strategies:
+  recursive:
+    name: "Recursive Character Splitting"
+    description: "Splits text recursively using multiple separators"
+    chunk_size: 1000
+    chunk_overlap: 200
+    separators:
+      - "\n\n"      # Double newline (paragraphs)
+      - "\n"        # Single newline
+      - ". "        # Sentence end
+      - "? "        # Question end
+      - "! "        # Exclamation end
+      - "; "        # Semicolon
+      - ", "        # Comma
+      - " "         # Space
+      - ""          # Character
+    minimum_chunk_length: 100
+    maximum_chunk_length: 2000
+    preserve_headers: true
+    preserve_lists: true
+    preserve_tables: true
+  
+  fixed:
+    name: "Fixed-Size Chunking"
+    description: "Splits text into fixed-size chunks"
+    chunk_size: 1000
+    chunk_overlap: 100
+    minimum_chunk_length: 100
+    maximum_chunk_length: 1000
+    word_boundary: true  # Break at word boundaries
+  
+  paragraph:
+    name: "Paragraph-Aware Chunking"
+    description: "Splits text by paragraphs, combining when needed"
+    target_chunk_size: 1000
+    chunk_overlap: 100
+    minimum_chunk_length: 200
+    maximum_chunk_length: 2000
+    separator: "\n\n"
+    preserve_headers: true
+  
+  section:
+    name: "Section-Aware Chunking"
+    description: "Splits text by document sections"
+    target_chunk_size: 1500
+    chunk_overlap: 150
+    minimum_chunk_length: 300
+    maximum_chunk_length: 3000
+    section_markers:
+      - "# "        # Markdown H1
+      - "## "       # Markdown H2
+      - "### "      # Markdown H3
+    preserve_section_context: true
+
+
+# Validation Rules
+validation:
+  check_empty_chunks: true
+  check_duplicate_chunks: true
+  check_oversized_chunks: true
+  check_undersized_chunks: true
+  check_invalid_utf8: true
+  check_missing_metadata: true
+  
+  min_chunk_size: 50
+  max_chunk_size: 5000
+  warn_if_chunk_larger_than: 2500
+  warn_if_chunk_smaller_than: 75
+
+
+# Metadata Configuration
+metadata:
+  required_fields:
+    - chunk_id
+    - document_id
+    - source
+    - chunk_index
+    - total_chunks
+    - start_character
+    - end_character
+    - text
+    - word_count
+    - created_at
+    - checksum
+  
+  optional_fields:
+    - title
+    - section
+    - language
+    - tokens
+    - has_code
+    - has_list
+    - has_table
+    - parent_document_checksum
+  
+  generate_checksum: true
+  checksum_algorithm: "sha256"
+  include_timestamps: true
+  include_statistics: true
+
+
+# Incremental Processing
+incremental:
+  enabled: true
+  use_checksums: true
+  skip_unchanged: true
+  checksum_algorithm: "sha256"
+  cache_checksums: true
+
+
+# Output Configuration
+output:
+  format: "json"           # json or jsonl
+  indent: 2                # JSON indentation
+  ensure_ascii: false      # Allow Unicode in JSON
+  compression: null        # null, "gzip", or "bzip2"
+  
+  # Organize chunks by source
+  organize_by_source: true
+  
+  # Output filename pattern
+  filename_pattern: "{document_stem}.json"
+
+
+# Performance
+performance:
+  batch_size: 100          # Process N documents at a time
+  max_workers: 4           # Parallel processing workers
+  show_progress: true      # Show progress bars
+  log_every_n: 50         # Log progress every N documents
+
+
+# Quality Metrics
+quality_metrics:
+  generate_reports: true
+  report_format: "json"
+  
+  metrics:
+    - total_documents
+    - total_chunks
+    - average_chunk_size
+    - median_chunk_size
+    - average_overlap
+    - largest_chunk
+    - smallest_chunk
+    - duplicate_chunks
+    - empty_chunks
+    - failed_documents
+    - processing_time
+    - chunks_per_document
+    - characters_per_chunk
+    - words_per_chunk
+
+
+# Language Detection (optional)
+language:
+  detect: false             # Enable language detection
+  default_language: "en"    # Default if detection fails
+  supported_languages:
+    - en
+    - es
+    - fr
+    - de
+    - it
+    - pt
+
+
+# Chunk ID Configuration
+chunk_id:
+  format: "{source}_{document_id}_{chunk_index:04d}"
+  deterministic: true       # Same input = same IDs
+  include_checksum: false   # Include content checksum in ID
+
+
+# Special Handling
+special_handling:
+  medical_qa:
+    preserve_question_answer_pairs: true
+    chunk_by_qa_pair: true
+  
+  clinical_guidelines:
+    preserve_sections: true
+    keep_section_headers: true
+  
+  research_papers:
+    preserve_abstracts: true
+    preserve_references: false
+
+
+# Error Handling
+error_handling:
+  on_invalid_utf8: "replace"     # skip, replace, or fail
+  on_empty_document: "skip"      # skip or fail
+  on_oversized_chunk: "split"    # split or fail
+  on_metadata_missing: "warn"    # warn or fail
+  continue_on_error: true        # Continue processing on errors
+  max_errors_per_batch: 10       # Stop batch if too many errors
+
+
+# Logging
+logging:
+  level: "INFO"
+  log_chunk_creation: false      # Log each chunk (verbose)
+  log_validation_issues: true
+  log_skipped_documents: true
+  log_performance_metrics: true

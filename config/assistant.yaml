@@ -1,0 +1,298 @@
+# MedNexus-AI Medical Assistant Configuration
+# Phase 4: Production-Grade Medical AI Assistant
+
+# LLM Configuration
+llm:
+  provider: "gemini"  # gemini
+  model: "gemini-2.0-flash-exp"  # gemini-2.0-flash-exp, gemini-1.5-pro
+  
+  # Generation parameters
+  temperature: 0.1  # Low temperature for factual medical responses
+  top_p: 0.95
+  top_k: 40
+  max_output_tokens: 2048
+  
+  # Safety and reliability
+  max_retries: 3
+  retry_delay: 2
+  timeout: 60
+  
+  # Streaming
+  streaming: true
+  
+  # Token tracking
+  track_tokens: true
+  track_latency: true
+
+# Retrieval Configuration
+retrieval:
+  # Number of documents to retrieve
+  top_k: 5
+  
+  # Retrieval mode
+  mode: "hybrid"  # vector, bm25, hybrid
+  
+  # Re-ranking
+  rerank: false
+  rerank_top_k: 3
+  
+  # MMR for diversity
+  mmr_enabled: false
+  mmr_lambda: 0.7
+  
+  # Metadata filtering
+  filter_by_source: false
+  allowed_sources: ["medquad", "pubmed"]
+
+# Context Configuration
+context:
+  # Maximum tokens for context
+  max_tokens: 4000
+  
+  # Context assembly
+  deduplicate: true
+  sort_by_relevance: true
+  include_metadata: true
+  
+  # Section prioritization
+  prioritize_sections: true
+  
+  # Context compression
+  compress: false
+  compression_ratio: 0.5
+
+# Prompt Configuration
+prompts:
+  # Default template
+  default_template: "medical_qa"
+  
+  # Available templates
+  templates:
+    - medical_qa
+    - disease_explanation
+    - drug_information
+    - clinical_guidelines
+    - medical_definition
+    - research_question
+    - conversation_continuation
+  
+  # System instruction
+  system_instruction: |
+    You are a medical AI assistant providing educational information based on 
+    retrieved medical knowledge. You MUST:
+    
+    1. Base ALL answers ONLY on the provided context
+    2. NEVER fabricate medical information
+    3. Cite sources for all claims
+    4. State uncertainty when information is incomplete
+    5. Encourage professional medical consultation
+    6. Never provide diagnosis or treatment recommendations
+    7. Focus on education and awareness
+    
+    If you cannot answer based on the context, clearly state that.
+
+# Memory Configuration
+memory:
+  # Memory type
+  type: "conversation_buffer_window"  # buffer, buffer_window, summary
+  
+  # Window size for recent messages
+  window_size: 10
+  
+  # Session management
+  session_timeout: 3600  # 1 hour
+  persist_sessions: true
+  session_storage: "storage/sessions"
+  
+  # Context caching
+  cache_retrieved_context: true
+  context_cache_size: 100
+
+# Citation Configuration
+citations:
+  # Enable citations
+  enabled: true
+  
+  # Citation format
+  format: "inline"  # inline, footnote, references
+  
+  # Include fields
+  include_chunk_id: true
+  include_source: true
+  include_section: true
+  include_confidence: false
+  
+  # Validation
+  verify_citations: true
+
+# Follow-up Questions
+followup:
+  # Enable follow-up generation
+  enabled: true
+  
+  # Number of follow-ups
+  max_questions: 3
+  
+  # Categories
+  categories:
+    - treatment
+    - symptoms
+    - prevention
+    - causes
+    - risk_factors
+    - diagnosis
+
+# Safety Guardrails
+safety:
+  # Enable safety layer
+  enabled: true
+  
+  # Safety level
+  level: "strict"  # permissive, moderate, strict
+  
+  # Detection
+  detect_emergency: true
+  detect_self_harm: true
+  detect_medication_misuse: true
+  detect_diagnosis_requests: true
+  
+  # Responses
+  emergency_message: |
+    If this is a medical emergency, please call emergency services immediately 
+    or go to the nearest emergency room.
+  
+  disclaimer: |
+    This information is for educational purposes only and should not replace 
+    professional medical advice. Please consult a healthcare provider for 
+    personalized medical guidance.
+
+# Hallucination Prevention
+hallucination:
+  # Detection
+  enabled: true
+  
+  # Verification
+  verify_context_usage: true
+  verify_citations: true
+  detect_unsupported_claims: true
+  
+  # Confidence thresholds
+  min_confidence: 0.3
+  low_confidence_threshold: 0.5
+  
+  # Uncertainty phrases
+  uncertainty_phrases:
+    - "Based on the available information"
+    - "According to the sources"
+    - "The retrieved information suggests"
+    - "It appears that"
+
+# Response Formatting
+response:
+  # Format type
+  format: "structured"  # structured, plain
+  
+  # Sections to include
+  sections:
+    - summary
+    - detailed_explanation
+    - key_points
+    - sources
+    - followup_questions
+    - confidence
+  
+  # Markdown support
+  use_markdown: true
+  
+  # Length control
+  max_length: 2000
+  min_length: 100
+
+# Streaming Configuration
+streaming:
+  # Enable streaming
+  enabled: true
+  
+  # Chunk size
+  chunk_size: 10
+  
+  # Events
+  emit_start_event: true
+  emit_chunk_event: true
+  emit_end_event: true
+  emit_error_event: true
+
+# Evaluation Configuration
+evaluation:
+  # Enable evaluation
+  enabled: true
+  
+  # Metrics to track
+  metrics:
+    - faithfulness
+    - answer_relevancy
+    - context_precision
+    - context_recall
+    - citation_accuracy
+    - hallucination_rate
+    - latency
+    - token_usage
+    - cost_per_query
+  
+  # Output files
+  output_dir: "datasets/evaluation"
+  output_files:
+    rag_metrics: "rag_metrics.json"
+    conversation_metrics: "conversation_metrics.json"
+    assistant_performance: "assistant_performance.json"
+
+# Logging Configuration
+logging:
+  # Log levels
+  level: "INFO"
+  
+  # What to log
+  log_prompts: true
+  log_retrieved_chunks: true
+  log_llm_responses: true
+  log_tokens: true
+  log_latency: true
+  log_errors: true
+  
+  # Sensitive data
+  redact_pii: true
+  
+  # Performance
+  log_performance: true
+  latency_threshold_ms: 5000
+
+# Cost Tracking
+cost:
+  # Enable cost tracking
+  enabled: true
+  
+  # Pricing (per 1M tokens)
+  gemini_2_0_flash_input: 0.075
+  gemini_2_0_flash_output: 0.30
+  gemini_1_5_pro_input: 1.25
+  gemini_1_5_pro_output: 5.00
+  
+  # Budget limits
+  daily_budget: 10.0  # USD
+  monthly_budget: 300.0  # USD
+  
+  # Alerts
+  alert_on_threshold: true
+  alert_threshold: 0.8  # 80% of budget
+
+# Feature Flags
+features:
+  enable_streaming: true
+  enable_memory: true
+  enable_citations: true
+  enable_followup: true
+  enable_safety: true
+  enable_hallucination_check: true
+  enable_evaluation: true
+  enable_cost_tracking: true
+

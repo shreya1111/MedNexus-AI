@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedNexus-AI | Knowledge Base</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --glass-border: rgba(30, 41, 59, 0.5);
+        }
+        body {
+            background-color: #0e1417;
+            color: #dde3e7;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0e1417;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2f3639;
+            border-radius: 10px;
+        }
+        .search-glow:focus-within {
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.15);
+            border-color: #4cd6ff;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#ddcdff",
+                      "on-surface": "#dde3e7",
+                      "surface": "#0e1417",
+                      "primary-fixed": "#b7eaff",
+                      "on-tertiary-container": "#6b4700",
+                      "primary-fixed-dim": "#4cd6ff",
+                      "surface-dim": "#0e1417",
+                      "background": "#0e1417",
+                      "surface-tint": "#4cd6ff",
+                      "secondary-fixed": "#e9ddff",
+                      "on-error": "#690005",
+                      "on-tertiary": "#442b00",
+                      "error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#5700c9",
+                      "on-secondary-fixed": "#23005b",
+                      "error": "#ffb4ab",
+                      "secondary": "#d1bcff",
+                      "tertiary-fixed": "#ffddb1",
+                      "tertiary-container": "#feb127",
+                      "tertiary-fixed-dim": "#ffba49",
+                      "on-tertiary-fixed": "#291800",
+                      "surface-container-low": "#161d1f",
+                      "on-tertiary-fixed-variant": "#624000",
+                      "surface-container-high": "#242b2e",
+                      "on-background": "#dde3e7",
+                      "on-primary-container": "#00566a",
+                      "surface-variant": "#2f3639",
+                      "surface-container-lowest": "#090f12",
+                      "inverse-primary": "#00677f",
+                      "surface-bright": "#333a3d",
+                      "inverse-surface": "#dde3e7",
+                      "primary-container": "#00d1ff",
+                      "outline-variant": "#3c494e",
+                      "outline": "#859399",
+                      "on-surface-variant": "#bbc9cf",
+                      "on-primary-fixed-variant": "#004e60",
+                      "secondary-container": "#7000ff",
+                      "primary": "#a4e6ff",
+                      "tertiary": "#ffd59c",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary": "#3c0090",
+                      "on-primary": "#003543",
+                      "surface-container": "#1a2123",
+                      "inverse-on-surface": "#2b3134",
+                      "secondary-fixed-dim": "#d1bcff",
+                      "on-primary-fixed": "#001f28",
+                      "surface-container-highest": "#2f3639"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "container-max": "1440px",
+                      "sm": "8px",
+                      "unit": "8px",
+                      "xs": "4px",
+                      "3xl": "64px",
+                      "2xl": "48px",
+                      "xl": "32px",
+                      "lg": "24px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-caps": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "display-lg-mobile": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "mono-data": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="flex overflow-hidden h-screen">
+<!-- SideNavBar Anchor -->
+<aside class="flex flex-col h-full py-md bg-surface-container dark:bg-surface-container border-r border-outline-variant fixed left-0 top-0 w-64 z-40 hidden md:flex">
+<div class="px-md mb-xl">
+<h1 class="font-display-lg text-display-lg font-bold text-primary">MedNexus-AI</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant opacity-70">Clinical Intelligence</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1 overflow-y-auto custom-scrollbar">
+<!-- Active: Knowledge Base -->
+<a class="flex items-center gap-3 px-4 py-3 mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-caps text-label-caps">AI Chat</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-lg mx-2 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">database</span>
+<span class="font-label-caps text-label-caps">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-caps text-label-caps">Documents</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps">Reports</span>
+</a>
+</nav>
+<div class="mt-auto px-md pt-md border-t border-outline-variant/30 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-error transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-caps text-label-caps">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 flex flex-col relative overflow-hidden h-full">
+<!-- TopNavBar Anchor -->
+<header class="flex justify-between items-center px-lg h-16 w-full sticky top-0 z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-xl">
+<div class="relative group">
+<input class="bg-surface-container-low border-outline-variant rounded-full pl-10 pr-4 py-1.5 font-body-sm text-body-sm focus:ring-1 focus:ring-primary focus:border-primary w-64 transition-all" placeholder="Global system search..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-primary text-on-primary px-4 py-1.5 rounded-full font-label-caps text-label-caps hover:brightness-110 active:scale-95 transition-all">Quick Action</button>
+<div class="flex items-center gap-2 border-l border-outline-variant pl-4">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">sensors</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-2">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a female doctor in a high-tech medical facility. She has a warm yet authoritative expression, wearing a white clinical coat over dark professional attire. The background is a soft-focus laboratory with glowing blue interfaces and high-end medical equipment, emphasizing a clinical-futuristic aesthetic with cold, crisp lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGlPjs1AKEWpOuRyUOgUcGfbYPGPdU5Fu7exs77FNw7SASpYjA9_QaT2_RGV47tnkuGKN11wYZtfylP1v8RAez4zD9JXYazVuvkB1dxZ8N5nGuLi4fxgewHhuUPH8d_jKROJatGB73Xr-0yGEQbuJ8ymMDT1PdyDTg9kZPvnC45TwrReTFkAMS0PzCLzM19Gj_Gbzjk3FQ4RIKT2zQWlc7zo9eJffPQ-fQTZdlA5Q9XfPn1JqHIsAIGmQUxLSCVTz7XSyAtOYCra8"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex flex-1 overflow-hidden">
+<!-- Search & Results Section -->
+<section class="flex-1 flex flex-col h-full bg-surface">
+<!-- Search Header -->
+<div class="p-lg border-b border-outline-variant bg-surface-container-lowest/50">
+<div class="max-w-3xl mx-auto w-full">
+<div class="flex flex-col gap-6">
+<h2 class="font-headline-md text-headline-md text-primary text-center">Semantic Clinical Knowledge</h2>
+<div class="relative search-glow border border-outline-variant bg-surface-container-high rounded-xl flex items-center p-1.5 transition-all">
+<span class="material-symbols-outlined px-3 text-on-surface-variant">travel_explore</span>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-body-lg font-body-lg py-2" placeholder="Ask about rare neurodegenerative symptoms or latest trial results..." type="text"/>
+<div class="flex items-center gap-1 pr-1">
+<button class="bg-primary-container/10 text-primary px-3 py-1.5 rounded-lg font-label-caps text-label-caps border border-primary/20 hover:bg-primary-container/20">Hybrid</button>
+<button class="bg-surface text-on-surface-variant px-3 py-1.5 rounded-lg font-label-caps text-label-caps hover:bg-surface-variant">Semantic</button>
+</div>
+</div>
+<!-- Filters -->
+<div class="flex flex-wrap justify-center gap-3">
+<button class="px-4 py-1.5 rounded-full border border-primary text-primary font-label-caps text-label-caps bg-primary/5">All Sources</button>
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high">Clinical Trials</button>
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high">Patient Records</button>
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high">Medical Journals</button>
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high">FDA Guidelines</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Results List -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-lg">
+<div class="max-w-4xl mx-auto space-y-4">
+<div class="flex justify-between items-center mb-4">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing 1-12 of 842 matches for "Neurodegenerative"</span>
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Sort by:</span>
+<select class="bg-transparent border-none text-primary font-label-caps text-label-caps focus:ring-0 cursor-pointer">
+<option>Relevancy Score</option>
+<option>Newest First</option>
+<option>Citation Count</option>
+</select>
+</div>
+</div>
+<!-- Result Card 1 -->
+<div class="group p-md rounded-xl border border-outline-variant hover:border-primary/50 bg-surface-container-lowest transition-all cursor-pointer active:scale-[0.99] relative overflow-hidden">
+<div class="absolute right-0 top-0 p-2 bg-primary/10 rounded-bl-xl border-l border-b border-primary/20">
+<span class="font-mono-data text-mono-data text-primary">Score: 0.982</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-[20px]">science</span>
+<h3 class="font-headline-md text-body-lg font-bold group-hover:text-primary transition-colors">Phase III Trial: Neural-Glia Interactions in Early Onset ALS</h3>
+</div>
+<div class="flex items-center gap-4 font-label-caps text-label-caps text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 12, 2024</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">account_balance</span> Mayo Clinic Research</span>
+<span class="text-tertiary-container bg-tertiary-container/10 px-2 py-0.5 rounded">High Confidence</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+                                    This longitudinal study investigates the metabolic dysregulation of oligodendrocytes as a primary driver of axonal degeneration. Findings suggest that MCT1 transporter deficiency correlates with...
+                                </p>
+<div class="flex gap-2 mt-2">
+<span class="px-2 py-1 bg-surface-variant rounded text-[10px] font-mono-data text-on-surface-variant uppercase">Neurology</span>
+<span class="px-2 py-1 bg-surface-variant rounded text-[10px] font-mono-data text-on-surface-variant uppercase">Clinical Trial</span>
+<span class="px-2 py-1 bg-surface-variant rounded text-[10px] font-mono-data text-on-surface-variant uppercase">ALS</span>
+</div>
+</div>
+</div>
+<!-- Result Card 2 -->
+<div class="group p-md rounded-xl border border-outline-variant hover:border-primary/50 bg-surface-container-lowest transition-all cursor-pointer active:scale-[0.99]">
+<div class="absolute right-0 top-0 p-2 bg-primary/10 rounded-bl-xl border-l border-b border-primary/20">
+<span class="font-mono-data text-mono-data text-primary">Score: 0.945</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-[20px]">description</span>
+<h3 class="font-headline-md text-body-lg font-bold group-hover:text-primary transition-colors">Patient ID: MN-4491 - Clinical Progress Note</h3>
+</div>
+<div class="flex items-center gap-4 font-label-caps text-label-caps text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">calendar_today</span> Sep 28, 2024</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">person</span> Dr. Elena Vance</span>
+<span class="text-on-secondary-container bg-secondary-container/20 px-2 py-0.5 rounded">Electronic Health Record</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+                                    Patient presents with atypical rapid progression of limb weakness and bulbar involvement. EMG confirms widespread denervation. Genetic screening for SOD1 mutation is currently...
+                                </p>
+</div>
+</div>
+<!-- Result Card 3 -->
+<div class="group p-md rounded-xl border border-outline-variant hover:border-primary/50 bg-surface-container-lowest transition-all cursor-pointer active:scale-[0.99]">
+<div class="absolute right-0 top-0 p-2 bg-primary/10 rounded-bl-xl border-l border-b border-primary/20">
+<span class="font-mono-data text-mono-data text-primary">Score: 0.899</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-[20px]">menu_book</span>
+<h3 class="font-headline-md text-body-lg font-bold group-hover:text-primary transition-colors">Proteostasis and Protein Aggregation in Neurodegeneration</h3>
+</div>
+<div class="flex items-center gap-4 font-label-caps text-label-caps text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">calendar_today</span> Jun 2024</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">local_library</span> Nature Neuroscience</span>
+<span class="text-on-tertiary-container bg-tertiary-container/10 px-2 py-0.5 rounded">Journal Paper</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+                                    A comprehensive review of the cellular mechanisms involved in the clearance of misfolded proteins and the failure of autophagic pathways in diseased neurons...
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Detail Panel / Side Panel -->
+<aside class="w-96 h-full border-l border-outline-variant bg-surface-container-low flex flex-col hidden xl:flex">
+<div class="p-md border-b border-outline-variant flex items-center justify-between">
+<h2 class="font-headline-md text-body-lg font-bold">Selected Intelligence</h2>
+<button class="p-1 hover:bg-surface-variant rounded transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-md space-y-8">
+<!-- Document Metadata Section -->
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-[18px]">info</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant">Document Metadata</span>
+</div>
+<div class="space-y-4 bg-surface/40 p-md rounded-lg border border-outline-variant">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">Source URI</span>
+<span class="font-mono-data text-mono-data text-primary truncate">s3://med-data-vault/trials/ALS_Ph3_2024.pdf</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">Word Count</span>
+<span class="font-mono-data text-mono-data">14,208</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">Language</span>
+<span class="font-mono-data text-mono-data">English (EN-US)</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">PII Redaction</span>
+<span class="flex items-center gap-2 font-mono-data text-mono-data text-secondary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Verified Secure
+                                </span>
+</div>
+</div>
+</div>
+<!-- Entity Extraction Section -->
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-tertiary text-[18px]">psychology</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant">Entity Extraction</span>
+</div>
+<div class="space-y-6">
+<!-- Symptoms -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-tertiary">Symptoms</span>
+<span class="bg-tertiary/10 text-tertiary px-1.5 py-0.5 rounded text-[10px]">12 detected</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 rounded bg-surface-container border border-outline-variant font-body-sm text-body-sm hover:border-tertiary transition-colors cursor-default">Fasciculations</span>
+<span class="px-2 py-1 rounded bg-surface-container border border-outline-variant font-body-sm text-body-sm hover:border-tertiary transition-colors cursor-default">Muscle Atrophy</span>
+<span class="px-2 py-1 rounded bg-surface-container border border-outline-variant font-body-sm text-body-sm hover:border-tertiary transition-colors cursor-default">Dysphagia</span>
+<span class="px-2 py-1 rounded bg-surface-container border border-outline-variant font-body-sm text-body-sm hover:border-tertiary transition-colors cursor-default">Spasticity</span>
+</div>
+</div>
+<!-- Diagnoses -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-primary">Diagnoses</span>
+<span class="bg-primary/10 text-primary px-1.5 py-0.5 rounded text-[10px]">4 detected</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 rounded bg-surface-container border border-outline-variant font-body-sm text-body-sm hover:border-primary transition-colors cursor-default">Amyotrophic Lateral Sclerosis</span>
+<span class="px-2 py-1 rounded bg-surface-container border border-outline-variant font-body-sm text-body-sm hover:border-primary transition-colors cursor-default">Frontotemporal Dementia</span>
+<span class="px-2 py-1 rounded bg-surface-container border border-outline-variant font-body-sm text-body-sm hover:border-primary transition-colors cursor-default">Motor Neuron Disease</span>
+</div>
+</div>
+<!-- Citations Visual -->
+<div class="bg-surface-container-highest/30 rounded-xl p-md border border-outline-variant/50 relative overflow-hidden group">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-secondary">format_quote</span>
+<span class="font-label-caps text-label-caps text-on-surface">AI Synthesis Snippet</span>
+</div>
+<p class="font-body-sm text-body-sm italic text-on-surface-variant leading-relaxed">
+                                    "...the correlation between <span class="text-primary font-bold">MCT1 transporters</span> and <span class="text-tertiary font-bold">axonal health</span> suggests a novel therapeutic window prior to the onset of overt clinical symptoms."
+                                </p>
+<div class="mt-4 flex justify-end">
+<button class="text-primary font-label-caps text-label-caps hover:underline">View Source Map →</button>
+</div>
+<!-- Background subtle glow decoration -->
+<div class="absolute -right-10 -bottom-10 w-24 h-24 bg-primary/10 blur-3xl group-hover:bg-primary/20 transition-all duration-700"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Detail Panel Footer -->
+<div class="p-md border-t border-outline-variant bg-surface-container-high/50 flex gap-2">
+<button class="flex-1 bg-primary text-on-primary py-2 rounded-lg font-label-caps text-label-caps hover:brightness-110 active:scale-95 transition-all">Add to Report</button>
+<button class="px-3 py-2 border border-outline-variant rounded-lg hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">share</span>
+</button>
+</div>
+</aside>
+</div>
+<!-- Mobile Nav Support -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container/90 backdrop-blur-xl border-t border-outline-variant h-16 flex items-center justify-around z-50">
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-label-caps">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">database</span>
+<span class="text-[10px] font-label-caps">KB</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="text-[10px] font-label-caps">AI</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-label-caps">Settings</span>
+</button>
+</nav>
+<!-- Footer Anchor (Semantic Check) - Desktop Only in footer slot -->
+<footer class="hidden md:flex flex-row justify-between items-center px-gutter max-w-container-max mx-auto w-full py-4 bg-surface-container-lowest border-t border-outline-variant">
+<div class="font-body-sm text-body-sm text-on-surface-variant opacity-60">
+                © 2024 MedNexus AI. Enterprise Clinical Intelligence.
+            </div>
+<div class="flex gap-md">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">HIPAA Compliance</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">Contact Support</a>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interactions for result card selection
+        document.querySelectorAll('.group.p-md.rounded-xl').forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove active styling from all
+                document.querySelectorAll('.group.p-md.rounded-xl').forEach(c => {
+                    c.classList.remove('border-primary', 'bg-primary/5');
+                    c.classList.add('border-outline-variant', 'bg-surface-container-lowest');
+                });
+                // Add to current
+                card.classList.remove('border-outline-variant', 'bg-surface-container-lowest');
+                card.classList.add('border-primary', 'bg-primary/5');
+                
+                // Simulate panel update
+                console.log('Loading metadata for entity...');
+            });
+        });
+
+        // Hover effect for "Data-Ink" efficiency visualization
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            document.querySelector('.search-glow').style.boxShadow = "0 0 40px rgba(0, 209, 255, 0.1)";
+        });
+        searchInput.addEventListener('blur', () => {
+            document.querySelector('.search-glow').style.boxShadow = "none";
+        });
+    </script>
+</body></html>

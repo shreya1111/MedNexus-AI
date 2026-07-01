@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-container-highest rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-outline-variant;
+  }
+}
+
+@layer components {
+  /* Glass Card Effect */
+  .glass-card {
+    @apply bg-surface-glass backdrop-blur-[12px] border border-[rgba(60,73,78,0.5)] transition-all duration-300;
+  }
+  
+  .glass-card:hover {
+    @apply border-[rgba(0,209,255,0.4)] shadow-glass;
+  }
+  
+  /* Status Pulse Animation */
+  .status-pulse {
+    @apply animate-pulse-cyan;
+  }
+  
+  /* Typography Classes */
+  .text-display-lg {
+    @apply text-display-lg;
+  }
+  
+  .text-display-lg-mobile {
+    @apply text-display-lg-mobile;
+  }
+  
+  .text-headline-md {
+    @apply text-headline-md;
+  }
+  
+  .text-body-lg {
+    @apply text-body-lg;
+  }
+  
+  .text-body-md {
+    @apply text-body-md;
+  }
+  
+  .text-body-sm {
+    @apply text-body-sm;
+  }
+  
+  .text-label-caps {
+    @apply text-label-caps uppercase;
+  }
+  
+  .text-mono-data {
+    @apply text-mono-data font-mono;
+  }
+  
+  /* Focus Ring */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-container/50 focus:ring-offset-0;
+  }
+  
+  /* Button Hover Effect */
+  .button-hover {
+    @apply active:scale-95 transition-transform duration-150;
+  }
+  
+  /* Sidebar Item Hover */
+  .sidebar-item-hover {
+    @apply hover:translate-x-1 transition-transform duration-200;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

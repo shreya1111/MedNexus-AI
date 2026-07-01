@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Verify Your Account | MedNexus-AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "border-low-opacity": "rgba(60, 73, 78, 0.5)",
+                    "secondary": "#d1bcff",
+                    "on-primary": "#003543",
+                    "error": "#ffb4ab",
+                    "surface-base": "#0e1417",
+                    "outline-variant": "#3c494e",
+                    "tertiary": "#ffd59c",
+                    "surface-container": "#1a2123",
+                    "inverse-on-surface": "#2b3134",
+                    "inverse-primary": "#00677f",
+                    "surface-glass": "rgba(26, 33, 35, 0.7)",
+                    "background": "#0e1417",
+                    "surface-container-high": "#242b2e",
+                    "on-background": "#dde3e7",
+                    "tertiary-container": "#feb127",
+                    "error-container": "#93000a",
+                    "on-secondary-fixed-variant": "#5700c9",
+                    "on-tertiary": "#442b00",
+                    "inverse-surface": "#dde3e7",
+                    "surface-container-low": "#161d1f",
+                    "on-tertiary-container": "#6b4700",
+                    "surface-dim": "#0e1417",
+                    "on-secondary": "#3c0090",
+                    "on-secondary-container": "#ddcdff",
+                    "primary": "#a4e6ff",
+                    "outline": "#859399",
+                    "on-tertiary-fixed-variant": "#624000",
+                    "primary-fixed": "#b7eaff",
+                    "surface-container-highest": "#2f3639",
+                    "on-secondary-fixed": "#23005b",
+                    "tertiary-fixed-dim": "#ffba49",
+                    "surface-variant": "#2f3639",
+                    "secondary-fixed": "#e9ddff",
+                    "surface": "#0e1417",
+                    "surface-tint": "#4cd6ff",
+                    "on-primary-fixed-variant": "#004e60",
+                    "tertiary-fixed": "#ffddb1",
+                    "secondary-fixed-dim": "#d1bcff",
+                    "primary-fixed-dim": "#4cd6ff",
+                    "on-tertiary-fixed": "#291800",
+                    "on-primary-container": "#00566a",
+                    "surface-container-lowest": "#090f12",
+                    "on-surface": "#dde3e7",
+                    "success-glow": "#feb127",
+                    "on-surface-variant": "#bbc9cf",
+                    "surface-bright": "#333a3d",
+                    "primary-container": "#00d1ff",
+                    "on-error": "#690005",
+                    "secondary-container": "#7000ff",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-fixed": "#001f28"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "xs": "4px",
+                    "container-max": "1440px",
+                    "sm": "8px",
+                    "2xl": "48px",
+                    "md": "16px",
+                    "xl": "32px",
+                    "3xl": "64px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "mono-data": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(26, 33, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(60, 73, 78, 0.5);
+        }
+        .otp-input:focus {
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.15);
+            border-color: #a4e6ff;
+        }
+        .animate-pulse-cyan {
+            animation: pulse-cyan 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-cyan {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-surface-base text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary">
+<!-- Subtle Atmospheric Background -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+<div class="absolute -top-1/2 -left-1/4 w-full h-full bg-[radial-gradient(circle_at_center,rgba(0,209,255,0.03)_0%,transparent_70%)]"></div>
+<div class="absolute -bottom-1/2 -right-1/4 w-full h-full bg-[radial-gradient(circle_at_center,rgba(209,188,255,0.03)_0%,transparent_70%)]"></div>
+</div>
+<!-- Layout Shell -->
+<div class="relative z-10 min-h-screen flex flex-col items-center justify-center px-lg py-3xl">
+<!-- Brand Header (Simplified for focused task) -->
+<div class="mb-3xl text-center">
+<div class="inline-flex items-center gap-md mb-md">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center shadow-[0_0_15px_rgba(0,209,255,0.3)]">
+<span class="material-symbols-outlined text-on-primary font-bold">medical_services</span>
+</div>
+<h1 class="font-display-lg text-headline-md tracking-tight text-primary">MedNexus-AI</h1>
+</div>
+</div>
+<!-- Verification Card -->
+<main class="w-full max-w-[480px]">
+<div class="glass-panel p-xl rounded-full shadow-2xl relative overflow-hidden">
+<!-- Success Decoration -->
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+<!-- Visual Anchor -->
+<div class="flex flex-col items-center text-center mb-xl">
+<div class="relative mb-lg">
+<div class="absolute inset-0 bg-primary/10 blur-2xl rounded-full scale-150"></div>
+<div class="relative w-24 h-24 rounded-full border border-primary/20 flex items-center justify-center bg-surface-container-low">
+<span class="material-symbols-outlined text-[48px] text-primary" style="font-variation-settings: 'wght' 300;">mark_email_read</span>
+<!-- Secure Shield Badge -->
+<div class="absolute -bottom-1 -right-1 bg-surface-container-highest border border-outline-variant rounded-lg p-xs">
+<span class="material-symbols-outlined text-sm text-secondary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-sm">Verify your clinical account</h2>
+<p class="font-body-md text-on-surface-variant max-w-[340px]">
+                        We've sent a 6-digit secure verification code to <span class="text-on-surface font-medium">dr.stephenson@hospital.org</span>
+</p>
+</div>
+<!-- Input Section -->
+<form class="space-y-xl" id="otp-form">
+<div class="flex justify-between gap-sm sm:gap-md" id="otp-container">
+<!-- Six individual digit inputs -->
+<input class="otp-input w-12 h-16 sm:w-14 sm:h-16 text-center text-headline-md font-mono-data bg-surface-container-low border border-outline-variant rounded-xl text-primary transition-all duration-200 outline-none" maxlength="1" required="" type="text"/>
+<input class="otp-input w-12 h-16 sm:w-14 sm:h-16 text-center text-headline-md font-mono-data bg-surface-container-low border border-outline-variant rounded-xl text-primary transition-all duration-200 outline-none" maxlength="1" required="" type="text"/>
+<input class="otp-input w-12 h-16 sm:w-14 sm:h-16 text-center text-headline-md font-mono-data bg-surface-container-low border border-outline-variant rounded-xl text-primary transition-all duration-200 outline-none" maxlength="1" required="" type="text"/>
+<input class="otp-input w-12 h-16 sm:w-14 sm:h-16 text-center text-headline-md font-mono-data bg-surface-container-low border border-outline-variant rounded-xl text-primary transition-all duration-200 outline-none" maxlength="1" required="" type="text"/>
+<input class="otp-input w-12 h-16 sm:w-14 sm:h-16 text-center text-headline-md font-mono-data bg-surface-container-low border border-outline-variant rounded-xl text-primary transition-all duration-200 outline-none" maxlength="1" required="" type="text"/>
+<input class="otp-input w-12 h-16 sm:w-14 sm:h-16 text-center text-headline-md font-mono-data bg-surface-container-low border border-outline-variant rounded-xl text-primary transition-all duration-200 outline-none" maxlength="1" required="" type="text"/>
+</div>
+<div class="space-y-md">
+<button class="w-full h-14 bg-primary-container text-on-primary font-bold font-label-caps tracking-widest rounded-xl hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-sm" type="submit">
+                            VERIFY IDENTITY
+                            <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+<div class="flex flex-col items-center gap-xs">
+<p class="font-body-sm text-on-surface-variant">
+                                Didn't receive the code?
+                            </p>
+<button class="group relative font-label-caps text-sm text-outline hover:text-primary transition-colors disabled:cursor-not-allowed" disabled="" id="resend-btn" type="button">
+<span class="resend-text">RESEND CODE</span>
+<span class="font-mono-data text-primary ml-sm" id="timer">02:00</span>
+<div class="absolute -bottom-1 left-0 w-0 h-[1px] bg-primary group-hover:w-full transition-all duration-300"></div>
+</button>
+</div>
+</div>
+</form>
+<!-- HIPAA/Security Badge -->
+<div class="mt-xl pt-lg border-t border-outline-variant/30 flex items-center justify-center gap-md">
+<div class="flex items-center gap-xs text-on-surface-variant/60 uppercase tracking-widest text-[10px] font-bold">
+<span class="material-symbols-outlined text-sm">lock</span>
+                        End-to-End Encrypted
+                    </div>
+<div class="w-[1px] h-3 bg-outline-variant/30"></div>
+<div class="flex items-center gap-xs text-on-surface-variant/60 uppercase tracking-widest text-[10px] font-bold">
+<span class="material-symbols-outlined text-sm">gpp_good</span>
+                        HIPAA Compliant
+                    </div>
+</div>
+</div>
+<!-- Footer Meta -->
+<footer class="mt-xl text-center">
+<p class="font-body-sm text-on-surface-variant/50">
+                    © 2024 MedNexus AI. Enterprise Clinical Intelligence.
+                </p>
+<div class="mt-md flex justify-center gap-lg">
+<a class="text-on-surface-variant/50 hover:text-primary text-[12px] transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant/50 hover:text-primary text-[12px] transition-colors" href="#">Support Portal</a>
+</div>
+</footer>
+</main>
+</div>
+<script>
+        // OTP Input Logic
+        const inputs = document.querySelectorAll('.otp-input');
+        const form = document.getElementById('otp-form');
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+
+            // Prevent non-numeric
+            input.addEventListener('keypress', (e) => {
+                if (!/[0-9]/.test(e.key)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Form Submit Simulation
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const code = Array.from(inputs).map(i => i.value).join('');
+            if (code.length === 6) {
+                const btn = form.querySelector('button[type="submit"]');
+                btn.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> VERIFYING...';
+                btn.disabled = true;
+                
+                setTimeout(() => {
+                    btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> VERIFIED';
+                    btn.classList.replace('bg-primary-container', 'bg-tertiary-container');
+                }, 1500);
+            }
+        });
+
+        // Timer Logic
+        let timeLeft = 120;
+        const timerElement = document.getElementById('timer');
+        const resendBtn = document.getElementById('resend-btn');
+
+        const countdown = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerElement.innerText = "";
+                resendBtn.disabled = false;
+                resendBtn.classList.replace('text-outline', 'text-primary');
+                return;
+            }
+            
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            timeLeft--;
+        }, 1000);
+
+        resendBtn.addEventListener('click', () => {
+            if(!resendBtn.disabled) {
+                alert('A new verification code has been dispatched to your clinical portal.');
+                // In real app, reset timer here
+            }
+        });
+
+        // Visual feedback for focus
+        inputs[0].focus();
+    </script>
+</body></html>

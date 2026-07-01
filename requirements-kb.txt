@@ -43,3 +43,19 @@ pytest-cov>=4.1.0           # Code coverage for tests
 
 # Phase 2B implements document acquisition and preprocessing only
 # RAG pipeline dependencies will be added in Phase 2C
+
+
+# Phase 2D: Embedding Generation
+sentence-transformers>=2.2.0
+torch>=2.0.0
+google-generativeai>=0.3.0
+numpy>=1.24.0
+
+
+# Phase 3: Vector Retrieval
+chromadb>=0.4.0
+psutil>=5.9.0               # System and process utilities for benchmarking
+
+# Phase 4A: Medical AI Assistant Core
+google-generativeai>=0.3.0  # Gemini LLM integration
+langchain>=0.1.0            # LangChain framework (if needed for advanced features)
