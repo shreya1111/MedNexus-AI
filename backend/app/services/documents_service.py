@@ -14,13 +14,23 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete, func, and_, or_
 from fastapi import UploadFile
 
-# Add scripts directory to path
-sys.path.append(str(Path(__file__).parent.parent.parent.parent / "scripts"))
-
-from processors.document_processor import DocumentProcessor
 from app.database.models import User, Document
 from app.core.config import settings
 from app.core.exceptions import NotFoundError, ServiceError, ValidationError
+
+
+def _load_document_processor():
+    """
+    Lazily import the document processor module from the scripts package.
+
+    Imported on demand so the heavy AI/vector dependencies are not required
+    just to start the FastAPI backend.
+    """
+    scripts_dir = str(Path(__file__).parent.parent.parent.parent / "scripts")
+    if scripts_dir not in sys.path:
+        sys.path.append(scripts_dir)
+    from processors.document_processor import DocumentProcessor
+    return DocumentProcessor
 
 
 class DocumentsService:
@@ -43,25 +53,30 @@ class DocumentsService:
     def __init__(self, db: AsyncSession):
         """
         Initialize documents service.
-        
+
         Args:
             db: Database session
         """
         self.db = db
-        
+
         # Initialize upload directory
         self.upload_dir = Path(settings.UPLOAD_DIR) / "documents"
         self.upload_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Initialize document processor
-        processed_dir = self.upload_dir / "processed"
-        metadata_dir = self.upload_dir / "metadata"
-        
-        self.processor = DocumentProcessor(
-            output_dir=processed_dir,
-            metadata_dir=metadata_dir,
-            enable_cleaning=True
-        )
+
+        self._processor = None
+
+    def _get_processor(self):
+        """Lazily initialize the document processor."""
+        if self._processor is None:
+            DocumentProcessor = _load_document_processor()
+            processed_dir = self.upload_dir / "processed"
+            metadata_dir = self.upload_dir / "metadata"
+            self._processor = DocumentProcessor(
+                output_dir=processed_dir,
+                metadata_dir=metadata_dir,
+                enable_cleaning=True
+            )
+        return self._processor
     
     async def upload_document(
         self,
@@ -128,7 +143,7 @@ class DocumentsService:
             
             # Process document
             try:
-                processing_result = self.processor.process_document(
+                processing_result = self._get_processor().process_document(
                     input_path=file_path,
                     source=source or "knowledge_base",
                     preserve_structure=False

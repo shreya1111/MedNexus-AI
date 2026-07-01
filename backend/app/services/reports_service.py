@@ -14,14 +14,25 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
 from fastapi import UploadFile
 
-# Add scripts directory to path
-sys.path.append(str(Path(__file__).parent.parent.parent.parent / "scripts"))
-
-from processors.document_processor import DocumentProcessor
-from ai.assistant import MedicalAssistant
 from app.database.models import User, Document, MedicalReport
 from app.core.config import settings
 from app.core.exceptions import NotFoundError, ServiceError, ValidationError
+
+
+def _load_processing_stack():
+    """
+    Lazily import the document processing and AI assistant modules.
+
+    Imported on demand so the heavy AI/vector dependencies (chromadb,
+    sentence-transformers, google-generativeai, etc.) are not required just
+    to start the FastAPI backend.
+    """
+    scripts_dir = str(Path(__file__).parent.parent.parent.parent / "scripts")
+    if scripts_dir not in sys.path:
+        sys.path.append(scripts_dir)
+    from processors.document_processor import DocumentProcessor
+    from ai.assistant import MedicalAssistant
+    return DocumentProcessor, MedicalAssistant
 
 
 class ReportsService:
@@ -43,36 +54,46 @@ class ReportsService:
     def __init__(self, db: AsyncSession):
         """
         Initialize reports service.
-        
+
         Args:
             db: Database session
         """
         self.db = db
-        
+
         # Initialize upload directory
         self.upload_dir = Path(settings.UPLOAD_DIR)
         self.upload_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Initialize document processor (Phase 3)
-        processed_dir = self.upload_dir / "processed"
-        metadata_dir = self.upload_dir / "metadata"
-        
-        self.processor = DocumentProcessor(
-            output_dir=processed_dir,
-            metadata_dir=metadata_dir,
-            enable_cleaning=True
-        )
-        
-        # Initialize Medical AI Assistant (Phase 4A)
-        try:
-            config_dir = Path(__file__).parent.parent.parent.parent / "config"
-            self.assistant = MedicalAssistant(
-                config_path=str(config_dir / "assistant.yaml"),
-                retrieval_config_path=str(config_dir / "retrieval.yaml"),
-                embedding_config_path=str(config_dir / "embedding.yaml")
+
+        self._processor = None
+        self._assistant = None
+
+    def _get_processor(self):
+        """Lazily initialize the document processor (Phase 3)."""
+        if self._processor is None:
+            DocumentProcessor, _ = _load_processing_stack()
+            processed_dir = self.upload_dir / "processed"
+            metadata_dir = self.upload_dir / "metadata"
+            self._processor = DocumentProcessor(
+                output_dir=processed_dir,
+                metadata_dir=metadata_dir,
+                enable_cleaning=True
             )
-        except Exception as e:
-            raise ServiceError(f"Failed to initialize Medical Assistant: {str(e)}")
+        return self._processor
+
+    def _get_assistant(self):
+        """Lazily initialize the Medical AI Assistant (Phase 4A)."""
+        if self._assistant is None:
+            try:
+                _, MedicalAssistant = _load_processing_stack()
+                config_dir = Path(__file__).parent.parent.parent.parent / "config"
+                self._assistant = MedicalAssistant(
+                    config_path=str(config_dir / "assistant.yaml"),
+                    retrieval_config_path=str(config_dir / "retrieval.yaml"),
+                    embedding_config_path=str(config_dir / "embedding.yaml")
+                )
+            except Exception as e:
+                raise ServiceError(f"Failed to initialize Medical Assistant: {str(e)}")
+        return self._assistant
     
     async def upload_report(
         self,
@@ -137,7 +158,7 @@ class ReportsService:
             # Process document asynchronously (in production, use background task)
             try:
                 # Process with Phase 3 document processor
-                processing_result = self.processor.process_document(
+                processing_result = self._get_processor().process_document(
                     input_path=file_path,
                     source="medical_report",
                     preserve_structure=False
@@ -316,7 +337,7 @@ class ReportsService:
             
             # Get AI analysis
             start_time = datetime.now()
-            response = self.assistant.ask(
+            response = self._get_assistant().ask(
                 query=prompt,
                 conversation_history=[],
                 session_id=f"report_analysis_{report_id}"
@@ -486,7 +507,7 @@ class ReportsService:
     def __del__(self):
         """Cleanup on service destruction."""
         try:
-            if hasattr(self, 'assistant'):
-                self.assistant.cleanup()
+            if self._assistant is not None:
+                self._assistant.cleanup()
         except Exception:
             pass

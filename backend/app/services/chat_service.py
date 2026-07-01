@@ -11,13 +11,25 @@ from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
 
-# Add scripts directory to path to import Phase 4A/4B modules
-sys.path.append(str(Path(__file__).parent.parent.parent.parent / "scripts"))
-
-from ai.assistant import MedicalAssistant, AssistantResponse
 from app.database.models import User, Session, Conversation
 from app.core.config import settings
 from app.core.exceptions import NotFoundError, ServiceError
+
+
+def _load_assistant():
+    """
+    Lazily import the Phase 4A/4B Medical Assistant.
+
+    Imported on demand so the heavy AI/vector dependencies (chromadb,
+    sentence-transformers, google-generativeai, etc.) are not required just
+    to start the FastAPI backend. They are only needed when a chat endpoint
+    is actually invoked.
+    """
+    scripts_dir = str(Path(__file__).parent.parent.parent.parent / "scripts")
+    if scripts_dir not in sys.path:
+        sys.path.append(scripts_dir)
+    from ai.assistant import MedicalAssistant, AssistantResponse
+    return MedicalAssistant, AssistantResponse
 
 
 class ChatService:
@@ -30,21 +42,26 @@ class ChatService:
     def __init__(self, db: AsyncSession):
         """
         Initialize chat service.
-        
+
         Args:
             db: Database session
         """
         self.db = db
-        
-        # Initialize Medical AI Assistant (Phase 4A/4B)
-        try:
-            self.assistant = MedicalAssistant(
-                config_path=str(Path(settings.UPLOAD_DIR).parent.parent / "config" / "assistant.yaml"),
-                retrieval_config_path=str(Path(settings.UPLOAD_DIR).parent.parent / "config" / "retrieval.yaml"),
-                embedding_config_path=str(Path(settings.UPLOAD_DIR).parent.parent / "config" / "embedding.yaml")
-            )
-        except Exception as e:
-            raise ServiceError(f"Failed to initialize Medical Assistant: {str(e)}")
+        self._assistant = None
+
+    def _get_assistant(self):
+        """Lazily initialize the Medical AI Assistant (Phase 4A/4B)."""
+        if self._assistant is None:
+            try:
+                MedicalAssistant, _ = _load_assistant()
+                self._assistant = MedicalAssistant(
+                    config_path=str(Path(settings.UPLOAD_DIR).parent.parent / "config" / "assistant.yaml"),
+                    retrieval_config_path=str(Path(settings.UPLOAD_DIR).parent.parent / "config" / "retrieval.yaml"),
+                    embedding_config_path=str(Path(settings.UPLOAD_DIR).parent.parent / "config" / "embedding.yaml")
+                )
+            except Exception as e:
+                raise ServiceError(f"Failed to initialize Medical Assistant: {str(e)}")
+        return self._assistant
     
     async def send_message(
         self,
@@ -72,12 +89,12 @@ class ChatService:
             else:
                 session = await self._create_session(user.id)
                 session_id = session.session_id
-            
+
             # Get conversation history from database
             history = await self._get_conversation_history(session.id)
-            
-            # Call Phase 4A/4B Medical Assistant
-            response: AssistantResponse = self.assistant.ask(
+
+            # Call Phase 4A/4B Medical Assistant (lazy-loaded)
+            response = self._get_assistant().ask(
                 query=message,
                 conversation_history=history,
                 session_id=session_id
@@ -238,14 +255,15 @@ class ChatService:
         
         # Clear Phase 4B conversation memory
         try:
-            self.assistant.clear_conversation(session_id)
+            if self._assistant is not None:
+                self._assistant.clear_conversation(session_id)
         except Exception:
             pass  # Silent fail if assistant cleanup fails
     
     async def _create_session(self, user_id: int) -> Session:
         """Create a new session."""
         # Generate session ID using Phase 4B
-        session_id = self.assistant.start_conversation()
+        session_id = self._get_assistant().start_conversation()
         
         session = Session(
             user_id=user_id,
@@ -331,7 +349,7 @@ class ChatService:
     def __del__(self):
         """Cleanup assistant on service destruction."""
         try:
-            if hasattr(self, 'assistant'):
-                self.assistant.cleanup()
+            if self._assistant is not None:
+                self._assistant.cleanup()
         except Exception:
             pass

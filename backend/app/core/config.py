@@ -6,7 +6,7 @@ Loads configuration from environment variables.
 
 from typing import List, Optional
 from pydantic_settings import BaseSettings
-from pydantic import AnyHttpUrl, field_validator
+from pydantic import AnyHttpUrl
 
 
 class Settings(BaseSettings):
@@ -41,13 +41,11 @@ class Settings(BaseSettings):
     BCRYPT_ROUNDS: int = 12
     ALLOWED_ORIGINS: str = "http://localhost:3000"
     
-    @field_validator("ALLOWED_ORIGINS", mode="before")
-    @classmethod
-    def parse_cors(cls, v: str) -> List[str]:
-        """Parse CORS origins."""
-        if isinstance(v, str):
-            return [origin.strip() for origin in v.split(",")]
-        return v
+    def get_allowed_origins(self) -> List[str]:
+        """Get CORS origins as a list."""
+        if isinstance(self.ALLOWED_ORIGINS, str):
+            return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",")]
+        return ["http://localhost:3000"]
     
     # Rate Limiting
     RATE_LIMIT_PER_MINUTE: int = 60
@@ -58,13 +56,11 @@ class Settings(BaseSettings):
     ALLOWED_EXTENSIONS: str = "pdf,txt,md"
     UPLOAD_DIR: str = "storage/uploads"
     
-    @field_validator("ALLOWED_EXTENSIONS", mode="before")
-    @classmethod
-    def parse_extensions(cls, v: str) -> List[str]:
-        """Parse allowed extensions."""
-        if isinstance(v, str):
-            return [ext.strip() for ext in v.split(",")]
-        return v
+    def get_allowed_extensions(self) -> List[str]:
+        """Get allowed extensions as a list."""
+        if isinstance(self.ALLOWED_EXTENSIONS, str):
+            return [ext.strip() for ext in self.ALLOWED_EXTENSIONS.split(",")]
+        return ["pdf", "txt", "md"]
     
     # Gemini API
     GEMINI_API_KEY: str

@@ -6,14 +6,24 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from datetime import datetime, timedelta
 from typing import Dict, Any
-import sys
 from pathlib import Path
 
-sys.path.append(str(Path(__file__).parent.parent.parent.parent))
+from app.database.models import User, Session as ChatSession, Conversation as ChatMessage
 
-from app.database.models import User, ChatSession, ChatMessage
-from scripts.vector_db.collection_manager import CollectionManager
-from scripts.utils.config_loader import load_yaml_config
+
+def _load_vector_db():
+    """
+    Lazily import the vector DB stack.
+
+    Imported on demand so the heavy AI/vector dependencies (chromadb, etc.)
+    are not required just to start the FastAPI backend.
+    """
+    import sys
+    if str(Path(__file__).parent.parent.parent.parent) not in sys.path:
+        sys.path.append(str(Path(__file__).parent.parent.parent.parent))
+    from scripts.vector_db.collection_manager import CollectionManager
+    from scripts.utils.config_loader import load_yaml_config
+    return CollectionManager, load_yaml_config
 
 
 class DashboardService:
@@ -22,15 +32,24 @@ class DashboardService:
     def __init__(self, db: AsyncSession):
         """
         Initialize dashboard service.
-        
+
         Args:
             db: Database session
         """
         self.db = db
-        
-        # Initialize vector DB for knowledge base stats
-        retrieval_config = load_yaml_config(Path("config/retrieval.yaml"))
-        self.collection_manager = CollectionManager(retrieval_config)
+        self._collection_manager = None
+
+    def _get_collection_manager(self):
+        """Lazily initialize the vector DB collection manager."""
+        if self._collection_manager is None:
+            try:
+                CollectionManager, load_yaml_config = _load_vector_db()
+                retrieval_config = load_yaml_config(Path("config/retrieval.yaml"))
+                self._collection_manager = CollectionManager(retrieval_config)
+            except Exception:
+                # Vector DB is optional for dashboard stats; degrade gracefully
+                self._collection_manager = False  # marker: unavailable
+        return self._collection_manager if self._collection_manager is not False else None
     
     async def get_dashboard_stats(self, user_id: int = None) -> Dict[str, Any]:
         """
@@ -72,9 +91,13 @@ class DashboardService:
         
         # Knowledge base size
         try:
-            collection = self.collection_manager.get_or_create_collection()
-            knowledge_base_size = collection.count()
-        except:
+            collection_manager = self._get_collection_manager()
+            if collection_manager:
+                collection = collection_manager.get_or_create_collection()
+                knowledge_base_size = collection.count()
+            else:
+                knowledge_base_size = 0
+        except Exception:
             knowledge_base_size = 0
         
         # Average confidence (from chat metadata)

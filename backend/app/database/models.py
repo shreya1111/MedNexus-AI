@@ -28,6 +28,7 @@ class User(Base):
     """User model."""
     
     __tablename__ = "users"
+    __allow_unmapped__ = True  # Allow legacy SQLAlchemy 1.x style annotations
     
     # Authentication
     email = Column(String(255), unique=True, index=True, nullable=False)
@@ -57,13 +58,14 @@ class Session(Base):
     """User session model for conversation history."""
     
     __tablename__ = "sessions"
+    __allow_unmapped__ = True  # Allow legacy SQLAlchemy 1.x style annotations
     
     # Foreign key
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     
     # Session data
     session_id = Column(String(255), unique=True, index=True, nullable=False)
-    metadata = Column(JSON, nullable=True)
+    data = Column(JSON, nullable=True)  # Renamed from 'metadata' (reserved in SQLAlchemy)
     message_count = Column(Integer, default=0, nullable=False)
     
     # Status
@@ -80,6 +82,7 @@ class Conversation(Base):
     """Conversation message model."""
     
     __tablename__ = "conversations"
+    __allow_unmapped__ = True  # Allow legacy SQLAlchemy 1.x style annotations
     
     # Foreign keys
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
@@ -90,7 +93,7 @@ class Conversation(Base):
     content = Column(Text, nullable=False)
     
     # Metadata
-    metadata = Column(JSON, nullable=True)
+    extra_data = Column(JSON, nullable=True)  # Renamed from 'metadata' (reserved in SQLAlchemy)
     tokens_used = Column(Integer, nullable=True)
     latency_ms = Column(Float, nullable=True)
     confidence = Column(Float, nullable=True)
@@ -104,6 +107,7 @@ class Document(Base):
     """Uploaded document model."""
     
     __tablename__ = "documents"
+    __allow_unmapped__ = True  # Allow legacy SQLAlchemy 1.x style annotations
     
     # Foreign key
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
@@ -121,7 +125,7 @@ class Document(Base):
     processing_error = Column(Text, nullable=True)
     
     # Metadata
-    metadata = Column(JSON, nullable=True)
+    extra_data = Column(JSON, nullable=True)  # Renamed from 'metadata' (reserved in SQLAlchemy)
     checksum = Column(String(64), nullable=True)
     
     # Relationship
@@ -132,6 +136,7 @@ class MedicalReport(Base):
     """Medical report analysis model."""
     
     __tablename__ = "medical_reports"
+    __allow_unmapped__ = True  # Allow legacy SQLAlchemy 1.x style annotations
     
     # Foreign key
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
@@ -142,7 +147,7 @@ class MedicalReport(Base):
     output_text = Column(Text, nullable=False)
     
     # Metadata
-    metadata = Column(JSON, nullable=True)
+    extra_data = Column(JSON, nullable=True)  # Renamed from 'metadata' (reserved in SQLAlchemy)
     confidence = Column(Float, nullable=True)
     tokens_used = Column(Integer, nullable=True)
     processing_time_ms = Column(Float, nullable=True)
@@ -155,6 +160,7 @@ class APIUsage(Base):
     """API usage tracking model."""
     
     __tablename__ = "api_usage"
+    __allow_unmapped__ = True  # Allow legacy SQLAlchemy 1.x style annotations
     
     # Foreign key
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
@@ -184,6 +190,7 @@ class RefreshToken(Base):
     """Refresh token model."""
     
     __tablename__ = "refresh_tokens"
+    __allow_unmapped__ = True  # Allow legacy SQLAlchemy 1.x style annotations
     
     # Foreign key
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)

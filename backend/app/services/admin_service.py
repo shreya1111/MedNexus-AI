@@ -12,7 +12,7 @@ from app.database.models import (
     User, UserRole, Conversation, Session as ChatSession,
     Document, MedicalReport, APIUsage
 )
-from app.core.exceptions import NotFoundError, ValidationError, PermissionDenied
+from app.core.exceptions import NotFoundError, ValidationError, AuthorizationError
 
 
 class AdminService:
@@ -30,7 +30,7 @@ class AdminService:
     def _check_admin(self, user: User) -> None:
         """Check if user is admin."""
         if not user.is_superuser:
-            raise PermissionDenied("Admin access required")
+            raise AuthorizationError("Admin access required")
     
     async def get_users(
         self,

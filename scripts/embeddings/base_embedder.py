@@ -46,8 +46,7 @@ class EmbeddingResult:
     chunk_id: str
     embedding: Optional[List[float]] = None
     metadata: Optional[EmbeddingMetadata] = None
-    
-error: Optional[str] = None
+    error: Optional[str] = None
     status: str = "pending"  # pending, success, failed, cached
     generation_time: float = 0.0
     retry_count: int = 0

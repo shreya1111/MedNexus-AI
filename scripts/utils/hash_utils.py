@@ -241,3 +241,8 @@ def quick_hash(file_path: Path, sample_size: int = 1024 * 1024) -> str:
             hasher.update(chunk)
     
     return hasher.hexdigest()
+
+
+# Aliases for backward compatibility
+calculate_file_checksum = compute_file_hash
+calculate_string_checksum = compute_string_hash

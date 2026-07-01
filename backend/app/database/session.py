@@ -12,13 +12,24 @@ from app.core.config import settings
 
 
 # Create async engine
+# SQLite doesn't support pool_size/max_overflow, only PostgreSQL does
+engine_kwargs = {
+    "echo": settings.DEBUG,
+    "future": True,
+}
+
+# Add pool settings only for PostgreSQL
+if "postgresql" in settings.DATABASE_URL:
+    engine_kwargs["pool_size"] = settings.DATABASE_POOL_SIZE
+    engine_kwargs["max_overflow"] = settings.DATABASE_MAX_OVERFLOW
+
+# Use NullPool for testing
+if settings.ENVIRONMENT == "test":
+    engine_kwargs["poolclass"] = NullPool
+
 engine = create_async_engine(
     settings.DATABASE_URL,
-    echo=settings.DEBUG,
-    future=True,
-    pool_size=settings.DATABASE_POOL_SIZE,
-    max_overflow=settings.DATABASE_MAX_OVERFLOW,
-    poolclass=NullPool if settings.ENVIRONMENT == "test" else None
+    **engine_kwargs
 )
 
 # Create async session factory

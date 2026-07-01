@@ -10,65 +10,92 @@ from pathlib import Path
 from typing import List, Dict, Any
 from sqlalchemy.ext.asyncio import AsyncSession
 
-sys.path.append(str(Path(__file__).parent.parent.parent.parent))
-
-from scripts.vector_db.collection_manager import CollectionManager
-from scripts.vector_db.retriever import VectorRetriever
-from scripts.vector_db.hybrid_retriever import HybridRetriever
-from scripts.vector_db.query_processor import QueryProcessor
-from scripts.embeddings.provider_factory import ProviderFactory
-from scripts.utils.config_loader import load_yaml_config
-
 from app.core.exceptions import NotFoundError, ValidationError
+
+
+def _load_retrieval_stack():
+    """
+    Lazily import the RAG retrieval stack from the scripts package.
+
+    Imported on demand so the heavy AI/vector dependencies (chromadb,
+    sentence-transformers, etc.) are not required just to start the FastAPI
+    backend. They are only needed when a search endpoint is actually invoked.
+    """
+    project_root = str(Path(__file__).parent.parent.parent.parent)
+    if project_root not in sys.path:
+        sys.path.append(project_root)
+    from scripts.vector_db.collection_manager import CollectionManager
+    from scripts.vector_db.retriever import VectorRetriever
+    from scripts.vector_db.hybrid_retriever import HybridRetriever
+    from scripts.vector_db.query_processor import QueryProcessor
+    from scripts.embeddings.provider_factory import ProviderFactory
+    from scripts.utils.config_loader import load_yaml_config
+    return (
+        CollectionManager, VectorRetriever, HybridRetriever,
+        QueryProcessor, ProviderFactory, load_yaml_config
+    )
 
 
 class SearchService:
     """Search service for knowledge base retrieval."""
-    
+
     def __init__(self, db: AsyncSession):
         """
         Initialize search service.
-        
+
         Args:
             db: Database session
         """
         self.db = db
-        self._initialize_retrieval()
-    
+        self._initialized = False
+        self.collection_manager = None
+        self.query_processor = None
+        self.embedder = None
+        self.vector_retriever = None
+        self.hybrid_retriever = None
+
     def _initialize_retrieval(self):
-        """Initialize retrieval components."""
+        """Initialize retrieval components lazily."""
+        if self._initialized:
+            return
+        (
+            CollectionManager, VectorRetriever, HybridRetriever,
+            QueryProcessor, ProviderFactory, load_yaml_config
+        ) = _load_retrieval_stack()
+
         # Load configs
         retrieval_config = load_yaml_config(Path("config/retrieval.yaml"))
         embedding_config = load_yaml_config(Path("config/embedding.yaml"))
-        
+
         # Initialize collection manager
         self.collection_manager = CollectionManager(retrieval_config)
         self.collection_manager.get_or_create_collection()
-        
+
         # Initialize query processor
         self.query_processor = QueryProcessor(retrieval_config)
-        
+
         # Initialize embedder
         provider_config = embedding_config.get('provider', {})
         active_provider = provider_config.get('active', 'sentence-transformers')
         provider_settings = provider_config.get(active_provider, {})
-        
+
         self.embedder = ProviderFactory.create_embedder(
             active_provider,
             provider_settings
         )
         self.embedder.initialize()
-        
+
         # Initialize retrievers
         self.vector_retriever = VectorRetriever(
             retrieval_config,
             self.collection_manager
         )
-        
+
         self.hybrid_retriever = HybridRetriever(
             retrieval_config,
             self.collection_manager
         )
+        self._initialized = True
     
     async def vector_search(
         self,
@@ -87,14 +114,15 @@ class SearchService:
         Returns:
             Search results
         """
+        self._initialize_retrieval()
         start_time = time.time()
-        
+
         # Process query
         processed_query = self.query_processor.process(query)
-        
+
         # Generate embedding
         query_embedding = self.embedder.embed_batch([processed_query])[0]
-        
+
         # Search
         results = self.vector_retriever.search(
             query_embedding=query_embedding,
@@ -144,14 +172,15 @@ class SearchService:
         Returns:
             Search results
         """
+        self._initialize_retrieval()
         start_time = time.time()
-        
+
         # Process query
         processed_query = self.query_processor.process(query)
-        
+
         # Generate embedding
         query_embedding = self.embedder.embed_batch([processed_query])[0]
-        
+
         # Hybrid search
         results = self.hybrid_retriever.search(
             query_embedding=query_embedding,
@@ -194,6 +223,7 @@ class SearchService:
         Returns:
             Statistics
         """
+        self._initialize_retrieval()
         # Get collection stats
         collection = self.collection_manager.get_or_create_collection()
         total_chunks = collection.count()
